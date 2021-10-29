@@ -1,0 +1,7 @@
+MT-env/*
+annotations/*
+dataset/*
+GenerateTFRecord/*
+models/*
+pretrained_models/*
+__pycache__/*
