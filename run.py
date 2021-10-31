@@ -4,8 +4,8 @@ from model import UsedModel
 def parse_args():
     argParser = argparse.ArgumentParser(description='Train model for detection and classification of diseased fingerprints')
     argParser.add_argument('--model', dest='model', action='store', default="ssd_mobilenet", choices=['ssd_mobilenet', 'faster_rcnn'], help='Select type of model.')
-    argParser.add_argument('--epochs', dest='epochs', action='store', type=int, help='Number of epochs to train for.')
-    #argParser.add_argument('--onlytrain', dest='onlytrain', action='store', type=bool, help='Number of epochs to train for.')
+    argParser.add_argument('--epochs', dest='epochs', default=10, action='store', type=int, help='Number of epochs to train for.')
+    argParser.add_argument('--test', dest='test', action='store_true', default=False, help='Run model on test folder.')
     return argParser.parse_args()
 
 if __name__ == "__main__":
@@ -17,4 +17,8 @@ if __name__ == "__main__":
 
     print(init_args)
     model = UsedModel(**init_args)
-    model.config_model()
+
+    if args.test == False:
+        model.config_model()
+    else:
+        model.test_model()
