@@ -5,6 +5,7 @@ def parse_args():
     argParser = argparse.ArgumentParser(description='Train model for detection and classification of diseased fingerprints')
     argParser.add_argument('--model', dest='model', action='store', default="ssd_mobilenet", choices=['ssd_mobilenet', 'faster_rcnn'], help='Select type of model.')
     argParser.add_argument('--epochs', dest='epochs', action='store', type=int, help='Number of epochs to train for.')
+    #argParser.add_argument('--onlytrain', dest='onlytrain', action='store', type=bool, help='Number of epochs to train for.')
     return argParser.parse_args()
 
 if __name__ == "__main__":
