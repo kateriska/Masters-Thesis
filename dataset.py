@@ -8,9 +8,9 @@ import random
 class Dataset:
     def __init__(self):
         super().__init__()
-        self.dataset_path = "./dataset/train/*"
-        self.preprocessed_dataset_path = "./dataset/train_preprocessed/*"
-        self.preprocessed_dataset_test_path = "./dataset/test_preprocessed/*"
+        self.dataset_path = os.path.join('dataset', 'train', '*')
+        self.preprocessed_dataset_path = os.path.join('dataset', 'train_preprocessed', '*')
+        self.preprocessed_dataset_test_path = os.path.join('dataset', 'test_preprocessed', '*')
 
     def preprocess_dataset(self):
         for file in glob.glob(self.dataset_path):
@@ -18,7 +18,7 @@ class Dataset:
             extension = os.path.splitext(file)[1][1:]
 
             if extension == 'xml':
-                shutil.copyfile(file, './dataset/train_preprocessed/' + file_substr)
+                shutil.copyfile(file, os.path.join('dataset', 'train_preprocessed', file_substr))
                 continue
 
             img = cv2.imread(file, 0)
@@ -34,7 +34,7 @@ class Dataset:
             result_tresh = cv2.add(tresh_img, opening)
             result_orig = cv2.add(img, opening) # add mask with input image
 
-            cv2.imwrite('./dataset/train_preprocessed/' + file_substr,result_orig)
+            cv2.imwrite(os.path.join('dataset', 'train_preprocessed', file_substr),result_orig)
 
         self.split_dataset()
 
@@ -57,7 +57,7 @@ class Dataset:
             generated_random_number = random.random()
 
             if (generated_random_number >= 0.8):
-                shutil.move(file, './dataset/test_preprocessed/' + file_substr)
+                shutil.move(file, os.path.join('dataset', 'test_preprocessed', file_substr))
                 test_image_name = file_substr.rsplit('.', 1)[0]
                 test_images_names.append(test_image_name)
 
@@ -68,4 +68,4 @@ class Dataset:
             test_xml_name = file_substr.rsplit('.', 1)[0]
 
             if test_xml_name in test_images_names:
-                shutil.move(file, './dataset/test_preprocessed/' + file_substr)
+                shutil.move(file, os.path.join('dataset', 'test_preprocessed', file_substr))
