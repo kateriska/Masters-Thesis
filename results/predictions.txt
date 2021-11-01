@@ -1,0 +1,244 @@
+FILE NAME: atopic_eczema_FP_00032.xml
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00198.xml
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00005.xml
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00011.xml
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00351.xml
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00027.xml
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00198.png
+DETECTIONS: 
+	CLASS: atopic eczema
+	DETECTION SCORE: 95.94 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 94.96 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 76.46 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 74.41 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 65.24 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 63.9 %
+FILE NAME: atopic_eczema_FP_00184.xml
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00185.png
+DETECTIONS: 
+	CLASS: atopic eczema
+	DETECTION SCORE: 90.13 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 83.26 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 57.87 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 56.03 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 53.54 %
+FILE NAME: atopic_eczema_FP_00373.xml
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00367.xml
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00028.xml
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00365.png
+DETECTIONS: 
+	CLASS: atopic eczema
+	DETECTION SCORE: 85.86 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 80.94 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 80.03 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 65.79 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 64.72 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 54.99 %
+FILE NAME: atopic_eczema_FP_00354.png
+DETECTIONS: 
+	CLASS: atopic eczema
+	DETECTION SCORE: 84.58 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 66.23 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 65.76 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 52.93 %
+FILE NAME: atopic_eczema_FP_00185.xml
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00191.png
+DETECTIONS: 
+	CLASS: atopic eczema
+	DETECTION SCORE: 95.45 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 92.04 %
+FILE NAME: atopic_eczema_FP_00046.xml
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00003.png
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00146.xml
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00374.xml
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00035.xml
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00183.png
+DETECTIONS: 
+	CLASS: atopic eczema
+	DETECTION SCORE: 79.72 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 72.54 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 70.45 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 54.08 %
+FILE NAME: atopic_eczema_FP_00368.png
+DETECTIONS: 
+	CLASS: atopic eczema
+	DETECTION SCORE: 86.88 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 77.45 %
+FILE NAME: atopic_eczema_FP_00025.xml
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00367.png
+DETECTIONS: 
+	CLASS: atopic eczema
+	DETECTION SCORE: 72.44 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 65.4 %
+FILE NAME: atopic_eczema_FP_00003.xml
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00361.png
+DETECTIONS: 
+	CLASS: atopic eczema
+	DETECTION SCORE: 66.81 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 63.65 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 58.47 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 58.39 %
+FILE NAME: atopic_eczema_FP_00351.png
+DETECTIONS: 
+	CLASS: atopic eczema
+	DETECTION SCORE: 87.8 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 86.68 %
+FILE NAME: atopic_eczema_FP_00032.png
+DETECTIONS: 
+	CLASS: atopic eczema
+	DETECTION SCORE: 56.13 %
+FILE NAME: atopic_eczema_FP_00026.xml
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00025.png
+DETECTIONS: 
+	CLASS: atopic eczema
+	DETECTION SCORE: 63.6 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 50.43 %
+FILE NAME: atopic_eczema_FP_00191.xml
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00146.png
+DETECTIONS: 
+	CLASS: atopic eczema
+	DETECTION SCORE: 91.22 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 87.0 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 86.08 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 78.47 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 74.18 %
+FILE NAME: atopic_eczema_FP_00041.png
+DETECTIONS: 
+	CLASS: atopic eczema
+	DETECTION SCORE: 90.79 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 76.57 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 73.42 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 64.97 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 50.2 %
+FILE NAME: atopic_eczema_FP_00035.png
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00184.png
+DETECTIONS: 
+	CLASS: atopic eczema
+	DETECTION SCORE: 94.69 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 84.41 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 75.55 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 71.89 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 67.97 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 52.9 %
+FILE NAME: atopic_eczema_FP_00374.png
+DETECTIONS: 
+	CLASS: atopic eczema
+	DETECTION SCORE: 91.81 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 87.56 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 81.8 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 79.69 %
+FILE NAME: atopic_eczema_FP_00373.png
+DETECTIONS: 
+	CLASS: atopic eczema
+	DETECTION SCORE: 96.84 %
+FILE NAME: atopic_eczema_FP_00183.xml
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00028.png
+DETECTIONS: 
+	CLASS: atopic eczema
+	DETECTION SCORE: 81.17 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 78.57 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 69.96 %
+FILE NAME: atopic_eczema_FP_00046.png
+DETECTIONS: 
+	CLASS: atopic eczema
+	DETECTION SCORE: 95.23 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 69.28 %
+FILE NAME: atopic_eczema_FP_00365.xml
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00005.png
+DETECTIONS: 
+	CLASS: atopic eczema
+	DETECTION SCORE: 60.72 %
+FILE NAME: atopic_eczema_FP_00354.xml
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00027.png
+DETECTIONS: 
+	CLASS: atopic eczema
+	DETECTION SCORE: 66.23 %
+FILE NAME: atopic_eczema_FP_00361.xml
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00368.xml
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00026.png
+DETECTIONS: 
+FILE NAME: atopic_eczema_FP_00011.png
+DETECTIONS: 
+	CLASS: atopic eczema
+	DETECTION SCORE: 91.84 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 80.52 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 69.59 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 61.54 %
+FILE NAME: atopic_eczema_FP_00041.xml
+DETECTIONS: 

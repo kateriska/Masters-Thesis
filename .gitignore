@@ -6,4 +6,3 @@ models/*
 pretrained_models/*
 __pycache__/*
 trained_models/*
-results/*
