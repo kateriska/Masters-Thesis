@@ -38,7 +38,7 @@ class Dataset:
 
         self.split_dataset()
 
-    # split dataset into test and train folder and store in train or test folder also their xml annotations 
+    # split dataset into test and train folder and store in train or test folder also their xml annotations
     def split_dataset(self):
         #if len(os.listdir(os.path.abspath('./dataset/train_preprocessed/')) ) == 0:
         #    print("Directory is empty")

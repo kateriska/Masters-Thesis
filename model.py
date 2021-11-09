@@ -95,6 +95,8 @@ class UsedModel:
     def train_model(self):
         print(os.getcwd())
         train_command = "python {} --model_dir={} --pipeline_config_path={} --num_train_steps={}".format(os.path.join('.','models', 'research', 'object_detection', 'model_main_tf2.py'), os.path.join('trained_models', 'ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8'),os.path.join('trained_models', 'ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8', 'pipeline.config'), self.epochs)
+        print("Command for training model:")
+        print(train_command)
         #subprocess.Popen(['python', os.path.join('models', 'research', 'object_detection', 'model_main_tf2.py'), '--model_dir=' + os.path.join('trained_models', 'ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8'), '--pipeline_config_path=' + os.path.join('trained_models', 'ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8', 'pipeline.config'), '--num_train_steps=' + str(self.epochs)])
     '''
     label map in format:
@@ -110,7 +112,7 @@ class UsedModel:
 
 
     def create_label_map(self):
-        labels = [{'name':'atopic', 'id':1}]
+        labels = [{'name':'atopic', 'id':1}, {'name':'verruca', 'id':2}, {'name':'dysh', 'id':3}]
 
         label_map_path = os.path.join('annotations', 'label_map.pbtxt')
 
@@ -130,7 +132,7 @@ class UsedModel:
 
 
     # test trained model on test dataset, save results into ./results folder - images with bounding box and txt file with predictions (at least for now)
-    # TO DO: evaluate test images predicted bounding boxes and real xml annotated bounding boxes 
+    # TO DO: evaluate test images predicted bounding boxes and real xml annotated bounding boxes
     def test_model(self, full_model_name):
         print("Only test")
         configs = config_util.get_configs_from_pipeline_file(os.path.join('trained_models', full_model_name, 'pipeline.config'))
@@ -188,6 +190,10 @@ class UsedModel:
 
                 elif key == 1:
                     f.write('\t' + "CLASS: verruca vulgaris" + '\n')
+                    f.write('\t' + "DETECTION SCORE: " + str(round(value * 100, 2)) + " %" + '\n')
+
+                elif key == 2:
+                    f.write('\t' + "CLASS: dishydrosis" + '\n')
                     f.write('\t' + "DETECTION SCORE: " + str(round(value * 100, 2)) + " %" + '\n')
 
             image_np_array_result = image_np_array.copy()

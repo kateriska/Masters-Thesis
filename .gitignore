@@ -6,3 +6,10 @@ models/*
 pretrained_models/*
 __pycache__/*
 trained_models/*
+scripts/dys_generated_dataset/*
+scripts/dys_generated_xml_files/*
+scripts/example_json_files/*
+scripts/generated_dataset/*
+scripts/generated_xml_files/*
+scripts/healthy_generated_dataset/*
+scripts/healthy_generated_xml_files/*
