@@ -55,7 +55,7 @@ class UsedModel:
         with tf.io.gfile.GFile(os.path.join('trained_models', full_model_name, 'pipeline.config'), "r") as f:
             text_format.Merge(f.read(), pipeline_config)
 
-        pipeline_config.model.ssd.num_classes = 1
+        pipeline_config.model.ssd.num_classes = 3
         pipeline_config.train_config.batch_size = 4
 
         trained_model_latest_checkpoint = tf.train.latest_checkpoint(os.path.join('trained_models', full_model_name))
@@ -134,7 +134,7 @@ class UsedModel:
     # test trained model on test dataset, save results into ./results folder - images with bounding box and txt file with predictions (at least for now)
     # TO DO: evaluate test images predicted bounding boxes and real xml annotated bounding boxes
     def test_model(self, full_model_name):
-        print("Only test")
+        print("Only test trained model on test dataset")
         configs = config_util.get_configs_from_pipeline_file(os.path.join('trained_models', full_model_name, 'pipeline.config'))
         detection_model = model_builder.build(model_config=configs['model'], is_training=False)
 
@@ -149,6 +149,7 @@ class UsedModel:
         # detect and clasify each image from test dataset
         for file in glob.glob('./dataset/test_preprocessed/*'):
             file_substr = file.split('/')[-1]
+
             f.write("FILE NAME: " + file_substr + '\n')
             f.write("DETECTIONS: " + '\n')
             extension = os.path.splitext(file)[1][1:]
@@ -157,6 +158,7 @@ class UsedModel:
             if extension == 'xml':
                 continue
 
+            print(file_substr)
             img = cv2.imread(file)
             image_np_array = np.array(img)
 

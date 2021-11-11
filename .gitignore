@@ -13,3 +13,5 @@ scripts/generated_dataset/*
 scripts/generated_xml_files/*
 scripts/healthy_generated_dataset/*
 scripts/healthy_generated_xml_files/*
+results/*
+!results/predictions.txt
