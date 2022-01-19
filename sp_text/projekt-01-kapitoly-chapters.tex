@@ -7,11 +7,11 @@ Problematika detekce a klasifikace pro rozličné typy objektů je stále jední
 Lidské otisky prstů jsou jednou z nejznámějších a nejužívanějších biometrických charakteristik. V roce 1823 bylo vytvořeno Janem Evangelistou Purkyně první klasifikační schéma otisků prstů, které rozdělovalo otisky prstů do devíti tříd na základě konfigurace hřebenů papilárních linií. V~roce 1863 bylo ve Velké Británii akceptováno, že žádní dva lidé nemají totožné otisky prstu~\cite{Maltoni2009}. Následující kapitola se zabývá stručným popisem oboru biometrie a jejími základními pojmy. Hlavním z cílů této kapitoly je však představit onemocnění, které mohou plochu otisku prstu postihnout a popsat základní přístupy pro zpracování a rozpoznávání otisků prstů.
 \section{Biometrie}
 Cílem biometrie (biometrického rozpoznávání) je použití anatomických a behaviorálních charakteristik, které se nazývají biometrické rysy, k automatickému rozpoznávání jedinců. Biometrie se postupem času stala efektivním řešením lidské identifikace reprezentující tělesnou identitu jednotlivce \cite{Maltoni2009}. Představuje jednu z technologií, které mohou umožnit naši společnost bezpečnější a poskytnout vyšší uživatelské pohodlí \cite{Maltoni2009}. Biometrický systém však může být napadnutelný a biometrická identita nemůže být v případě prozrazení anulována~\cite{BIOopora}.
-\subsection*{Identita, identifikace, verifikace a autentizace}
+\subsection{Identita, identifikace, verifikace a autentizace}
 Identita, identifikace, verifikace a autentizace jsou základními pojmy, které biometrie využívá. Rozpoznání je založeno na jednoznačné identitě jedince. Identita je jednoznačnou charakteristikou každého z nás. Rozlišujeme fyzickou a elektronickou identitu. Fyzická identita je pouze jediná a je definována vzhledem a chováním. Elektronických identit můžeme mít ovšem vytvořených více (např. více účtů na sociálních sítích) \cite{BIOopora}.
 
 Identifikace je situací, kdy daná osoba zadá svoji biometrickou vlastnost systému, ale nesdělí mu svoji identitu. Daný systém pak má za úkol rozpoznat identitu uživatele -- porovnává se vzorek zadaný na vstupu s celou databází. Systém poté nalezne nebo nenalezne danou identitu. Identifikaci můžeme chápat jako porovnání 1:N \cite{BIOopora}. Při verifikaci je sdělena systému elektronická identita uživatele a dojde k ověření fyzické identity. V databázi je vyhledán daný záznam uživatele, který obsahuje biometrická data. Pokud je záznam nenalezen, dojde k zamítnutí přístupu uživatele, jinak dochází k porovnání dat -- výsledkem je potvrzení či nepotvrzení identity. Proces verifikace je také jinak nazýván porovnání 1:1 \cite{BIOopora}. Při~autentizaci má systém za úkol potvrdit autentičnost (hodnověrnost) osoby žádající o~přístup. Autentizace může probíhat jak při identifikaci, tak při autentizaci. Rozhodnutí je obvykle prováděno na základě nastavené hodnoty prahu \cite{BIOopora}.
-\subsection*{Biometrické systémy a vlastnosti}
+\subsection{Biometrické systémy a vlastnosti}
 Biometrický systém, znázorněn na obrázku \ref{fig:biosystem}, je složen z registračního a verifikačního / identifikačního modulu. Součástí obou uvedených modulů je biometrický senzor a biometrický markant -- extrahované rysy z biometrické informace na vstupu. Hlavním rozdílem obou modulů je princip práce s databází a biometrickým markantem.  Při práci s registračním modulem je biometrický markant uložen do databáze. Verifikační / identifikační modul naopak neukládá biometrický markant do databáze, ale místo toho načítá data z databáze pro porovnání biometrického markantu na vstupu s údaji databáze. Při tomto porovnání obdržíme výsledek na základě nalezení případné shody a případného operačním módu -- verifikaci nebo identifikaci \cite{BIOopora}.
 
 \begin{figure}[!htbp]
@@ -46,19 +46,19 @@ Nejdůležitějšími funkcemi kůže jsou:
     \item Vylučovací funkce kůže -- Vyloučené sekrety mazových a potních žláz se uplatňují při~ochraně kůže i celého organismu \cite{ZakladyFunkcniAnatomieCloveka}.
 \end{itemize}
 
-\subsection*{Papilární linie}
+\subsection{Papilární linie}
 Na prstech rukou a nohou jsou přítomné vyvýšené kožní útvary, které se nazývají papilární linie. Základ papilárních linií je formovaný na hranici kožních vrstev epidermis a corium, kde dochází k vzájemné interakci spodní epidermální vrstvy a horní vrstvy coria. Po určitém zvlnění epidermální vrstvy se na bříškách prstů objeví papilární linie \cite{DermatologickeFaktory}. Struktura kůže a papilárních linií je znázorněna na obrázku \ref{fig:kuze}, na obrázku \ref{fig:zdravyotisk} je pak zobrazen nasnímaný otisk prstu tvořený charakteristickými papilárními liniemi. Tyto linie slouží k určení identity jedince, tvoří dermatoglyfy, které jsou pro jedince charakteristické. Přesný důvod vzniku papilárních linií však není známý -- uvažuje se o hypotéze, že to jsou např. výsledky napětí a tlaků v kůži během embryonálního vývoje. Uspořádání papilárních linií je z 90 \% podmíněno geneticky, z 10 \% je pak závislé na vnějších podmínkách. Ani jednovaječná dvojčata nemají shodné otisky prstů -- shodují se sice v základních vzorech, ale odlišují se v~drobných detailech rozhodujícími pro identifikaci osob \cite{Dermatoglyfika}. Papilární linie se vyvíjejí během nitroděložního vývoje a po celý život jedince vykazují stabilitu, kdy se s~přibývajícím věkem mění rozměry plošek prstů, dlaní či chodidel, avšak struktura zůstává stejná \cite{DermatologickeFaktory}. \\
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=200px]{obrazky-figures/kuze.jpeg}
+    \includegraphics[width=260px]{obrazky-figures/kuze.jpeg}
     \caption{Struktura kůže \cite{DermatologickeFaktory}}
     \label{fig:kuze}
 \end{figure}
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=200px]{obrazky-figures/zdravyotisk.PNG}
+    \includegraphics[width=100px]{obrazky-figures/zdravyotisk.PNG}
     \caption{Příklad nasnímaného otisku prstu \cite{BIOotiskyLecture}}
     \label{fig:zdravyotisk}
 \end{figure}
@@ -66,7 +66,7 @@ Na prstech rukou a nohou jsou přítomné vyvýšené kožní útvary, které se
 \section{Nemoci kůže ovlivňující otisky prstů}
 \label{sec:nemoci}
 Nemoci kůže představují důležitý, ale často opomíjený faktor ovlivňující snímání otisků prstů a jejich následnou analýzu. Uvádí se, že zhruba 20 -- 25 \% pacientů trpí některou z~kožních chorob \cite{InfluenceSkinDiseases}. Tato kapitola uvádí výčet onemocnění, které mohou postihnout oblast prstů a způsob, jakým se projevují na zachyceném snímku na biometrickém senzoru. 
-\subsection*{Atopický ekzém}
+\subsection{Atopický ekzém}
 Atopický ekzém je jedním z druhů ekzému -- nejčastějšího chronického zánětlivého onemocnění. Původ onemocnění zahrnují například genetické faktory, defekt kožní bariéry a vliv prostředí. Předpokládá se, že atopický ekzém je spjatý s příbuznými onemocněními jako astma, potravinová alergie nebo alergická rýma. Pokud jeden z rodičů dítěte trpí atopickým ekzémem, je více jak poloviční pravděpodobnost, že bude symptomy postihnut i jeho potomek. Při postižení obou rodičů je tato šance dokonce 80 \%. Atopický ekzém se projevuje svěděním, snížením hydratace a zvýšením suchosti pokožky. Postižené místo je citlivé k alergenům a dráždivým látkám \cite{AtopicDermatitis}. Při léčbě je nutné vyhýbat se spouštěcím faktorům a zamezit vysušování pokožky.
 
 Při snímání se onemocnění atopickým ekzémem projevuje více způsoby. U pacientů s~mírnějším průběhem se nemoc projevuje úzkými bílými liniemi přecházející přes papilární linie. Papilární linie zůstávají přerušené však pouze na několika místech a obvykle jsou stále uspokojivě čitelné. Ovšem otisky prstů pacientů s vážnějším průběhem nemoci jsou velmi poškozené, papilární linie jsou skoro nečitelné a vedle bílých linií se často vyskytují i tmavé nepravidelné skvrny.
@@ -84,7 +84,7 @@ Při snímání se onemocnění atopickým ekzémem projevuje více způsoby. U 
     \caption{Atopický ekzém zachycený biometrickým senzorem \cite{Barotova}}
   \end{minipage}
 \end{figure}
-\subsection*{Bradavice}
+\subsection{Bradavice}
 Bradavice (verruca vulgaris) jsou běžnými novotvary způsobené lidskými papilomaviry (HPV). Tyto viry, kterých existuje více jak 100 různých typů, dokáží vstoupit do kůže prostřednictvím malých řezných ran a způsobit zvýšený růst buněk. Kůže se tedy na daném místě postupně stává silnější -- je vytvořena bradavice. Bradavice se mohou vyskytovat jednotlivě nebo ve skupinách na různých částech lidského těla. Zbavení se bradavic může být náročné zejména pro lidi se slabým imunitním systémem. U lidí se zdravým imunitním systémem obvykle bradavice zmizí postupem času \cite{WartsOverview}.  Bradavice se na snímcích projevují jako bílé skvrny kulatého tvaru, občas s černými tečkami uvnitř. Poškození není tolik závažné, jako např. u atopického ekzému a psoriázy a papilární linie zbytku otisku prstu jsou nepoškozené. 
 
 \begin{figure}[!htbp]
@@ -101,7 +101,7 @@ Bradavice (verruca vulgaris) jsou běžnými novotvary způsobené lidskými pap
   \end{minipage}
 \end{figure}
 
-\subsection*{Psoriáza}
+\subsection{Psoriáza}
 Psoriáza (lupénka) se vyskytuje zhruba u 1--3 \% lidské populace. Původ onemocnění je neznámý, avšak je uvažováno o dědičných predispozicích. Nejčastějším projevem tohoto chronického onemocnění je odlupování pokožky. Výskyt onemocnění na dlaních a prstech se vyznačuje červenými plaky. Při zhoršeném průběhu se můžou objevit bolestivé trhliny a krvácení. Psoriáza stejně jako bradavice nemá žádnou dostupnou léčbu. Obvykle se nemoc postupně zhoršuje a zlepšuje \cite{Psoriasis,InfluenceSkinDiseases}. Onemocnění je často na snímcích rozpoznatelné pomocí tmavé skvrny nepravidelného tvaru, která je ohraničena bílými liniemi. Papilární linie jsou obvykle čitelné pouze na menší části snímku.
 
 \begin{figure}[!htbp]
@@ -117,7 +117,7 @@ Psoriáza (lupénka) se vyskytuje zhruba u 1--3 \% lidské populace. Původ onem
     \caption{Psoriáza zachycená biometrickým senzorem \cite{Barotova}}
   \end{minipage}
 \end{figure}
-\subsection*{Dyshidróza}
+\subsection{Dyshidróza}
 Dyshidróza je jednou z nejčastějších kožních poruch. Původ onemocnění je neznámý, ale uvažuje se například o důvodu styku s kontaktním alergenem. Onemocnění je charakteristické výskytem drobných svědivých puchýřků na dlaních a stranách prstu. Kůže může být vlhká a zarudlá. Postupem času tyto puchýřky prasknou a objevují se zarudlé šupinaté skvrny \cite{InfluenceSkinDiseases}. Při snímcích na senzoru se onemocnění projevuje více způsoby -- většinou se jedná o bílé čáry a nepravidelné bílé skvrny. Při vážnějším poškození nejsou dostatečně viditelné papilární linie.
 
 \begin{figure}[!htbp]
@@ -134,7 +134,7 @@ Dyshidróza je jednou z nejčastějších kožních poruch. Původ onemocnění 
   \end{minipage}
 \end{figure}
 
-\subsection*{Acrodermatitis continua}
+\subsection{Acrodermatitis continua}
 Acrodermatitis continua je chronickým onemocněním, jedním ze zvláštních druhů psoriázy. Projevuje se výskytem pustul -- dutin vyplněných hnisem na špičkách prstů, většinou vyskytující se častěji na prstech dlaní než chodidel. Toto onemocnění nemá žádný standardizovaný postup léčby a jeho původ není známý, uvažuje se však o např. infekčním nebo genetickém původu. Při vážném průběhu onemocnění může onemocnění poškodit oblast nehtu \cite{AcrodermatitisContinua}. Snímky na senzoru jsou typické nerozpoznatelnými papilárními liniemi, celý otisk prstu pokrývají tmavé menší skvrny různých tvarů.
 
 \begin{figure}[!htbp]
@@ -151,7 +151,7 @@ Acrodermatitis continua je chronickým onemocněním, jedním ze zvláštních d
   \end{minipage}
 \end{figure}
 
-\subsection*{Raynaudova nemoc}
+\subsection{Raynaudova nemoc}
 Raynaudova nemoc je charakteristická křečovitými stahy drobných tepen a tepének z důsledku chladu a stresu. Dochází k poruše krevního zásobení postižené oblasti a postižená periferní oblast (např. prsty) pak postupně mění barvu na bílou, modrou a červenou. Odhad prevalence -- počtu jedinců trpící nemocí vzhledem k počtu jedinců v dané populaci -- odhadem činí 5 až 20 \%. Nemoc se častěji vyskytuje u žen a problémy jsou obvykle dlouhodobé. Jedním z důvodů postižení tímto onemocněním je např. onemocnění pojivové tkáně nebo hematologické příčiny \cite{InfluenceSkinDiseases}. Toto onemocnění se projevuje pouze změnou zbarvení prstů a snímky ze senzoru se proto jeví jako nepoškozené.
 
 \begin{figure}[!htbp]
@@ -167,7 +167,7 @@ Raynaudova nemoc je charakteristická křečovitými stahy drobných tepen a tep
     \caption{Raynaudova nemoc zachycená biometrickým senzorem \cite{Barotova}}
   \end{minipage}
 \end{figure}
-\subsection*{Systémová sklerodermie}
+\subsection{Systémová sklerodermie}
 Systémová sklerodermie je chronickým autoimunitním onemocněním. Pro více než 90 \% pacientů je typické onemocnění Raynaudovou nemocí a postižené jsou více ženy \cite{InfluenceSkinDiseases}. Původ nemoci je neznámý. Onemocnění se projevuje otoky prstů, malými jizvičkami na špičce prstu nebo sklerodaktylií. Při sklerodaktylii se v tkáních ruky ukládá vazivo, čímž je narušená pohyblivost a vzniká charakteristická ztuhlá ruka. Nemoc je neléčitelná, ke tlumení projevů se mohou využít imunosupresivní léky tlumící imunitní reakce v těle -- kortikoidy. Kožní postižení není pouze jediným projevem systémové sklerodermie -- může dojít i k plicnímu postižení nebo postižení oběhového systému \cite{SystemovaSklerodermie}. 
 
 \begin{figure}[!htbp]
@@ -203,12 +203,12 @@ Metod pro porovnání otisků prstů existuje celá řada. Metoda založená na 
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=260px]{obrazky-figures/zpracovani_otisku.png}
+    \includegraphics[width=380px]{obrazky-figures/zpracovani_otisku.png}
     \caption{Schéma zpracování otisku prstu \cite{BIOopora}}
     \label{fig:zpracovani}
 \end{figure}
 
-\subsection*{Daktyloskopie}
+\subsection{Daktyloskopie}
 Platí následující daktyloskopické zákony:
 \begin{itemize}
     \item Papilární linie jsou pro každého z jedinců unikátní \cite{BIOopora}.
@@ -216,7 +216,7 @@ Platí následující daktyloskopické zákony:
     \item Dorůstáním kůže na povrchu prstů jsou papilární linie obnovovány. Papilární linie nemohou být pozměněny nebo odstraněny, pokud není poškozena dermální vrstva kůže. Pokud však k poškození dojde, pak již na tomto místě nedojde k obnově papilárních linií \cite{BIOopora}.
     \item Konfigurační typy se mohou individuálně měnit, ovšem jedná se pouze o malé změny, které leží v tolerančních limitech a umožňují systematickou klasifikaci \cite{BIOopora}.
 \end{itemize}
-\subsection*{Typy otisků prstů, druhy markantů a třídy otisků prstů}
+\subsection{Typy otisků prstů, druhy markantů a třídy otisků prstů}
 Otisky prstů jsou děleny na základě způsobu pořízení následovně:
 \begin{itemize}
 \item válený otisk (barvený, rolovaný),
@@ -224,11 +224,11 @@ Otisky prstů jsou děleny na základě způsobu pořízení následovně:
 \item latentní otisk (skrytý) \cite{BIOopora}.
 \end{itemize}
 
-Válené otisky jsou získávány způsobem rolování prstu po celé délce, kdy je snahou zachytit všechny detaily hřebenů papilárních linií. Píchané otisky vznikají přiložením bříška prstu k plochému povrchu -- rolování není prováděno. Píchané otisky prstů pokrývají menší plochu, jak válené otisky prstů a typicky nejsou zkresleny právě procesem rolování. Oba tyto typy jsou získávány pomocí senzoru nebo off-line způsobem snímání -- např. nanesením inkoustu na bříško prstu. Latentní otisky prstu jsou obvykle získávány z objektů, kterých se daná osoba dotkla -- typickým prostředím pro práci s tímto typem otisku prstů je kriminalistika \cite{LatentFingerprintMatching}. Ve srovnání s válenými a píchanými otisky, které mají obvykle dobrou kvalitu a obsahují mnoho informace, jsou latentní otisky těžší na správné získání -- obvykle se používají speciální fyzikální a chemické metody (např. daktyloskopický prášek, kyanoakrylát nebo ninhydrin) \cite{BIOdaktylLecture}.
+Válené otisky jsou získávány způsobem rolování prstu po celé délce, kdy je snahou zachytit všechny detaily hřebenů papilárních linií. Píchané otisky vznikají přiložením bříška prstu k plochému povrchu -- rolování není prováděno. Píchané otisky prstů pokrývají menší plochu, jak válené otisky prstů a typicky nejsou zkresleny právě procesem rolování. Oba tyto typy jsou získávány pomocí senzoru nebo off-line způsobem snímání -- např. nanesením inkoustu na bříško prstu. Latentní otisky prstu jsou obvykle získávány z objektů, kterých se daná osoba dotkla -- typickým prostředím pro práci s tímto typem otisku prstů je kriminalistika \cite{LatentFingerprintMatching}. Ve srovnání s válenými a píchanými otisky, které mají obvykle dobrou kvalitu a obsahují mnoho informace, jsou latentní otisky těžší na správné získání -- obvykle se používají speciální fyzikální a chemické metody (např. daktyloskopický prášek, kyanoakrylát nebo ninhydrin) \cite{BIOdaktylLecture}.\\
 
-\begin{figure}[!htbp]
+\begin{figure}[ht!]
     \centering
-    \includegraphics[width=200px]{obrazky-figures/typy.png}
+    \includegraphics[width=210px]{obrazky-figures/typy.png}
     \caption{Válený, píchaný a latentní otisk \cite{BIOopora}}
 \end{figure}
 
@@ -271,12 +271,12 @@ V daktyskopických (kriminalistických) systémech se obvykle používají všec
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=170px]{obrazky-figures/tridy.png}
+    \includegraphics[width=190px]{obrazky-figures/tridy.png}
     \caption{Typy tříd otisků prstů \cite{BIOopora}}
 \end{figure}
 
 
-\subsection*{Měření kvality otisků prstů}
+\subsection{Měření kvality otisků prstů}
 Verifikace otisku prstu je často ovlivněna kvalitou snímku otisku prstu poskytnutým senzorem. Dokonce nejlepší verifikační systémy mají mnohdy problémy s zašuměnými a nekvalitními snímky. V mnoha studiích bylo zjištěno, že změna typu senzoru může mít vliv na~rozpoznávání -- každý z nich poskytuje snímek jiné kvality. Vlhkost / suchost otisku prstu, šum, nečistoty jak na prstu, tak na senzoru nebo onemocnění mohou mít důležitý vliv na~biometrický systém. Existuje mnoho různých způsobů pro měření kvality otisků prstu -- vedle způsobů zaměřených na analýzu šířky a kontinuity papilárních linií se může využít i např. analýza na základě jasnosti papilárních linií \cite{FingerprintQuality}.
 
 Měření na základě šířky papilárních linií:
@@ -297,7 +297,7 @@ Měření na základě propojení (kontinuity) papilárních linií:
 \section{Typy senzorů}
 První techniky pro získávání otisků prstů byly typu off-line. Prsty byly očerněny inkoustem a přitisknuty nebo rolovány po papírové kartě. Tato karta byla dále naskenována a převedena tak do digitální podoby. Tato technika je stále užívanou v kriminalistice pod~názvem daktoloskopická karta. Vedle této metody se však v přístupových systémech užívají techniky pro živé naskenování otisku prstu pomocí biometrického senzoru -- tento způsob je mnohem více efektivním, levným a uživatelsky přívětivým. Může být tedy nasazen v široké oblasti aplikací \cite{Maltoni2009}. Existuje mnoho typů senzorů pro snímání otisků prstů, tato kapitola popisuje pouze dosud nejužívanější -- kapacitní a optický senzor.
 
-\subsection*{Kapacitní senzor}
+\subsection{Kapacitní senzor}
 Jedná se o jeden z nejužívanějších typů senzorů. Kapacitní senzor je tvořen 2D polem mikrokapacitorů, které jsou umístěny na čipu. Po přiložení prstu se mezi povrchem prstu a každou z křemíkových destiček vytvoří malý elektrický náboj, jehož hodnota závisí na~vzdálenosti mezi povrchem prstu a kapacitními destičkami. Hřebeny a údolí papilárních linií mají jinou hodnotu elektrického náboje a odlišnou výslednou intenzitu ve finálním snímku. Každý výrobce kapacitních senzorů má obvykle vlastní nastavenou hodnotu, jak rozlišit hřebeny a údolí papilárních linií, kterou je obvykle obtížné upravit. Kapacitní senzory nelze zneužít přiložením fotografie otisku prstu -- senzor měří dané vzdálenosti a nasnímán může být pouze 3D povrch. 
 
 Povrchovou vrstvu kapacitního senzoru je třeba chránit před chemickými látkami, které jsou přítomné v potu (např. sodík). Povrchová vrstva senzoru nesmí být však příliš silná, protože pak je snížena rozlišovací schopnost senzoru mezi hřebeny a údolími papilárních linií. Povrchová vrstva nesmí být ani příliš tenká, protože pak není odolná vůči mechanickému poškození \cite{Maltoni2009}. 
@@ -308,7 +308,7 @@ Povrchovou vrstvu kapacitního senzoru je třeba chránit před chemickými lát
     \caption{Schéma kapacitního senzoru \cite{Maltoni2009}}
 \end{figure}
 
-\subsection*{Optický senzor}
+\subsection{Optický senzor}
 Optický senzor FTIR (Fourier-transform infrared spectroscopy) je nejstarší a dosud nejužívanější způsob pro získávání snímků otisků prstů. Prst je přiložen na povrch hranolu, vrcholy papilárních linií se povrchu přímo dotýkají a hřebeny papilárních linií zůstávají od povrchu vzdálené. Levá část hranolu je obvykle nasvícena např. LED (Light-Emitting Diode) diodami. Toto světlo, které vstupuje do hranolu je odráženo údolími a náhodně pohlcováno hřebeny papilárních linií. Hřebeny se pak díky neschopnosti odrážet světlo jeví na obrazu jako tmavé oblasti ve srovnání s bílými oblastmi údolí. které světlo odrážejí. Odražené světlo od povrchu hranolu dopadá přeš čočku na CCD (Charge-coupled device) nebo CMOS (Complementary Metal–Oxide–Semiconductor) kameru, která nasnímá výsledný obraz. Stejně jako kapacitní senzory snímá FTIR senzor 3D povrch a proto nemůže být podvrhnout např. vytisknutou fotografií.
 
 Pokud je prst velmi suchý, nemusí docházet k rovnoměrnému kontaktu s povrchem senzoru FTIR. Někteří výrobci FTIR senzorů proto používají typicky silikonovou vrstvu na~povrchu hranolu, která zlepšuje optický kontakt kůže s hranolem. Často se z důvodu ceny používá na výrobu hranolu a čoček plast místo skla a CMOS kamery místo nákladnějších CCD kamer \cite{Maltoni2009}.
@@ -318,7 +318,7 @@ Pokud je prst velmi suchý, nemusí docházet k rovnoměrnému kontaktu s povrch
     \includegraphics[width=210px]{obrazky-figures/FTIR.png}
     \caption{Schéma FTIR senzoru \cite{Maltoni2009}}
 \end{figure}
-\subsection*{Daktyloskopická karta}
+\subsection{Daktyloskopická karta}
 Daktyloskopická karta je off-line způsobem snímání, která se stále užívá v kriminalistice. Obecně obsahuje osobní údaje o daktyloskopované osobě, otisky prstů a další záznamy týkající se daktyloskopování.
 
 Daktyloskopická karta obsahuje následující otisky prstů:
@@ -328,11 +328,11 @@ Daktyloskopická karta obsahuje následující otisky prstů:
     \item píchané otisky ostatních prstů (otisky umístěny ve dvou polích podle levé nebo pravé ruky).
 \end{itemize}
 
-Při daktyloskopování je dbáno na to, aby kresba papilárních linií na získaných otiscích byla plynulá, dobře čitelná a nepřerušovaná. Také se snažíme o zachycení co největší plochy dané otiskované části prstu \cite{BIOdaktylLecture}.
+Při daktyloskopování je dbáno na to, aby kresba papilárních linií na získaných otiscích byla plynulá, dobře čitelná a nepřerušovaná. Také se snažíme o zachycení co největší plochy dané otiskované části prstu \cite{BIOdaktylLecture}.\\\\
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=420px]{obrazky-figures/dakt_karta.png}
+    \includegraphics[width=260px]{obrazky-figures/dakt_karta.png}
     \caption{Příklad daktyloskopické karty Policie ČR \cite{BIOdaktylLecture}}
 \end{figure}
 
@@ -347,19 +347,19 @@ Syntetické otisky prstů jsou nedílnou součástí pro učení modelů konvolu
 \begin{figure}[!htbp]
   \begin{minipage}[b]{0.3\linewidth}
     \centering
-    \includegraphics[width=100px]{obrazky-figures/SG1_1.png}
+    \includegraphics[width=70px]{obrazky-figures/SG1_1.png}
     \caption{Syntetický otisk prstu vygenerovaný generátorem SFinGe}
   \end{minipage}
   \hspace{0.5cm}
   \begin{minipage}[b]{0.3\linewidth}
     \centering
-    \includegraphics[width=100px]{obrazky-figures/SG1_1_warts.png}
+    \includegraphics[width=70px]{obrazky-figures/SG1_1_warts.png}
     \caption{Generované onemocnění bradavice do~syntetického otisku prstu}
   \end{minipage}
   \hspace{0.5cm}
   \begin{minipage}[b]{0.3\linewidth}
     \centering
-    \includegraphics[width=90px]{obrazky-figures/SG10_1.png}
+    \includegraphics[width=60px]{obrazky-figures/SG10_1.png}
     \caption{Generované onemocnění dishydrózy do~syntetického otisku prstu}
   \end{minipage}
 \end{figure}
@@ -373,7 +373,7 @@ Obecné schéma umělého neuronu je znázorněno na obrázku \ref{fig:umelyneur
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=170px]{obrazky-figures/umely_neuron.png}
+    \includegraphics[width=190px]{obrazky-figures/umely_neuron.png}
     \caption{Schéma umělého neuronu \cite{IZULecture}}
     \label{fig:umelyneuron}
 \end{figure}
@@ -383,10 +383,26 @@ Nejznámější umělý neuron se nazývá perceptron. Schéma perceptronu je zn
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=180px]{obrazky-figures/perceptron.png}
+    \includegraphics[width=200px]{obrazky-figures/perceptron.png}
     \caption{Schéma perceptronu \cite{IZULecture}}
     \label{fig:perceptron}
 \end{figure}
+
+\section{Síť MLP}
+\label{section:MLP}
+Síť MLP (Multilayer perceptron -- Vícevrstvý perceptron) je klasickým typem neuronové sítě. Obecné schéma sítě MLP je zobrazeno na obrázku \ref{fig:mlp}. Data jsou přivedena na vstup vstupní vrstvě, následně síť obsahuje několik skrytých vrstev, která zajišťuje různé úrovně abstrakce. Výstupní vrstva poté provádí výslednou predikci. Všechny vrstvy jsou plně propojené -- každý perceptron z vrstvy je propojen s každým perceptronem následující vrstvy \cite{WhenToUseMLPCNN}.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=180px]{obrazky-figures/mlp.pdf}
+    \caption{Schéma sítě MLP}
+    \label{fig:mlp}
+\end{figure}
+
+Sítě MLP jsou vhodnými pro využití např. pro klasifikaci na základě atributů při tabulkových datasetech \cite{WhenToUseMLPCNN}. Jejich využití na problémy jako je zpracování obrazu je však už velmi nevýhodné. MLP sítě obsahují velké množství parametrů a nejsou invariantní vůči posunutí. Pokud by byl obraz převeden na 1D vektor a zpracován MLP sítí, tak je ztracena prostorová informace \cite{CNNvsMLP}.
+
+
+
 
 
 \section{Aktivační funkce}
@@ -394,7 +410,7 @@ Aktivační funkce definuje, jak se suma vstupů bude transformovat na výstupy 
 
 Skryté vrstvy obvykle užívají stejnou aktivační funkci, která se obvykle liší od aktivační funkce zvolené pro výstupní vrstvu. Aktivační funkce pro výstupní vrstvu obvykle závisí na~typu úlohy, kterou má neuronová síť realizovat (např. úloha binární klasifikace, klasifikace do více tříd) \cite{HowToChooseActivationFunction}.
 
-\subsection*{Aktivační funkce skryté vrstvy}
+\subsection{Aktivační funkce skryté vrstvy}
 Pro aktivační funkci skryté vrstvy se užívá diferencovatelná nelineární aktivační funkce. Model se pak dokáže naučit složitější funkce, než model užívající lineární aktivační funkci. Řešené problémy reálného světa jsou totiž nelineárními \cite{HowToChooseActivationFunction}. 
 
 Mezi známé aktivační funkce skryté vrstvy neuronové sítě patří:
@@ -413,17 +429,8 @@ Mezi známé aktivační funkce skryté vrstvy neuronové sítě patří:
     \end{equation} 
 \end{itemize}
 
-\begin{figure}[!htbp]
-    \centering
-    \includegraphics[width=300px]{obrazky-figures/sigmoid.png}
-    \caption{Sigmoid funkce a její derivace \cite{VanishingGradientProblem}}
-    \label{fig:sigmoid}
-\end{figure}
-
-
-
-\subsection*{Aktivační funkce výstupní vrstvy}
-Aktivační funkce výstupní vrstvy je závislá na řešeném problému. Obvykle je její výběr spjatý i s výběrem dané loss funkce, které jsou také charakteristické pro různé zvolené úlohy.
+\subsection{Aktivační funkce výstupní vrstvy}
+Aktivační funkce výstupní vrstvy je závislá na řešeném problému. Obvykle je její výběr spjatý i s výběrem dané loss funkce (viz sekce \ref{section:loss}), které jsou také charakteristické pro různé zvolené úlohy.
 
 Aktivačními funkcemi užitými pro výstupní vrstvy neuronové sítě jsou:
 \begin{itemize}
@@ -432,8 +439,16 @@ Aktivačními funkcemi užitými pro výstupní vrstvy neuronové sítě jsou:
     \item Softmax -- Výstupem softmax je vektor hodnot, jejichž součet je jednotkový -- jedná se o pravděpodobnost příslušnosti výstupu do dané třídy. Je vhodnou použít při klasifikaci do více než dvou tříd \cite{HowToChooseActivationFunction}. 
 \end{itemize}
 
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=410px]{obrazky-figures/sigmoid.png}
+    \caption{Sigmoid funkce a její derivace \cite{VanishingGradientProblem}}
+    \label{fig:sigmoid}
+\end{figure}
+
 
 \section{Loss funkce}
+\label{section:loss}
 S problematikou loss funkce souvisí pojem objektivní funkce -- funkce, která má za úkol vyhodnocovat kandidátní řešení (např. množinu vah) a úkolem modelu je maximalizovat nebo minimalizovat právě tuto objektivní funkci. U neuronových sítí se typicky snažíme o minimalizaci chyby -- objektivní funkce je zde právě nazývána loss funkcí. Stejně jako u~aktivační funkce výstupní vrstvy výběr dané loss funkce závisí na vybrané úloze, kterou řešíme:
 \begin{itemize}
     \item MAE (Mean Absolute Error) -- Jedná se o nejednodušší, avšak robustní loss funkci užitou pro regresi. MAE je ideální i při operaci s odlehlými hodnotami. Výpočet je počítán jako průměr druhých mocnin mezi predikovanými a skutečnými hodnotami \cite{LossFunctions}.
@@ -442,7 +457,7 @@ S problematikou loss funkce souvisí pojem objektivní funkce -- funkce, která 
 \section{Trénování neuronové sítě}
 Cílem algoritmu učení je minimalizace objektivní funkce, což je suma výsledků loss funkce přes všechny prvky datasetu. Snahou je nalézt takové parametry, které minimalizují hodnotu objektivní funkce. Gradienty jsou derivacemi objektové funkce s konkrétními parametry a počítají se pro konkrétní parciální derivaci -- vektor reálných čísel. Minimalizuje se objektivní funkce $J(\theta)$ parametrizovaná parametry modelu $\theta$ pomocí aktualizace parametrů v opačném směru gradientu objektivní funkce $\nabla_{\theta}J(\theta)$. Parametr $\eta$ udává learning rate -- velikost kroku pro dosažení (lokálního) minima \cite{GradientDescent}. Při zpětné propagaci se aktualizují váhy neuronové sítě.
 
-\subsection*{Batch gradient descent}
+\subsection{Batch gradient descent}
 Batch gradient descent počítá gradient objektivní funkce s využitím celé datové sady. Pro~vypočítání jedné aktualizace parametrů je tedy zapotřebí vypočítání gradientů pro~celý dataset: 
 
   \begin{equation} 
@@ -451,14 +466,14 @@ Batch gradient descent počítá gradient objektivní funkce s využitím celé 
 
 Tento výpočet však může být velmi pomalým a neřešitelným pro datasety, které se svým rozsahem nevejdou do paměti. Tato metoda nám také neumožňuje online aktualizaci modelu -- např. při rozšíření datasetu v průběhu trénování \cite{GradientDescent}.
 
-\subsection*{Stochastic gradient descent}
+\subsection{Stochastic gradient descent}
 Stochastic gradient descent počítá aktualizaci parametrů pro každý prvek z trénovací sady $x^{(i)}$, který spadá do třídy $y^{(i)}$:
   \begin{equation} 
     \theta = \theta - \eta\nabla_{\theta}J(\theta;x^{(i)};y^{(i)})
     \end{equation} 
 Tato metoda řeší problém provádění redundantních výpočtů pro rozsáhlé datasety, který je typickým pro přístup Batch gradient descent. Stochastic gradient descent je také mnohem rychlejší, umožňuje online aktualizaci modelu a vyhledávání nových možných lepších potenciálních lokálních minim. Při snižování parametru learning rate vykazuje Stochastic gradient descent stejné konvergenční chování jako Batch gradient descent a konverguje k~lokálnímu nebo globálnímu minimu v závislosti na typu úlohy \cite{GradientDescent}.
 
-\subsection*{Mini-batch gradient descent}
+\subsection{Mini-batch gradient descent}
 Mini-batch gradient descent provádí aktualizaci pro každý mini-batch $n$ trénovacích vzorků: 
 
 \begin{equation} 
@@ -470,7 +485,7 @@ Snižování počtu aktualizací může vést ke stabilnější konvergenci a p�
 
 
 \section{Konvoluční neuronové sítě}
-Konvoluční neuronové sítě jsou speciálním typem neuronových sítí, které jsou v dnešní době vysokým způsobem užívané při zpracování obrazu a řeči. Jejich název je odvozen od matematické operace konvoluce, která je v jejich architektuře použita. Jelikož konvoluční neuronové sítě explicitně předpokládají, že vstupy jsou např. ve formě obrázků nebo zvuku, tak můžeme zakódovat určité vlastnosti do jejich architektury. Výrazně se snižuje počet parametrů modelu oproti tzv. sítím MLP (Vícevrstvý perceptron), což je klasický typ neuronové sítě, která obsahuje pouze plně propojené vrstvy -- každý perceptron z vrstvy je propojen s každým perceptronem následující vrstvy. Zanedbání prostorové informace je další nevýhodou sítí MLP.\\
+Konvoluční neuronové sítě jsou speciálním typem neuronových sítí, které jsou v dnešní době vysokým způsobem užívané při zpracování obrazu a řeči. Jejich název je odvozen od matematické operace konvoluce, která je v jejich architektuře použita. Jelikož konvoluční neuronové sítě explicitně předpokládají, že vstupy jsou např. ve formě obrázků nebo zvuku, tak můžeme zakódovat určité vlastnosti do jejich architektury. Výrazně se snižuje počet parametrů modelu oproti tzv. sítím MLP (Vícevrstvý perceptron), které byly popsány v sekci \ref{section:MLP}.\\
 
 Obecně se konvoluční neuronová síť skládá z:
 \begin{itemize}
@@ -485,24 +500,25 @@ Konvoluční neuronová síť dokáže zohlednit místní konektivitu -- konvolu
 
 Na každý pixel obrazu je obecně aplikováno více konvolučních filtrů. První vrstvy konvoluční neuronové sítě obsahují jednoduché filtry reagující pouze na hrany, filtry v jedné z posledních vrstev nám umožňují získat z obrazu detailnější informace (např. filtry reagující na barvy). Aplikací každého filtru je získána aktivační mapa. 
 
-Další nedílnou součástí konvolučních neuronových sítí je pooling vrstva. Její parametry jsou nižší, jak velikost získané aktivační mapy konvoluční vrstvou -- např. velikost 2 $\times$ 2 a parametr stride 2 pixely. Při tomto nastavení pooling vrstvy je aktivační mapa dvakrát zmenšena -- každá dimenze je poloviční, počet pixelů v aktivační mapě je pak zmenšen čtyřikrát -- např. při vstupu aktivační mapy o velikosti 6 $\times$ 6 (36 pixelů) je po aplikaci pooling vrstvy nová velikost aktivační mapy 3 $\times$ 3 (9 pixelů). Pooling vrstvy jsou neučitelnou částí konvolučních neuronových sítí. Nejznámějšími operací spojenou s pooling vrstvou je max pooling umožňující nalezení hodnot lokálních maxim. Pooling vrstva efektivně snižuje prostorové dimenze vstupu a pracuje s myšlenkou, že relativní umístění prvku (vlastnosti) vzhledem k ostatním prvkům (vlastnostem) je důležitější jak jeho samotné přesné umístění~\cite{PoolingLayers}.
+Další nedílnou součástí konvolučních neuronových sítí je pooling vrstva. Její parametry jsou nižší, jak velikost získané aktivační mapy konvoluční vrstvou -- např. velikost 2 $\times$ 2 a parametr stride (krok posunu konvolučního filtru) 2 pixely. Při tomto nastavení pooling vrstvy je aktivační mapa dvakrát zmenšena -- každá dimenze je poloviční, počet pixelů v aktivační mapě je pak zmenšen čtyřikrát -- např. při vstupu aktivační mapy o velikosti 6 $\times$ 6 (36 pixelů) je po aplikaci pooling vrstvy nová velikost aktivační mapy 3 $\times$ 3 (9 pixelů). Pooling vrstvy jsou neučitelnou částí konvolučních neuronových sítí. Nejznámějšími operací spojenou s pooling vrstvou je max pooling umožňující nalezení hodnot lokálních maxim. Pooling vrstva efektivně snižuje prostorové dimenze vstupu a pracuje s myšlenkou, že relativní umístění prvku (vlastnosti) vzhledem k ostatním prvkům (vlastnostem) je důležitější jak jeho samotné přesné umístění~\cite{PoolingLayers}.
 
 Obraz je poté po dostatečném zpracování s využitím konvolučních vrstev převeden na~1D vektor a přiveden na vstup plně propojených vrstev. Tyto plně propojené vrstvy pak tvoří výstupní část celého modelu a je určen výsledek na základě dané úlohy.
 
 \section{Existující architektury neuronových sítí pro zpracování obrazu}
 Páteřní konvoluční neuronová síť je základní částí každého detekčního modelu. V průběhu zpracovávání vstupu konvoluční neuronovou sítí jsou extrahovány rysy různých úrovní -- v prvních vrstvách sítě se získávají rysy nízké úrovně, které mají vysoké rozlišení, avšak malý počet informací. Naopak na konci jsou získány rysy s nízkým rozlišením, ale vysokou hodnotou informace. Běžné principy detekce objektů jako Faster R-CNN nebo SSD užívají jako páteřní síť např. ResNet-50 nebo MobileNet. Jeden z nejnovějších přístupů EfficientDet užívá však speciální EfficientNet síť.
-\subsection*{VGG-16}
-VGG-16 je jednoduchou a široce užívanou konvoluční neuronovou sítí představenou roku 2014. Není však příliš výpočetně optimalizovanou. Vstupem sítě je barevný obrázek o rozměrech 224 $\times$ 224. Všechny konvoluční vrstvy jsou výpočetně stejně složité a z rozlišení se složitost přesouvá do parametru počtu kanálů -- při zmenšení rozlišení se dvakrát zvýší počet kanálů. Používá se velikost jádra konvoluční vrstvy 3 $\times$ 3. Síť má v hlubších vrstvách více nelinearit a nižší počet parametrů. Vstup první plně propojené vrstvy má dimenze 7~$\times$~7~$\times$ 512. Po plně propojených vrstvách následuje predikce s využitím aktivační funkce softmax např. do 1000 tříd pro dataset ILSVRC \cite{VGG16}.
+\subsection{VGG-16}
+VGG-16 je jednoduchou a široce užívanou konvoluční neuronovou sítí představenou roku 2014. Není však příliš výpočetně optimalizovanou. Její architektura je zobrazena na obrázku \ref{fig:vgg}. Vstupem sítě je barevný obrázek o rozměrech 224 $\times$ 224. Všechny konvoluční vrstvy jsou výpočetně stejně složité a z rozlišení se složitost přesouvá do parametru počtu kanálů -- při zmenšení rozlišení se dvakrát zvýší počet kanálů. Velikost jádra konvoluční vrstvy je 3 $\times$ 3. Síť má v hlubších vrstvách více nelinearit a nižší počet parametrů. Vstup první plně propojené vrstvy má dimenze 7~$\times$~7~$\times$ 512. Po plně propojených vrstvách následuje predikce s využitím aktivační funkce softmax např. do 1000 tříd pro dataset ILSVRC \cite{VGG16}.
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=250px]{obrazky-figures/vgg16.png}
+    \includegraphics[width=300px]{obrazky-figures/vgg16.png}
     \caption{Architektura VGG16 \cite{VGG16}}
+    \label{fig:vgg}
 \end{figure}
 
-\subsection*{ResNet-50}
+\subsection{ResNet-50}
 ResNet-50 je variantou modelu ResNet. Je složen z 48 konvolučních vrstev, jedné max pool vrstvy a jedné average pool vrstvy -- celkově tedy obsahuje 50 vrstev. Tento model využívá reziduálních připojení - připojení vstupu ResNet-50 modelu na výstup, kdy je spočítána suma právě tohoto vstupu (identity) a zpracovaného vstupu. Výhodou tohoto dodatečného připojení identity na výstup je, že modelu nejsou přidané žádné nové dodatečné parametry. Tento princip řeší problém tendence vyšší chybovosti u modelů s vyšším počtem vrstev. Také je vyřešený problém mizejících gradientů. Dalšími známými variantami ResNet jsou např. ResNet-101 (obsahující 101 vrstev) nebo ResNet-152 (obsahující 152 vrstev) \cite{ResNet50}.
-\subsection*{MobileNet}
+\subsection{MobileNet}
 Architektura MobileNet byla poprvé představena roku 2017. Svojí myšlenkou se vyhýbá trendu tvoření komplikovanějších sítí o více vrstvách pro dosažení vyšší přesnosti. Místo toho se autoři zaměřili na výpočetně limitované platformy -- na tvorbu vhodné sítě pro mobilní a vestavěné aplikace, robotiku, nebo samořídící auta. MobileNet využívá tzv. hloubkově oddělitelné konvoluce (Depthwise Separable Convolutions) \cite{MobileNet}.
 
 Princip základních kroků hloubkově oddělitelné konvoluce je zobrazen na obrázcích \ref{fig:depthwise} a \ref{fig:depthwise2}. Při hloubkově oddělitelné konvoluci je v první části provedena operace konvoluce bez změny hloubky -- každé z jader je aplikováno pouze na 1 odpovídající kanál vstupu (nikoliv na všechny jako u běžné operace konvoluce). Následně probíhá bodová konvoluce -- rozměry velikosti jádra pro bodovou konvoluci jsou 1 $\times$ 1.
@@ -512,28 +528,29 @@ Výhodou tohoto přístupu oproti klasické operaci konvoluce je rapidní sníž
 \begin{figure}[!htbp]
   \begin{minipage}[b]{0.5\linewidth}
     \centering
-    \includegraphics[width=220px]{obrazky-figures/depthwise.png}
+    \includegraphics[width=230px]{obrazky-figures/depthwise.png}
     \caption{Hloubkově oddělitelná konvoluce - použití tří konvolučních jader \cite{SeparableConvolutions}}
     \label{fig:depthwise}
   \end{minipage}
   \hspace{0.5cm}
   \begin{minipage}[b]{0.5\linewidth}
     \centering
-    \includegraphics[width=220px]{obrazky-figures/depthwise2.png.png}
+    \includegraphics[width=230px]{obrazky-figures/depthwise2.png.png}
     \caption{Bodová konvoluce - transformace 3-kanálového obrazu na 1-kanálový \cite{SeparableConvolutions}}
     \label{fig:depthwise2}
   \end{minipage}
 \end{figure}
 
-\subsection*{Hourglass}
-Hourglass je typem konvoluční neuronové sítě představené v roce 2016. Poprvé byla využita na problematiku predikce pozice lidského těla. Hlavním úkolem této architektury je zachytit informaci přes různá rozlišení vstupního obrazu. Cílem této symetrické topologie je převést obraz na velmi nízké rozlišení pomocí pooling vrstev, následně probíhá zvětšení rozlišení. Při malém rozlišením síť dokáže efektivně pracovat s velkým kontextem, avšak se ztrácí informace o pozici. Při zvyšování rozlišení se naopak ztrácí hodně kontextu. Proto síť kombinuje rysy přes více rozlišení \cite{Hourglass}.
+\subsection{Hourglass}
+Hourglass je typem konvoluční neuronové sítě představené v roce 2016. Poprvé byla využita na problematiku predikce pozice lidského těla. Hlavním úkolem této architektury je zachytit informaci přes různá rozlišení vstupního obrazu. Cílem této symetrické topologie (viz obrázek \ref{fig:hourglass}) je převést obraz na velmi nízké rozlišení pomocí pooling vrstev, následně probíhá zvětšení rozlišení. Při malém rozlišením síť dokáže efektivně pracovat s velkým kontextem, avšak se ztrácí informace o pozici. Při zvyšování rozlišení se naopak ztrácí hodně kontextu. Proto síť kombinuje rysy přes více rozlišení \cite{Hourglass}.
 
 \begin{figure}[!htbp]
     \centering
     \includegraphics[width=300px]{obrazky-figures/hourglass.png}
     \caption{Symetrická topologie Hourglass \cite{Hourglass}}
+    \label{fig:hourglass}
 \end{figure}
-\subsection*{EfficientNet}
+\subsection{EfficientNet}
 Pokud chceme dosáhnout vyšší přesnosti modelu, je běžným způsobem škálovat model za~pomoci využití větší páteřní sítě (škálování do hloubky) nebo zvětšením rozlišení vstupního obrázku (škálování rozlišení). Přestože tyto metody individuálního škálování pouze na základě jednoho z faktorů zvyšují přesnost modelu, obvykle vyžadují zdlouhavé ruční ladění a u sítí obsahujících mnoho vrstev se může vyskytnout problém saturace a mizejících gradientů. Například ResNet dokáže být škálován z verze ResNet-18 na verzi ResNet-200 zvýšením počtu vrstev, řeší problém mizejících gradientů na základě funkce identity, avšak se jedná o rozsáhlou síť s mnoha parametry a dlouhým trénovacím časem. Cílem společnosti Google bylo navrhnout síť o méně parametrech, která dokáže být nasazená např. na mobilních zařízeních nebo méně výkonných strojích a  je méně náročnou na výpočetní zdroje a trénovací čas. V roce 2019 byla poprvé prezentována EfficientNet se základním principem efektivního složeného škálování modelu. Můžeme provést následující typy škálování:
 \begin{itemize}
     \item škálování rozlišení -- pokud má obraz vyšší rozlišení, můžeme z něj získat komplexní rysy a detailnější textury,
@@ -551,64 +568,68 @@ Při škálování je pracováno s koeficienty škálování $\alpha$ = 1,2 (šk
 \section{Přístupy pro detekci objektů}
 \label{sec:detekce}
 Problematika detekce objektů je jednou ze základních úloh strojového učení. Úkolem je vykreslit predikovaný bounding box okolo daného objektu. Naivním přístup k detekci by mohl být založen na pohyblivém okně přes dané pixely obrazu, kdy každé podokno je ohodnocené na základě predikce modelu skóre pro danou třídu. Podokna s vysokým skóre by pak byly částmi výsledného bounding boxu. Tento přístup je však výpočetně náročným. Proto se užívá jiných moderních přístupů. 
-\subsection*{R-CNN}
-R-CNN byla poprvé představena v roce 2014 \cite{RCNN}. Tento přístup kombinuje extrakci rysů z vybraných oblastí obrazu a konvoluční neuronovou síť. Je vybráno pouze např. 2000 oblastí na základě algoritmu selektivního výběru. Pro predikci není tedy využit velký počet oblastí, jako by tomu mohlo být u naivního algoritmu využívajícího posuvného okna, ale pouze zmenšený počet oblastí. Algoritmus selektivního výběru užívá greedy algoritmus pro~rekurzivní spojování podobných oblastí do regionů větší velikosti. 
+\subsection{R-CNN}
+R-CNN (Region Based Convolutional Neural Network) byla poprvé představena v roce 2014 \cite{RCNN}. Tento přístup kombinuje extrakci rysů z vybraných oblastí obrazu a konvoluční neuronovou síť. Je vybráno pouze např. 2000 oblastí na základě algoritmu selektivního výběru. Pro predikci není tedy využit velký počet oblastí, jako by tomu mohlo být u naivního algoritmu využívajícího posuvného okna, ale pouze zmenšený počet oblastí. Algoritmus selektivního výběru užívá greedy algoritmus pro~rekurzivní spojování podobných oblastí do regionů větší velikosti. 
 
-Regiony jsou poté konvertovány na rozměry na základě modelu konvoluční neuronové sítě, která extrahuje vektory rysů o 4096 dimenzích. Extrahované vektory rysů jsou poté klasifikovány pomocí klasifikátoru SVM (Support Vector Machines) do daných tříd. Algoritmus vedle predikce dané třídy objektu také predikuje čtyři hodnoty offsetu pro získání vyšší přesnosti polohy bounding boxu.
+Princip R-CNN modelu je znázorněn na obrázku \ref{fig:rcnn}. Regiony jsou poté konvertovány na rozměry na základě modelu konvoluční neuronové sítě, která extrahuje vektory rysů o 4096 dimenzích. Extrahované vektory rysů jsou poté klasifikovány pomocí klasifikátoru SVM (Support Vector Machines) do daných tříd. Algoritmus vedle predikce dané třídy objektu také predikuje čtyři hodnoty offsetu pro získání vyšší přesnosti polohy bounding boxu.
 
 Nevýhodami daného přístupu je stále vysoká doba trénování a celková nepoužitelnost nasazení v reálném čase. Regionů je stále vysoký počet, což vyžaduje tisíce zpětných průchodů modelem pro detekci objektů \cite{ObjectDetectionAlgorithms}.
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=340px]{obrazky-figures/rcnn.png}
+    \includegraphics[width=360px]{obrazky-figures/rcnn.png}
     \caption{Princip R-CNN \cite{ObjectDetectionAlgorithms}}
+    \label{fig:rcnn}
 \end{figure} 
 
-\subsection*{Fast R-CNN}
+\subsection{Fast R-CNN}
 Ross Girshick, jeden z předních autorů přístupu R-CNN, v roce 2015 vyřešil některé z nevýhod předešlého přístupu \cite{FastRCNN}. V R-CNN byl vysoký počet regionů postupně zpracováván konvoluční neuronovou sítí, v Fast R-CNN je na vstup modelu přiveden celý vstupní obraz. Je získána konvoluční mapa rysů, ze které identifikujeme vhodné regiony, které jsou s využitím ROI pooling vrstvy převedeny na pevnou délku. Tyto vektory mohou být klasifikovaný pomocí MLP sítě a softmax aktivační funkce. Vedle predikované třídy získáváme i hodnoty offsetu pro daný bounding box.
 
-Fast R-CNN je znatelně rychlejší jak R-CNN, protože z daného obrazu nemusí být pokaždé vybíráno několik tisíc regionů, které jsou následně zpracovávány modelem. Operace konvoluce je aplikována pouze jednou pro každý obraz, ze které je poté zpracována mapa rysů. Algoritmus selektivního výběru je však stále časově náročným procesem, který je fixně implementovaný a není schopný procesu učení a tedy i možného zlepšení přesnosti při~hledání vhodných regionů v obrazu \cite{ObjectDetectionAlgorithms}.
+Fast R-CNN je znatelně rychlejší jak R-CNN, protože z daného obrazu nemusí být pokaždé vybíráno několik tisíc regionů, které jsou následně zpracovávány modelem. Na obrázku \ref{fig:fastrcnn} je znázorněn její princip. Operace konvoluce je aplikována pouze jednou pro každý obraz, ze které je poté zpracována mapa rysů. Algoritmus selektivního výběru je však stále časově náročným procesem, který je fixně implementovaný a není schopný procesu učení a tedy i možného zlepšení přesnosti při~hledání vhodných regionů v obrazu \cite{ObjectDetectionAlgorithms}.
 
 \begin{figure}[!htbp]
     \centering
     \includegraphics[width=260px]{obrazky-figures/fastrcnn.png}
     \caption{Princip Fast R-CNN \cite{ObjectDetectionAlgorithms}}
+    \label{fig:fastrcnn}
 \end{figure} 
 
-\subsection*{Faster R-CNN}
+\subsection{Faster R-CNN}
 Faster R-CNN je metodou představenou v roce 2016, která řeší hlavně nevýhody R-CNN a Fast R-CNN z hlediska využívání algoritmu selektivního výběru \cite{FasterRCNN}. Jelikož se jedná o algoritmus, který ovlivňuje výkon neuronové sítě, bylo využito myšlenky zrušení tohoto algoritmu. Celý obraz je opět převeden na vstup konvoluční neuronové sítě, kdy je vygenerována mapa rysů. Je ovšem využito i druhé oddělené sítě, která predikuje vhodné oblasti pro následnou detekci. Tyto oblasti jsou po změně dimenzí při průchodu ROI pooling vrstvou využity pro následnou klasifikaci obrazu v dané oblasti a je opět predikována i odchylka pro bounding boxy.
 
 Faster R-CNN je díky vylepšením nedostatků přístupů R-CNN a Fast R-CNN znatelně rychlejší a je tedy vhodnou pro nasazení v reálných aplikacích \cite{ObjectDetectionAlgorithms}.
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=160px]{obrazky-figures/fasterrcnn.png}
+    \includegraphics[width=210px]{obrazky-figures/fasterrcnn.png}
     \caption{Princip Faster R-CNN \cite{ObjectDetectionAlgorithms}}
 \end{figure} 
 
-\subsection*{SSD}
+\subsection{SSD}
 
 \iffalse
 SSD (Single Shot Detector) je přístupem z roku 2016 pro detekci objektů, která je založena na odlišném principu než Faster R-CNN. Ve Faster R-CNN je hledání vhodných regionů a klasifikace daných regionů rozdělena, v SSD je fáze hledání vhodných regionů zrušena a metoda využívá pouze jednu konvoluční neuronovou síť. Celý vstupní obraz je na začátku přiveden na vstup konvoluční neuronové sítě. Mapy rysů jsou získány v různých měřítkách. Pomocí 3 $\times$ 3 konvolučního filtru jsou vytvořené na mapách rysů bounding boxy definující daný objekt. Najednou je definovaná hranice objektu a i jeho klasifikace do třídy. Bounding boxy se nacházejí na každé z aktivačních map a proto může být detekce provedena na objektech různého měřítka. Síť dokáže tedy získat predikce z map rysů s různě vysokým rozlišením a tak predikovat objekty rozličných velikostí. Při predikci je vypočítáno skóre pro přítomnost každé třídy pro daný objekt a offset bounding boxu pro to, aby dané ohraničení lépe odpovídalo reálnému tvaru objektu. SSD je přístupem, který zvláště díky více vrstvám pro predikci v různých měřítkách objektu, dosahuje dobré přesnosti za snížení trénovacího času a může být tedy nasazeným v reálných aplikacích \cite{SSD, SSDFasterR-CNNComparison}.
 \fi
 
-SSD (Single Shot Detector) je přístupem pro detekci objektů představeným roku 2016, který je založen na odlišném přístupu než Faster R-CNN. Principem Faster R-CNN je zpočátku hledat vhodné regiony a poté u těchto vybraných regionů provést detekci a klasifikaci. Fáze hledání vhodných regionů je u metody SSD zrušena. Místo toho se v několika konvolučních vrstvách o různém rozlišení provádí predikce bounding boxů a třídy pro každý z daných objektů. Pro každý objekt je při trénování predikováno 8732 bounding boxů -- díky tomuto vysokému množství získáme větší pokrytí dané lokace v obrazu a tak možnost nalezení bounding boxu, který má nejvyšší překryv se skutečným anotovaným bounding boxem objektu. SSD následně vybírá právě na základě skóre překryvu bounding boxy se skóre vyšším jak 50 \%. Následně jsou eliminovány duplicitní bounding boxy a je vybráno pouze 100 bounding boxů s nejvyšším skóre jistoty pro každý obrázek.
+SSD (Single Shot Detector) je přístupem pro detekci objektů představeným roku 2016, který je založen na odlišném přístupu než Faster R-CNN. Principem Faster R-CNN je zpočátku hledat vhodné regiony a poté u těchto vybraných regionů provést detekci a klasifikaci. Fáze hledání vhodných regionů je u metody SSD zrušena. Místo toho se v několika konvolučních vrstvách o různém rozlišení provádí predikce bounding boxů a třídy pro každý z daných objektů (viz schéma architektury \ref{fig:ssdarchitecture}). Pro každý objekt je při trénování predikováno 8732 bounding boxů -- díky tomuto vysokému množství získáme větší pokrytí dané lokace v obrazu a tak možnost nalezení bounding boxu, který má nejvyšší překryv se skutečným anotovaným bounding boxem objektu (viz obrázek \ref{fig:ssdfeaturemap}). SSD následně vybírá právě na základě skóre překryvu bounding boxy se skóre vyšším jak 50 \%. Následně jsou eliminovány duplicitní bounding boxy a je vybráno pouze 100 bounding boxů s nejvyšším skóre jistoty pro každý obrázek.
 
 Síť díky predikcím polohy bounding boxů a příslušnosti do třídy v různých měřítkách dokáže predikovat objekty rozličných velikostí. SSD je přístupem, který zvláště díky více vrstvám pro predikci v různých měřítkách objektu, dosahuje dobré přesnosti za snížení trénovacího času a může být tedy nasazeným v reálných aplikacích. Také dosahuje dobré přenosnosti i na datasetech o nižším rozlišení \cite{SSD, SSDFasterR-CNNComparison}.
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=220px]{obrazky-figures/ssd_feature_map.png}
+    \includegraphics[width=280px]{obrazky-figures/ssd_feature_map.png}
     \caption{Princip získání většího počtu bounding boxů pro daný objekt \cite{SSD}}
+    \label{fig:ssdfeaturemap}
 \end{figure} 
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=240px]{obrazky-figures/ssd_architecture.png}
+    \includegraphics[width=350px]{obrazky-figures/ssd_architecture.png}
     \caption{Architektura modelu SSD \cite{SSD}}
+    \label{fig:ssdarchitecture}
 \end{figure} 
 
-\subsection*{CenterNet}
+\subsection{CenterNet}
 Mnoho přístupů k detekci (např. SSD) využívá predikování tisíců bounding boxů pro jeden objekt a vybírá bounding boxy s vysokou hodnotou překryvu. Tento přístup má následující nevýhody -- složitost je úměrná druhé mocnině počtu predikcí a model je nucen vypočítávat předpovědi pro všechny bounding boxy, což je operace náročná na čas i výpočetní prostředky. CenterNet využívá jiný způsob predikce -- pro každý objekt je vytvořena tzv. \textit{center confidence heatmap}, kdy ve středech objektu nabývá hodnota distribuce funkce svého maxima (a tedy nejvyšší jistoty). Vedle generování této mapy jsou také jako u jiných detektorů predikovány hodnoty pro rozměry bounding boxů a offsety související se středem bounding boxů predikovanými mapou jistoty. CenterNet predikuje \textit{center confidence heatmap} pro každou třídu.
 
 Právě užití \textit{center confidence heatmap} nám umožňuje okamžitě odstranit irelevantní predikce bez nutnosti predikování celého bounding boxu, princip analýzy je zobrazen na obrázku \ref{fig:centernet}. Na mapu je aplikován max pooling a okolo samotného centra je vytvořen malý plochý region. Následně se boolovsky porovnávají jednotlivé prvky mezi vstupem a získaným výstupem po aplikaci max pooling -- je vytvořena nová tepelná mapa, kdy jsou lokální maxima nastavena na hodnotu 1, zbytek je nastaven na hodnotu 0. Tato mapa se vynásobí s původním vstupem a výsledné skóre jistoty je vyprahováno. Tímto způsobem se dále pracuje jen s bounding boxy, které odpovídají lokálním maximům \cite{CenterNet}.
@@ -622,7 +643,7 @@ Právě užití \textit{center confidence heatmap} nám umožňuje okamžitě od
 
 
 
-\subsection*{EfficientDet}
+\subsection{EfficientDet}
 \iffalse
 EfficientDet je modelem vyvinutým společností Google v roce 2020. Díky svému nízkému počtu parametrů se řadí k sítím s nižšími nároky na výpočetní zdroje a vyšší rychlostí trénování. Pro páteřní síť není užita např. MobileNet nebo ResNet-50 jako u předchozích metod, ale opět společností Google vyvinutá síť EfficientNet. EfficientDet neužívá FPN (Feature Pyramid Network) jako běžné algoritmy pro detekci. Při užití FPN jsou všechny rysy různých rozlišení posuzovány stejným způsobem a je jim tedy přikládána totožná důležitost. FPN je nahrazeno BiFPN (Weighted Bi-directional Feature Pyramid Network), který umožňuje analýzu a získání pouze důležitých rysů. Architektura modelu EfficientDet je znázorněna na obrázku \ref{fig:efficientdet}.
 
@@ -789,18 +810,18 @@ Cílem této práce je analyzovat více různých přístupů pro detekci a klas
     \item CenterNet Resnet101 V1 FPN 512x512.
 \end{itemize}
 
-\subsection*{TensorFlow a TensorFlow Model Garden}
+\subsection{TensorFlow a TensorFlow Model Garden}
 TensorFlow je open-source knihovnou zaměřující se na strojové učení. Umožňuje efektivně provádět nízko úrovňové tenzorové operace na CPU, GPU a TPU. Je schopna škálovat výpočty s využitím mnoha zařízení (např. clustery se stovkami GPU). Keras je vysokoúrovňové API knihovny TensorFlow - klade důraz na uživatelskou přívětivost a nezbytné abstrakce -- umožňuje snadným způsobem stavět modely strojového učení pro rozličné úlohy~\cite{Keras}.
 
 TensorFlow Model Garden je knihovnou dostupnou pod licencí Apache 2.0. Obsahuje implementace state-of-the-art řešení modelů a poskytuje mimo jiné podporu pro detekci a klasifikaci objektů -- TensorFlow 2 Detection Model Zoo\footnote{\url{https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md}}\cite{TensorFlowModelGarden}. Všechny modely byly předtrénovány na COCO 2017 datasetu\footnote{\url{https://cocodataset.org}} -- jednom z nejužívanějších datasetů strojového učení. Tento dataset obsahuje více jak 200 000 anotovaných snímků řazenými do 80 objektových kategorií, každý objekt je poté zařazen také do subkategorie -- např. objekty kategorií \textit{bicycle}, \textit{car}, \textit{motorcycle}, \textit{airplane}, \textit{bus}, \textit{train}, \textit{truck} nebo \textit{boat} jsou zařazeny do superkategorie \textit{vehicle} \cite{COCOCategoriesLabels}. 
 
 
-\subsection*{Načítání a konfigurace modelu}
+\subsection{Načítání a konfigurace modelu}
 Každý z detekčních modelů z knihovny TensorFlow Model Garden obsahuje konfigurační soubor s názvem \verb=pipeline.config=. Tento soubor má plno parametrů vhodných pro další experimentování. Pro počáteční trénování modelu byl zvolen model SSD MobileNet V2 FPNLite 320x320, který je z knihovny jedním z nejrychlejších.
 
 Pro vyzkoušení trénování a predikce byly zatím využity tři třídy onemocnění - bradavice, ekzém a dyshidróza. Pro trénovací a validační dataset je třeba vytvořit tzv. TF records, které obsahují obsahují vstupní obrázky reprezentované v bytech, anotované pozice bounding boxů s třídami a další dodatečné informace.
 
-\subsection*{Trénování modelu a následná predikce}
+\subsection{Trénování modelu a následná predikce}
 Pro zkušební počáteční trénování prvního z detekčních modelů bylo využito prostředí Colab Pro s GPU T4 a P100. Při následné predikci je vybráno v každém obrazu 100 bounding boxů s nejvyšším skóre jistoty, uživateli je poté vykresleno 8 bounding boxů s aspoň 50~\%~mírou jistoty pro klasifikaci. Současně jsou do textového souboru zapsány i informace o jednotlivých nejistějších predikcích. Následně bude potřeba model vyhodnotit na testovacím datasetu na základě např. překryvu anotovaných a predikovaných bounding boxů a správnosti klasifikované třídy onemocnění, nebo pomocí dalších technik.
 
 
