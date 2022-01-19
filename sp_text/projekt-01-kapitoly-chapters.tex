@@ -2,7 +2,7 @@
 \chapter{Úvod}
 V současném světě je stále více rozšířeným užití biometrie jako součásti bezpečnostních mechanismů. Jednou z nejrozšířenějších biometrických charakteristik je otisk prstu. Pro snímání by měly být zaručeny ideální podmínky, avšak jedná se o nesplnitelný úkol v běžném nasazení. Snímky získané ze senzoru mohou být nekvalitní, mohou obsahovat nečistoty, které dále komplikují proces rozpoznávání. Vysoké procento populace trpí kožními onemocněními. Mnohá onemocnění jsou široce rozšířená -- např. atopický ekzém nebo bradavice, které postihují i bříška prstu. U některých z~onemocnění (např. bradavice) je jejich vliv na rozpoznávání nižší, protože papilární linie jsou zachovány v nepostiženém místě otisku prstu, u tolik rozšířeného atopického ekzému však jsou ve vážnějších podobách papilární linie těžko rozpoznatelné. Potenciální detektor a klasifikátor těchto onemocnění by mohl odhalit možná postižení uživatele využívající biometrický systém.
 
-Problematika detekce a klasifikace pro rozličné typy objektů je stále jedním z předních témat současnosti. Techniky, které kdysi spíše využívaly ruční extrakci rysů, byly nahrazeny konvolučními neuronovými sítěmi, které dosahují vyšší přesnosti, ale i výpočetní náročnosti. Moderní detektory typů Faster R-CNN nebo SSD (Single Shot Detector) jsou využívané v reálných aplikacích a při rozpoznávání rozličných typů objektů. Cílem této práce je využít několika typů těchto moderních detektorů na úloze detekce a klasifikace různých typů onemocnění otisku prstu. Přitom je kladen důraz na experimenty s dostupnými architekturami a snahou nalézt co neuniverzálnější detektor, který by zvládl rozlišit co nejvíce typů onemocnění -- pro začátek jsou pro experimenty vybrány atopický ekzém, psoriáza, dishydróza a bradavice.
+Problematika detekce a klasifikace pro rozličné typy objektů je stále jedním z předních témat současnosti. Techniky, které kdysi spíše využívaly ruční extrakci rysů, byly nahrazeny konvolučními neuronovými sítěmi, které dosahují vyšší přesnosti, ale i výpočetní náročnosti. Moderní detektory typů Faster R-CNN (Region Based Convolutional Neural Network) nebo SSD (Single Shot Detector) jsou využívané v reálných aplikacích a při rozpoznávání rozličných typů objektů. Cílem této práce je využít několika typů těchto moderních detektorů na úloze detekce a klasifikace různých typů onemocnění otisku prstu. Přitom je kladen důraz na experimenty s dostupnými architekturami a snahou nalézt co neuniverzálnější detektor, který by zvládl rozlišit co nejvíce typů onemocnění -- pro začátek jsou pro experimenty vybrány atopický ekzém, psoriáza, dishydróza a bradavice.
 \chapter{Rozpoznávání podle otisků prstů}
 Lidské otisky prstů jsou jednou z nejznámějších a nejužívanějších biometrických charakteristik. V roce 1823 bylo vytvořeno Janem Evangelistou Purkyně první klasifikační schéma otisků prstů, které rozdělovalo otisky prstů do devíti tříd na základě konfigurace hřebenů papilárních linií. V~roce 1863 bylo ve Velké Británii akceptováno, že žádní dva lidé nemají totožné otisky prstu~\cite{Maltoni2009}. Následující kapitola se zabývá stručným popisem oboru biometrie a jejími základními pojmy. Hlavním z cílů této kapitoly je však představit onemocnění, které mohou plochu otisku prstu postihnout a popsat základní přístupy pro zpracování a rozpoznávání otisků prstů.
 \section{Biometrie}
@@ -12,17 +12,18 @@ Identita, identifikace, verifikace a autentizace jsou základními pojmy, které
 
 Identifikace je situací, kdy daná osoba zadá svoji biometrickou vlastnost systému, ale nesdělí mu svoji identitu. Daný systém pak má za úkol rozpoznat identitu uživatele -- porovnává se vzorek zadaný na vstupu s celou databází. Systém poté nalezne nebo nenalezne danou identitu. Identifikaci můžeme chápat jako porovnání 1:N \cite{BIOopora}. Při verifikaci je sdělena systému elektronická identita uživatele a dojde k ověření fyzické identity. V databázi je vyhledán daný záznam uživatele, který obsahuje biometrická data. Pokud je záznam nenalezen, dojde k zamítnutí přístupu uživatele, jinak dochází k porovnání dat -- výsledkem je potvrzení či nepotvrzení identity. Proces verifikace je také jinak nazýván porovnání 1:1 \cite{BIOopora}. Při~autentizaci má systém za úkol potvrdit autentičnost (hodnověrnost) osoby žádající o~přístup. Autentizace může probíhat jak při identifikaci, tak při autentizaci. Rozhodnutí je obvykle prováděno na základě nastavené hodnoty prahu \cite{BIOopora}.
 \subsection*{Biometrické systémy a vlastnosti}
-Biometrický systém je složen ze registračního a verifikačního / identifikačního modulu. Součástí obou uvedených modulů je biometrický senzor a biometrický markant -- extrahované rysy z biometrické informace na vstupu. Hlavním rozdílem obou modulů je princip práce s databází a biometrickým markantem.  Při práci s registračním modulem je biometrický markant uložen do databáze. Verifikační / identifikační modul naopak neukládá biometrický markant do databáze, ale místo toho načítá data z databáze pro porovnání biometrického markantu na vstupu s údaji databáze. Při tomto porovnání obdržíme výsledek na základě nalezení případné shody a případného operačním módu -- verifikaci nebo identifikaci \cite{BIOopora}.
+Biometrický systém, znázorněn na obrázku \ref{fig:biosystem}, je složen z registračního a verifikačního / identifikačního modulu. Součástí obou uvedených modulů je biometrický senzor a biometrický markant -- extrahované rysy z biometrické informace na vstupu. Hlavním rozdílem obou modulů je princip práce s databází a biometrickým markantem.  Při práci s registračním modulem je biometrický markant uložen do databáze. Verifikační / identifikační modul naopak neukládá biometrický markant do databáze, ale místo toho načítá data z databáze pro porovnání biometrického markantu na vstupu s údaji databáze. Při tomto porovnání obdržíme výsledek na základě nalezení případné shody a případného operačním módu -- verifikaci nebo identifikaci \cite{BIOopora}.
 
 \begin{figure}[!htbp]
     \centering
     \includegraphics[width=240px]{obrazky-figures/bio_system.png}
     \caption{Schéma biometrického systému \cite{BIOopora}}
+    \label{fig:biosystem}
 \end{figure}
 
 Biometrické charakteristiky můžeme dělit na anatomické a dynamické vlastnosti. U anatomických vlastností je jeden pevný rys jednou biometrickou vlastností. Do anatomických vlastností spadá např. otisk prstu, obličej, duhovka a sítnice oka, dlaň nebo geometrie ruky. Dynamické vlastnosti jsou spjaty s nějakou akcí uživatele, do této kategorie spadá např. chůze, hlas, gestikulace obličeje či dynamické vlastnosti podpisu \cite{BIOopora}. 
 \section{Struktura kůže}
-Kůže je největším lidským orgánem, který funguje jako počáteční obrana proti patogenům, ultrafialovému záření, chemikáliím nebo zranění. Také slouží jako regulátor teploty. Plocha kůže tvoří asi 1,5 -- 1,8 $m^2$ a má hmotnost zhruba 4,5 kg \cite{ZakladyFunkcniAnatomieCloveka}. 
+Kůže je největším lidským orgánem, který funguje jako počáteční obrana proti patogenům, ultrafialovému (UV) záření, chemikáliím nebo zranění. Také slouží jako regulátor teploty. Plocha kůže tvoří asi 1,5 -- 1,8 $m^2$ a má hmotnost zhruba 4,5 kg \cite{ZakladyFunkcniAnatomieCloveka}. 
 Lidská kůže je složena ze tří vrstev:
 \begin{itemize}
     \item epidermis (pokožka),
@@ -38,21 +39,28 @@ Lidská kůže je složena ze tří vrstev:
 
 Nejdůležitějšími funkcemi kůže jsou:
 \begin{itemize}
-    \item ochrana těla -- zabránění vnikání škodlivých látek do vnitřního prostředí organismu, odolnost vůči mechanickému poškození, ochrana proti UV záření díky pigmentu melaninu,
-    \item smyslová funkce kůže -- výskyt velkého množství receptorů sloužící k vnímání mechanických, tepelných a bolestivých počitků, specializované receptory slouží k vnímání tepla, chladu a hmatu,
-    \item udržování tělesné teploty -- zrohovatělá vrstva buněk díky své špatné tepelné vodivosti chrání organismus před většími tepelnými ztrátami, podkožní vazivo tvoří poměrně silnou vrstvu u každého jedince,
-    \item skladovací funkce kůže -- množství tuku v podkožním vazivu tvoří energetickou zásobárnu organismu, uskladnění vitamínů rozpustných v tucích (A, D, E, K),
-    \item vylučovací funkce kůže -- vyloučené sekrety mazových a potních žláz se uplatňují při~ochraně kůže i celého organismu \cite{ZakladyFunkcniAnatomieCloveka}.
+    \item Ochrana těla -- Kůže zabraňuje vnikání škodlivých látek do vnitřního prostředí organismu a je odolnou vůči mechanickému poškození. Pigment melanin chrání proti UV záření \cite{ZakladyFunkcniAnatomieCloveka}.
+    \item Smyslová funkce kůže -- V kůži se vyskytuje velké množství receptorů sloužící k vnímání mechanických, tepelných a bolestivých počitků. Specializované receptory slouží k vnímání tepla, chladu a hmatu \cite{ZakladyFunkcniAnatomieCloveka}.
+    \item Udržování tělesné teploty -- Zrohovatělá vrstva buněk díky své špatné tepelné vodivosti chrání organismus před většími tepelnými ztrátami. Podkožní vazivo tvoří poměrně silnou vrstvu u každého jedince \cite{ZakladyFunkcniAnatomieCloveka}.
+     \item Skladovací funkce kůže -- Množství tuku v podkožním vazivu tvoří energetickou zásobárnu organismu. Probíhá zde uskladnění vitamínů rozpustných v tucích (A, D, E, K) \cite{ZakladyFunkcniAnatomieCloveka}.
+    \item Vylučovací funkce kůže -- Vyloučené sekrety mazových a potních žláz se uplatňují při~ochraně kůže i celého organismu \cite{ZakladyFunkcniAnatomieCloveka}.
 \end{itemize}
 
 \subsection*{Papilární linie}
-Na prstech rukou a nohou jsou přítomné vyvýšené kožní útvary, které se nazývají papilární linie. Základ papilárních linií je formovaný na hranici kožních vrstev epidermis a corium, kde dochází k vzájemné interakci spodní epidermální vrstvy a horní vrstvy coria. Po určitém zvlnění epidermální vrstvy se na bříškách prstů objeví papilární linie \cite{DermatologickeFaktory}. Struktura kůže a papilárních linií je znázorněna na obrázku \ref{fig:kuze}. Tyto linie slouží k určení identity jedince, tvoří dermatoglyfy, které jsou pro jedince charakteristické. Přesný důvod vzniku papilárních linií však není známý -- uvažuje se o hypotéze, že to jsou např. výsledky napětí a tlaků v kůži během embryonálního vývoje. Uspořádání papilárních linií je z 90 \% podmíněno geneticky, z 10 \% je pak závislé na vnějších podmínkách. Ani jednovaječná dvojčata nemají shodné otisky prstů -- shodují se sice v základních vzorech, ale odlišují se v~drobných detailech rozhodujícími pro identifikaci osob \cite{Dermatoglyfika}. Papilární linie se vyvíjejí během nitroděložního vývoje a po celý život jedince vykazují stabilitu, kdy se s~přibývajícím věkem mění rozměry plošek prstů, dlaní či chodidel, avšak struktura zůstává stejná \cite{DermatologickeFaktory}. \\
+Na prstech rukou a nohou jsou přítomné vyvýšené kožní útvary, které se nazývají papilární linie. Základ papilárních linií je formovaný na hranici kožních vrstev epidermis a corium, kde dochází k vzájemné interakci spodní epidermální vrstvy a horní vrstvy coria. Po určitém zvlnění epidermální vrstvy se na bříškách prstů objeví papilární linie \cite{DermatologickeFaktory}. Struktura kůže a papilárních linií je znázorněna na obrázku \ref{fig:kuze}, na obrázku \ref{fig:zdravyotisk} je pak zobrazen nasnímaný otisk prstu tvořený charakteristickými papilárními liniemi. Tyto linie slouží k určení identity jedince, tvoří dermatoglyfy, které jsou pro jedince charakteristické. Přesný důvod vzniku papilárních linií však není známý -- uvažuje se o hypotéze, že to jsou např. výsledky napětí a tlaků v kůži během embryonálního vývoje. Uspořádání papilárních linií je z 90 \% podmíněno geneticky, z 10 \% je pak závislé na vnějších podmínkách. Ani jednovaječná dvojčata nemají shodné otisky prstů -- shodují se sice v základních vzorech, ale odlišují se v~drobných detailech rozhodujícími pro identifikaci osob \cite{Dermatoglyfika}. Papilární linie se vyvíjejí během nitroděložního vývoje a po celý život jedince vykazují stabilitu, kdy se s~přibývajícím věkem mění rozměry plošek prstů, dlaní či chodidel, avšak struktura zůstává stejná \cite{DermatologickeFaktory}. \\
 
 \begin{figure}[!htbp]
     \centering
     \includegraphics[width=200px]{obrazky-figures/kuze.jpeg}
     \caption{Struktura kůže \cite{DermatologickeFaktory}}
     \label{fig:kuze}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=200px]{obrazky-figures/zdravyotisk.PNG}
+    \caption{Příklad nasnímaného otisku prstu \cite{BIOotiskyLecture}}
+    \label{fig:zdravyotisk}
 \end{figure}
 
 \section{Nemoci kůže ovlivňující otisky prstů}
@@ -203,10 +211,10 @@ Metod pro porovnání otisků prstů existuje celá řada. Metoda založená na 
 \subsection*{Daktyloskopie}
 Platí následující daktyloskopické zákony:
 \begin{itemize}
-    \item papilární linie jsou pro každého z jedinců unikátní,
-    \item vzor, který tvoří papilární linie, zůstává po celý život jedince relativně neměnným, 
-    \item dorůstáním kůže na povrchu prstů jsou papilární linie obnovovány, papilární linie nemohou být pozměněny nebo odstraněny, pokud není poškozena dermální vrstva kůže, pokud však k poškození dojde, pak již na tomto místě nedojde k obnově papilárních linií,
-    \item konfigurační typy se mohou individuálně měnit, ovšem jedná se pouze o malé změny, které leží v tolerančních limitech a umožňují systematickou klasifikaci \cite{BIOopora}.
+    \item Papilární linie jsou pro každého z jedinců unikátní \cite{BIOopora}.
+    \item Vzor, který tvoří papilární linie, zůstává po celý život jedince relativně neměnným \cite{BIOopora}. 
+    \item Dorůstáním kůže na povrchu prstů jsou papilární linie obnovovány. Papilární linie nemohou být pozměněny nebo odstraněny, pokud není poškozena dermální vrstva kůže. Pokud však k poškození dojde, pak již na tomto místě nedojde k obnově papilárních linií \cite{BIOopora}.
+    \item Konfigurační typy se mohou individuálně měnit, ovšem jedná se pouze o malé změny, které leží v tolerančních limitech a umožňují systematickou klasifikaci \cite{BIOopora}.
 \end{itemize}
 \subsection*{Typy otisků prstů, druhy markantů a třídy otisků prstů}
 Otisky prstů jsou děleny na základě způsobu pořízení následovně:
@@ -215,6 +223,8 @@ Otisky prstů jsou děleny na základě způsobu pořízení následovně:
 \item píchaný otisk (živý),
 \item latentní otisk (skrytý) \cite{BIOopora}.
 \end{itemize}
+
+Válené otisky jsou získávány způsobem rolování prstu po celé délce, kdy je snahou zachytit všechny detaily hřebenů papilárních linií. Píchané otisky vznikají přiložením bříška prstu k plochému povrchu -- rolování není prováděno. Píchané otisky prstů pokrývají menší plochu, jak válené otisky prstů a typicky nejsou zkresleny právě procesem rolování. Oba tyto typy jsou získávány pomocí senzoru nebo off-line způsobem snímání -- např. nanesením inkoustu na bříško prstu. Latentní otisky prstu jsou obvykle získávány z objektů, kterých se daná osoba dotkla -- typickým prostředím pro práci s tímto typem otisku prstů je kriminalistika \cite{LatentFingerprintMatching}. Ve srovnání s válenými a píchanými otisky, které mají obvykle dobrou kvalitu a obsahují mnoho informace, jsou latentní otisky těžší na správné získání -- obvykle se používají speciální fyzikální a chemické metody (např. daktyloskopický prášek, kyanoakrylát nebo ninhydrin) \cite{BIOdaktylLecture}.
 
 \begin{figure}[!htbp]
     \centering
@@ -256,6 +266,8 @@ Otisky prstů mohou být také rozřazeny do následujících tříd na základ�
     \item pravá smyčka (\textit{Right Loop}),
     \item dvojitá smyčka (\textit{Twin Loop}) \cite{BIOopora}.
 \end{itemize}
+
+V daktyskopických (kriminalistických) systémech se obvykle používají všechny třídy otisků prstů s výjimkou dvojité smyčky \cite{BIOopora}. 
 
 \begin{figure}[!htbp]
     \centering
@@ -328,7 +340,7 @@ Při daktyloskopování je dbáno na to, aby kresba papilárních linií na zís
 Generování syntetických otisků prstů je inverzní biometrickou úlohou. Syntetické otisky mohou být vytvořeny z náhodných bodů nebo ISO šablony a vygenerovaný otisk je obvykle dokonalým. Mohou být užity pro hodnocení výkonu nebo učení modelů neuronových sítí. Výhodou je, že nepodléhají ochraně osobních údajů a proto mohou být snadněji zakomponovány do součástí vědeckých článků a prezentací výsledků \cite{BIOotiskyLecture}.
 
 Jelikož syntetický otisk prstu je obvykle dokonalým, při generování je kladen důraz na~generování poškození nebo šumu pro větší podobnost s reálným otiskem prstu. Pro~generování syntetických otisků bylo využito prostředí generátoru SFinGe, syntetickým otiskům je následně vygenerováno onemocnění generátorem popsaným v bakalářské práci Generování onemocnění kůže do syntetických otisků prstů z
-SFinGe \cite{FITBT21893}, v bakalářské práci Detekce a klasifikace poškození otisku prstu s využitím neuronových sítí byl generátor následně upraven a přidána funkce automatického anotování bounding boxů onemocnění v~JSON formátu~\cite{FITBT22567}.
+SFinGe \cite{FITBT21893}, v bakalářské práci Detekce a klasifikace poškození otisku prstu s využitím neuronových sítí \cite{FITBT22567} byl generátor následně upraven a přidána funkce automatického anotování bounding boxů onemocnění v~JSON formátu.
 
 Syntetické otisky prstů jsou nedílnou součástí pro učení modelů konvolučních neuronových sítí, zvláště při malé velikosti datasetu reálných otisků prstů získaných od pacientů trpících onemocněním. Model je však potřeba otestovat i na reálných otiscích, protože neuronová síť může mít tendenci se přetrénovat na pouze vygenerovaných syntetických otiscích prstů.
 
@@ -367,12 +379,13 @@ Obecné schéma umělého neuronu je znázorněno na obrázku \ref{fig:umelyneur
 \end{figure}
 
 
-Nejznámější umělý neuron se nazývá perceptron. Vstupní vektor $x_0, x_1,\ldots x_n$ má fixně nastavenou nultou složku na hodnotu 1 z důvodu zjednodušení vztahů pro výpočet odezvy a pro učení. Váha $w_0$ je pak nastavena na hodnotu záporného prahu. Vnitřní stav má následující rovnici: $w_0x_0 + \sum_{i=1}^{n}w_ix_i$, kde $x_0$ představuje speciální stav bias a $w_0$ jeho váhu. Na vnitřní reprezentaci je aplikována aktivační funkce a získaný výstup je předán další vrstvě. Při~zpětné propagaci jsou pak upraveny váhy neuronové sítě \cite{IZULecture}.
+Nejznámější umělý neuron se nazývá perceptron. Schéma perceptronu je znázorněno na obrázku \ref{fig:perceptron}. Vstupní vektor $x_0, x_1,\ldots x_n$ má fixně nastavenou nultou složku na hodnotu 1 z důvodu zjednodušení vztahů pro výpočet odezvy a pro učení. Váha $w_0$ je pak nastavena na hodnotu záporného prahu. Vnitřní stav má následující rovnici: $w_0x_0 + \sum_{i=1}^{n}w_ix_i$, kde $x_0$ představuje speciální stav bias a $w_0$ jeho váhu. Na vnitřní reprezentaci je aplikována aktivační funkce a získaný výstup je předán další vrstvě. Při~zpětné propagaci jsou pak upraveny váhy neuronové sítě \cite{IZULecture}.
 
 \begin{figure}[!htbp]
     \centering
     \includegraphics[width=180px]{obrazky-figures/perceptron.png}
     \caption{Schéma perceptronu \cite{IZULecture}}
+    \label{fig:perceptron}
 \end{figure}
 
 
@@ -386,11 +399,11 @@ Pro aktivační funkci skryté vrstvy se užívá diferencovatelná nelineární
 
 Mezi známé aktivační funkce skryté vrstvy neuronové sítě patří:
 \begin{itemize}
-    \item ReLU -- ReLU (Rectified Linear Unit) je nejužívanější aktivační funkcí. V kladné části nabývá derivace hodnoty 1, v záporné části je pak derivace nulová (tedy konstantní). Funkce a její derivace jsou monotónní. Funkci ReLU lze matematicky vyjádřit jako:
+    \item ReLU -- ReLU (Rectified Linear Unit) je nejužívanější aktivační funkcí. V kladné části nabývá derivace hodnoty 1, v záporné části je pak derivace nulová (tedy konstantní). Funkce a její derivace jsou monotónní \cite{ActivationFunctionsInNeuralNetworks}. Funkci ReLU lze matematicky vyjádřit jako:
     \begin{equation} 
     R(z) = max(0, z)
     \end{equation} 
-    \item Sigmoida -- Výstupem sigmoidy jsou hodnoty z intervalu $(0, 1)$. Čím je výstup vyšší, tím bude hodnota blíže hodnotě 1, čím je výstup nižší, tím více bude hodnota blízká hodnotě 0. Funkce je monotónní, avšak derivace funkce monotónní není. Funkce je vhodná pro predikci pravděpodobnosti díky právě jejímu definovanému oboru hodnot. S pojmem sigmoidy však souvisí problém mizejících gradientů. Jedná se o problém, kdy přidání vrstev využívající tuto aktivační funkci má za následek, že gradient loss funkce dosáhne k nule. Trénování modelu se tedy stává obtížným, což může vést k~celkové nepřesnosti celé sítě. Vysoké změny vstupu funkce vedou k malým změnám na výstupu -- hodnota derivace se blíží k nule. Tento problém je specifický pro sítě o~více vrstvách \cite{VanishingGradientProblem}. Graf sigmoidy a její derivace je znázorněný na obrázku \ref{fig:sigmoid}. Sigmoida je definována následujícím předpisem:
+    \item Sigmoida -- Výstupem sigmoidy jsou hodnoty z intervalu $(0, 1)$. Čím je výstup vyšší, tím bude hodnota blíže hodnotě 1, čím je výstup nižší, tím více bude hodnota blízká hodnotě 0. Funkce je monotónní, avšak derivace funkce monotónní není \cite{ActivationFunctionsInNeuralNetworks}. Funkce je vhodná pro predikci pravděpodobnosti díky právě jejímu definovanému oboru hodnot. S pojmem sigmoidy však souvisí problém mizejících gradientů. Jedná se o problém, kdy přidání vrstev využívající tuto aktivační funkci má za následek, že gradient loss funkce dosáhne k nule. Trénování modelu se tedy stává obtížným, což může vést k~celkové nepřesnosti celé sítě. Vysoké změny vstupu funkce vedou k malým změnám na výstupu -- hodnota derivace se blíží k nule. Tento problém je specifický pro sítě o~více vrstvách \cite{VanishingGradientProblem}. Graf sigmoidy a její derivace je znázorněný na obrázku \ref{fig:sigmoid}. Sigmoida je definována následujícím předpisem:
      \begin{equation} 
     \sigma(z) = \frac{1}{1+e^{-z}}
     \end{equation} 
@@ -414,8 +427,8 @@ Aktivační funkce výstupní vrstvy je závislá na řešeném problému. Obvyk
 
 Aktivačními funkcemi užitými pro výstupní vrstvy neuronové sítě jsou:
 \begin{itemize}
-    \item Linearita -- Lineární aktivační funkce nemění váhovanou sumu vstupu a přímo vrací danou hodnotu. Běžně se užívá při regresi -- predikci numerické hodnoty.
-    \item Sigmoida -- Sigmoida je vhodnou aktivační funkcí např. při binární klasifikaci.
+    \item Linearita -- Lineární aktivační funkce nemění váhovanou sumu vstupu a přímo vrací danou hodnotu. Běžně se užívá při regresi -- predikci numerické hodnoty \cite{HowToChooseActivationFunction}.
+    \item Sigmoida -- Sigmoida je vhodnou aktivační funkcí např. při binární klasifikaci \cite{HowToChooseActivationFunction}.
     \item Softmax -- Výstupem softmax je vektor hodnot, jejichž součet je jednotkový -- jedná se o pravděpodobnost příslušnosti výstupu do dané třídy. Je vhodnou použít při klasifikaci do více než dvou tříd \cite{HowToChooseActivationFunction}. 
 \end{itemize}
 
@@ -423,7 +436,7 @@ Aktivačními funkcemi užitými pro výstupní vrstvy neuronové sítě jsou:
 \section{Loss funkce}
 S problematikou loss funkce souvisí pojem objektivní funkce -- funkce, která má za úkol vyhodnocovat kandidátní řešení (např. množinu vah) a úkolem modelu je maximalizovat nebo minimalizovat právě tuto objektivní funkci. U neuronových sítí se typicky snažíme o minimalizaci chyby -- objektivní funkce je zde právě nazývána loss funkcí. Stejně jako u~aktivační funkce výstupní vrstvy výběr dané loss funkce závisí na vybrané úloze, kterou řešíme:
 \begin{itemize}
-    \item MAE (Mean Absolute Error) -- Jedná se o nejednodušší, avšak robustní loss funkci užitou pro regresi. MAE je ideální i při operaci s odlehlými hodnotami. Výpočet je počítán jako průměr druhých mocnin mezi predikovanými a skutečnými hodnotami.
+    \item MAE (Mean Absolute Error) -- Jedná se o nejednodušší, avšak robustní loss funkci užitou pro regresi. MAE je ideální i při operaci s odlehlými hodnotami. Výpočet je počítán jako průměr druhých mocnin mezi predikovanými a skutečnými hodnotami \cite{LossFunctions}.
     \item Cross-entropy loss -- Tato loss funkce je užívanou při problematice binární klasifikace a klasifikace do více tříd. Při binární cross-entropy loss je predikovaná hodnota porovnána se skutečnou třídou (hodnoty 0 nebo 1) a vypočítané skóre penalizuje pravděpodobnost na základě vzdálenosti od očekávané hodnoty. Penalizace je logaritmická, kdy pro malé vzdálenosti od skutečné hodnoty nabývá malých hodnot a naopak velkých hodnot pro velké rozdíly. Binární cross-entropy loss je vypočítaná jako průměr aplikace cross-entropy přes všechny vzorky. Pro aplikaci cross-entropy loss při klasifikaci do více tříd se používá one-hot kódování pro dané třídy. Skóre penalizace je vypočítané přes každou hodnotu vektoru získaným one-hot kódováním a zprůměrováno přes všechny vzorky \cite{LossFunctions}.
 \end{itemize}
 \section{Trénování neuronové sítě}
@@ -492,7 +505,7 @@ ResNet-50 je variantou modelu ResNet. Je složen z 48 konvolučních vrstev, jed
 \subsection*{MobileNet}
 Architektura MobileNet byla poprvé představena roku 2017. Svojí myšlenkou se vyhýbá trendu tvoření komplikovanějších sítí o více vrstvách pro dosažení vyšší přesnosti. Místo toho se autoři zaměřili na výpočetně limitované platformy -- na tvorbu vhodné sítě pro mobilní a vestavěné aplikace, robotiku, nebo samořídící auta. MobileNet využívá tzv. hloubkově oddělitelné konvoluce (Depthwise Separable Convolutions) \cite{MobileNet}.
 
-Princip základních kroků hloubkově oddělitelné konvoluce je zobrazen na obrázcích \ref{fig:depthwise} a \ref{fig:depthwise2}. Při hloubkově oddělitelné konvoluci je v první části provedena operace konvoluce bez změny hloubky -- každé z jader je aplikováno pouze na 1 odpovídající kanál vstupu (nikoliv na všechny jako u běžné operace konvoluce). Následně probíhá bodová konvoluce -- rozměry velikosti jádra pro bodovou konvoluci jsou 1 $\times$ 1. Proces aplikace bodové konvoluce je 
+Princip základních kroků hloubkově oddělitelné konvoluce je zobrazen na obrázcích \ref{fig:depthwise} a \ref{fig:depthwise2}. Při hloubkově oddělitelné konvoluci je v první části provedena operace konvoluce bez změny hloubky -- každé z jader je aplikováno pouze na 1 odpovídající kanál vstupu (nikoliv na všechny jako u běžné operace konvoluce). Následně probíhá bodová konvoluce -- rozměry velikosti jádra pro bodovou konvoluci jsou 1 $\times$ 1.
 
 Výhodou tohoto přístupu oproti klasické operaci konvoluce je rapidní snížení počtu aplikace operace násobení -- např. při velikosti batche obrázků o velikosti 256 s rozměry jednoho barevného snímku 12 $\times$ 12 $\times$ 3 pixely se jedná o snížení operací násobení z hodnoty 1228800 na 52952. Síť je pak schopná zpracovat více dat za nižší čas \cite{SeparableConvolutions}. 
 
