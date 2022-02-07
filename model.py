@@ -7,6 +7,7 @@ import glob
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
+import xml.etree.cElementTree as ET
 
 import tensorflow as tf
 import object_detection
@@ -133,8 +134,10 @@ class UsedModel:
 
     # test trained model on test dataset, save results into ./results folder - images with bounding box and txt file with predictions (at least for now)
     # TO DO: evaluate test images predicted bounding boxes and real xml annotated bounding boxes
-    def test_model(self, full_model_name):
+    def test_model(self):
         print("Only test trained model on test dataset")
+        if self.model == "ssd_mobilenet_v2":
+            full_model_name = "ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8"
         configs = config_util.get_configs_from_pipeline_file(os.path.join('trained_models', full_model_name, 'pipeline.config'))
         detection_model = model_builder.build(model_config=configs['model'], is_training=False)
 
@@ -149,6 +152,7 @@ class UsedModel:
         # detect and clasify each image from test dataset
         for file in glob.glob('./dataset/test_preprocessed/*'):
             file_substr = file.split('/')[-1]
+            test_image_name = file_substr.rsplit('.', 1)[0]
 
             f.write("FILE NAME: " + file_substr + '\n')
             f.write("DETECTIONS: " + '\n')
@@ -178,10 +182,14 @@ class UsedModel:
 
             detection_classes_tolist = detections['detection_classes'].tolist()
             detection_scores_tolist = detections['detection_scores'].tolist()
+            detection_boxes_tolist = detections['detection_boxes'].tolist()
+            #print(detection_boxes_tolist)
 
-
-            for key, value in zip(detection_classes_tolist, detection_scores_tolist):
-
+            detection_classes_tolist_filtered = []
+            detection_scores_tolist_filtered = []
+            detection_boxes_tolist_filtered = []
+            for key, value, box in zip(detection_classes_tolist, detection_scores_tolist, detection_boxes_tolist):
+                print(box)
                 # print only detections with more than e.g. 0.5 certainity
                 if value <= set_min_score_thresh:
                     continue
@@ -197,6 +205,12 @@ class UsedModel:
                 elif key == 2:
                     f.write('\t' + "CLASS: dishydrosis" + '\n')
                     f.write('\t' + "DETECTION SCORE: " + str(round(value * 100, 2)) + " %" + '\n')
+
+                detection_classes_tolist_filtered.append(key)
+                detection_scores_tolist_filtered.append(value)
+                detection_boxes_tolist_filtered.append(box)
+
+            self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered)
 
             image_np_array_result = image_np_array.copy()
 
@@ -217,3 +231,18 @@ class UsedModel:
             plt.savefig("./results/" + file_substr, bbox_inches='tight', pad_inches = 0)
 
         f.close()
+
+    def compute_iou(self, test_image_name, predicted_classes, predicted_scores, predicted_boxes):
+        tree = ET.parse(os.path.join('dataset', 'test_preprocessed', test_image_name + '.xml'))
+        root = tree.getroot()
+        print(root.tag)
+
+        for child in root:
+            print(child.tag, child.attrib)
+
+        for width in root.iter('width'):
+            print(width.attrib)
+        #for object in root.findall('object'):
+        for size in root.findall('size'):
+            width = size.find('width').text
+            height = size.find('height').text
