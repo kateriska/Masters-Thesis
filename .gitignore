@@ -15,3 +15,7 @@ scripts/healthy_generated_dataset/*
 scripts/healthy_generated_xml_files/*
 results/*
 !results/predictions.txt
+scripts/norm.png
+scripts/opening.png
+scripts/result.png
+scripts/thresh.png
