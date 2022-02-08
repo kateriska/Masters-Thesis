@@ -230,6 +230,8 @@ class UsedModel:
             plt.ylabel('Count of Predicted Bounding Boxes')
             plt.show()
             plt.savefig('./results/normalized_iou_distributions.jpg', bbox_inches='tight')
+            plt.clf()
+            ax.cla()  
 
             image_np_array_result = image_np_array.copy()
 
