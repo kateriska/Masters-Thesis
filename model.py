@@ -138,6 +138,8 @@ class UsedModel:
         print("Only test trained model on test dataset")
         if self.model == "ssd_mobilenet_v2":
             full_model_name = "ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8"
+
+        # configure trained model
         configs = config_util.get_configs_from_pipeline_file(os.path.join('trained_models', full_model_name, 'pipeline.config'))
         detection_model = model_builder.build(model_config=configs['model'], is_training=False)
 
@@ -149,6 +151,8 @@ class UsedModel:
 
         f = open("./results/predictions.txt", "w+") # file for predictions of tested images
 
+        # declare dictionary for plotting normalized IoU distributions
+        iou_stats = {0.0 : 0, 0.1 : 0, 0.2 : 0, 0.3 : 0, 0.4 : 0, 0.5 : 0, 0.6 : 0, 0.7 : 0, 0.8 : 0, 0.9 : 0, 1.0 : 0}
         # detect and clasify each image from test dataset
         for file in glob.glob('./dataset/test_preprocessed/*'):
             file_substr = file.split('/')[-1]
@@ -189,7 +193,7 @@ class UsedModel:
             detection_scores_tolist_filtered = []
             detection_boxes_tolist_filtered = []
             for key, value, box in zip(detection_classes_tolist, detection_scores_tolist, detection_boxes_tolist):
-                print(box)
+                #print(box)
                 # print only detections with more than e.g. 0.5 certainity
                 if value <= set_min_score_thresh:
                     continue
@@ -210,7 +214,22 @@ class UsedModel:
                 detection_scores_tolist_filtered.append(value)
                 detection_boxes_tolist_filtered.append(box)
 
-            self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered)
+            iou_stats = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_stats)
+            print(iou_stats)
+
+            # plot graph of normalized IoU distributions for whole test dataset - updated after each processed image
+            fig = plt.figure()
+            ax = fig.add_axes([0,0,1,1])
+            normalized_iou_scores = iou_stats.keys()
+            normalized_iou_scores = [str(i) for i in normalized_iou_scores]
+            print(normalized_iou_scores)
+            counts = iou_stats.values()
+            ax.bar(normalized_iou_scores, counts)
+            plt.title('Normalized IoU Distributions')
+            plt.xlabel('Normalized IoU (Intersection over Union Score)')
+            plt.ylabel('Count of Predicted Bounding Boxes')
+            plt.show()
+            plt.savefig('./results/normalized_iou_distributions.jpg', bbox_inches='tight')
 
             image_np_array_result = image_np_array.copy()
 
@@ -232,17 +251,60 @@ class UsedModel:
 
         f.close()
 
-    def compute_iou(self, test_image_name, predicted_classes, predicted_scores, predicted_boxes):
+    '''
+    You must evaluate IoUs directly to know how tight a model’s bounding boxes are to the underlying ground truth.
+    A simple way to generate aggregate statistics about the IoU of different models is by plotting histograms. Here’s the basic recipe:
+    Detect objects in a dataset using a set of models
+    Compute the IoUs of every prediction
+    For each prediction, store the highest IoU it has with any ground truth object
+    Plot a histogram with normalized counts
+    https://towardsdatascience.com/iou-a-better-detection-evaluation-metric-45a511185be1
+    '''
+    def compute_iou(self, test_image_name, predicted_classes, predicted_scores, predicted_boxes, iou_stats):
         tree = ET.parse(os.path.join('dataset', 'test_preprocessed', test_image_name + '.xml'))
         root = tree.getroot()
-        print(root.tag)
+        print(len(predicted_boxes))
 
-        for child in root:
-            print(child.tag, child.attrib)
-
-        for width in root.iter('width'):
-            print(width.attrib)
-        #for object in root.findall('object'):
         for size in root.findall('size'):
-            width = size.find('width').text
-            height = size.find('height').text
+            width = int (size.find('width').text)
+            height = int (size.find('height').text)
+
+        for predicted_box in predicted_boxes:
+            # convert predicted coordinates to real coordinates cause predicted are normalized
+            xmin_predicted = round(predicted_box[1] * width)
+            ymin_predicted = round(predicted_box[0] * height)
+            xmax_predicted = round(predicted_box[3] * width)
+            ymax_predicted = round(predicted_box[2] * height)
+
+            max_iou_score = 0
+            ground_truth_box_with_max_iou_score = []
+            for bndbox in root.findall('object/bndbox'):
+                xmin = int (bndbox.find('xmin').text)
+                ymin = int (bndbox.find('ymin').text)
+                xmax = int (bndbox.find('xmax').text)
+                ymax = int (bndbox.find('ymax').text)
+
+                intersection_xmin = max(xmin, xmin_predicted)
+                intersection_ymin = max(ymin, ymin_predicted)
+                intersection_xmax = min(xmax, xmax_predicted)
+                intersection_ymax = min(ymax, ymax_predicted)
+
+                intersection_area = max(0, intersection_xmax - intersection_xmin + 1) * max(0, intersection_ymax - intersection_ymin + 1)
+
+                ground_truth_area = (xmax - xmin + 1) * (ymax - ymin + 1)
+                predicted_area = (xmax_predicted - xmin_predicted + 1) * (ymax_predicted - ymin_predicted + 1)
+
+                iou_score = intersection_area / float(ground_truth_area + predicted_area - intersection_area)
+                #print(iou_score)
+
+                if iou_score > max_iou_score:
+                    max_iou_score = iou_score
+                    ground_truth_box_with_max_iou_score.append(xmin)
+                    ground_truth_box_with_max_iou_score.append(ymin)
+                    ground_truth_box_with_max_iou_score.append(xmax)
+                    ground_truth_box_with_max_iou_score.append(ymax)
+
+
+            current_value = iou_stats[round(max_iou_score,1)]
+            iou_stats[round(max_iou_score,1)] = current_value + 1
+        return iou_stats
