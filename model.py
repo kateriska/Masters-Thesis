@@ -153,6 +153,18 @@ class UsedModel:
 
         # declare dictionary for plotting normalized IoU distributions
         iou_stats = {0.0 : 0, 0.1 : 0, 0.2 : 0, 0.3 : 0, 0.4 : 0, 0.5 : 0, 0.6 : 0, 0.7 : 0, 0.8 : 0, 0.9 : 0, 1.0 : 0}
+
+        # count of images from each class for separate statistics
+        healthy_count = 0
+        atopic_count = 0
+        dysh_count = 0
+        verruca_count = 0
+
+        # count of correctly filled area percentage for each class for separate statistics
+        healthy_correctly_filled_area_sum = 0
+        atopic_correctly_filled_area_sum = 0
+        dysh_correctly_filled_area_sum = 0
+        verruca_correctly_filled_area_sum = 0
         # detect and clasify each image from test dataset
         for file in glob.glob('./dataset/test_preprocessed/*'):
             file_substr = file.split('/')[-1]
@@ -214,15 +226,25 @@ class UsedModel:
                 detection_scores_tolist_filtered.append(value)
                 detection_boxes_tolist_filtered.append(box)
 
-            iou_stats = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_stats)
-            print(iou_stats)
+            tree = ET.parse(os.path.join('dataset', 'test_preprocessed', test_image_name + '.xml'))
+            root = tree.getroot()
+
+            # get class of image - is it healthy fingerprint or fingerprint with some disease?
+            name = "healthy"
+            for class_img in root.findall('object'):
+                # get class of bounding boxes if image has any, if image doesnt have any annotated bounding boxes - it is healthy image without any disease
+                name = class_img.find('name').text
+
+
+            iou_stats = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_stats, tree)
+            #print(iou_stats)
 
             # plot graph of normalized IoU distributions for whole test dataset - updated after each processed image
             fig = plt.figure()
             ax = fig.add_axes([0,0,1,1])
             normalized_iou_scores = iou_stats.keys()
             normalized_iou_scores = [str(i) for i in normalized_iou_scores]
-            print(normalized_iou_scores)
+            #print(normalized_iou_scores)
             counts = iou_stats.values()
             ax.bar(normalized_iou_scores, counts)
             plt.title('Normalized IoU Distributions')
@@ -231,7 +253,22 @@ class UsedModel:
             plt.show()
             plt.savefig('./results/normalized_iou_distributions.jpg', bbox_inches='tight')
             plt.clf()
-            ax.cla()  
+            ax.cla()
+
+            correctly_filled_area = self.compute_area_test(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, tree)
+
+            if name == "atopic":
+                atopic_count += 1
+                atopic_correctly_filled_area_sum += correctly_filled_area
+            elif name == "dysh":
+                dysh_count += 1
+                dysh_correctly_filled_area_sum += correctly_filled_area
+            elif name == "verruca":
+                verruca_count += 1
+                verruca_correctly_filled_area_sum += correctly_filled_area
+            else:
+                healthy_count += 1
+                healthy_correctly_filled_area_sum += correctly_filled_area
 
             image_np_array_result = image_np_array.copy()
 
@@ -253,6 +290,12 @@ class UsedModel:
 
         f.close()
 
+        print("Average correctly filled area for individual classes:")
+        print("Atopic: " + str(atopic_correctly_filled_area_sum / atopic_count))
+        print("Dysh: " + str(dysh_correctly_filled_area_sum / dysh_count))
+        print("Verruca: " + str(verruca_correctly_filled_area_sum / verruca_count))
+        print("Healthy: " + str(healthy_correctly_filled_area_sum / healthy_count))
+
     '''
     You must evaluate IoUs directly to know how tight a model’s bounding boxes are to the underlying ground truth.
     A simple way to generate aggregate statistics about the IoU of different models is by plotting histograms. Here’s the basic recipe:
@@ -262,10 +305,10 @@ class UsedModel:
     Plot a histogram with normalized counts
     https://towardsdatascience.com/iou-a-better-detection-evaluation-metric-45a511185be1
     '''
-    def compute_iou(self, test_image_name, predicted_classes, predicted_scores, predicted_boxes, iou_stats):
-        tree = ET.parse(os.path.join('dataset', 'test_preprocessed', test_image_name + '.xml'))
+    def compute_iou(self, test_image_name, predicted_classes, predicted_scores, predicted_boxes, iou_stats, tree):
+        #tree = ET.parse(os.path.join('dataset', 'test_preprocessed', test_image_name + '.xml'))
         root = tree.getroot()
-        print(len(predicted_boxes))
+        #print(len(predicted_boxes))
 
         for size in root.findall('size'):
             width = int (size.find('width').text)
@@ -310,3 +353,104 @@ class UsedModel:
             current_value = iou_stats[round(max_iou_score,1)]
             iou_stats[round(max_iou_score,1)] = current_value + 1
         return iou_stats
+
+    def compute_area_test(self, test_image_name, predicted_classes, predicted_scores, predicted_boxes, tree):
+        #tree = ET.parse(os.path.join('dataset', 'test_preprocessed', test_image_name + '.xml'))
+        root = tree.getroot()
+        #print(len(predicted_boxes))
+
+        for size in root.findall('size'):
+            width = int (size.find('width').text)
+            height = int (size.find('height').text)
+
+        all_bndboxes_pixels = np.array([[]])
+        i = 0
+
+        for bndbox in root.findall('object/bndbox'):
+            xmin = int (bndbox.find('xmin').text)
+            ymin = int (bndbox.find('ymin').text)
+            xmax = int (bndbox.find('xmax').text)
+            ymax = int (bndbox.find('ymax').text)
+
+            '''
+            print(xmin)
+            print(ymin)
+            print(xmax)
+            print(ymax)
+            '''
+
+            X, Y = np.mgrid[xmin:xmax, ymin:ymax]
+
+            bndbox_pixels = np.stack(np.vstack((X.ravel(), Y.ravel())), axis=-1)
+
+            if i == 0:
+                all_bndboxes_pixels = bndbox_pixels
+            else:
+                all_bndboxes_pixels = np.concatenate((all_bndboxes_pixels, bndbox_pixels), axis=0)
+            i += 1
+
+        #print(all_bndboxes_pixels)
+        all_bndboxes_pixels = np.unique(all_bndboxes_pixels, axis=0)
+        #print(all_bndboxes_pixels)
+        j = 0
+        #print(predicted_boxes)
+
+        if predicted_boxes != []:
+            for predicted_box in predicted_boxes:
+                # convert predicted coordinates to real coordinates cause predicted are normalized
+                xmin_predicted = round(predicted_box[1] * width)
+                ymin_predicted = round(predicted_box[0] * height)
+                xmax_predicted = round(predicted_box[3] * width)
+                ymax_predicted = round(predicted_box[2] * height)
+
+                X_predicted, Y_predicted = np.mgrid[xmin_predicted:xmax_predicted, ymin_predicted:ymax_predicted]
+
+                predicted_bndbox_pixels = np.stack(np.vstack((X_predicted.ravel(), Y_predicted.ravel())), axis=-1)
+
+                if j == 0:
+                    all_predicted_bndboxes_pixels = predicted_bndbox_pixels
+                else:
+                    all_predicted_bndboxes_pixels = np.concatenate((all_predicted_bndboxes_pixels, predicted_bndbox_pixels), axis=0)
+                j += 1
+        else:
+            all_predicted_bndboxes_pixels = []
+        all_predicted_bndboxes_pixels = np.unique(all_predicted_bndboxes_pixels, axis=0)
+        #print(all_predicted_bndboxes_pixels)
+        if all_predicted_bndboxes_pixels != [] and all_bndboxes_pixels != []:
+            correctly_predicted_bndboxes_pixels = self.compute_same_pixels(all_bndboxes_pixels, all_predicted_bndboxes_pixels)
+
+        #print(all_predicted_bndboxes_pixels)
+        #print(all_bndboxes_pixels)
+        print("Correctly filled area in %:")
+        if all_predicted_bndboxes_pixels != [] and all_bndboxes_pixels != []:
+            correctly_filled_area = (correctly_predicted_bndboxes_pixels.shape[0] / all_bndboxes_pixels.shape[0]) * 100
+        elif all_predicted_bndboxes_pixels.size == 0 and all_bndboxes_pixels.size == 0: # for healthy fingerprint - no annotations of diseases and no prediction
+            correctly_filled_area = 100
+        else: # healthy fingerprint with some prediction of disease or diseased fingerprint with no predictions at all:
+            correctly_filled_area = 0
+        print(correctly_filled_area)
+        return correctly_filled_area
+
+
+
+    def compute_same_pixels(self, A, B):
+        '''
+        Function for getting intersecting rows across two 2D numpy arrays
+        Source:
+        ***************************************************************************************
+        *    Title: Get intersecting rows across two 2D numpy arrays
+        *    Author: user of stackoverflow with nickname "Joe Kington" -> https://stackoverflow.com/users/325565/joe-kington
+        *    Date: 29.11.2011
+        *    Code version: 1
+        *    Availability: https://stackoverflow.com/questions/8317022/get-intersecting-rows-across-two-2d-numpy-arrays
+        **************************************************************************************
+        '''
+
+        nrows, ncols = A.shape
+        dtype={'names':['f{}'.format(i) for i in range(ncols)],'formats':ncols * [A.dtype]}
+
+        C = np.intersect1d(A.view(dtype), B.view(dtype))
+
+       # This last bit is optional if you're okay with "C" being a structured array...
+        C = C.view(A.dtype).reshape(-1, ncols)
+        return C
