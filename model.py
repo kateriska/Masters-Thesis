@@ -160,11 +160,26 @@ class UsedModel:
         dysh_count = 0
         verruca_count = 0
 
-        # count of correctly filled area percentage for each class for separate statistics
-        healthy_correctly_filled_area_sum = 0
-        atopic_correctly_filled_area_sum = 0
-        dysh_correctly_filled_area_sum = 0
-        verruca_correctly_filled_area_sum = 0
+        # count of correctly detected area percentage for each class for separate statistics
+        healthy_correctly_detected_area_sum = 0
+        atopic_correctly_detected_area_sum = 0
+        dysh_correctly_detected_area_sum = 0
+        verruca_correctly_detected_area_sum = 0
+
+        healthy_not_detected_annotated_area_sum = 0
+        atopic_not_detected_annotated_area_sum = 0
+        dysh_not_detected_annotated_area_sum = 0
+        verruca_not_detected_annotated_area_sum = 0
+
+        healthy_correctly_detected_recognized_area_sum = 0
+        atopic_correctly_detected_recognized_area_sum = 0
+        dysh_correctly_detected_recognized_area_sum = 0
+        verruca_correctly_detected_recognized_area_sum = 0
+
+        healthy_extra_detected_area_sum = 0
+        atopic_extra_detected_area_sum = 0
+        dysh_extra_detected_area_sum = 0
+        verruca_extra_detected_area_sum = 0
         # detect and clasify each image from test dataset
         for file in glob.glob('./dataset/test_preprocessed/*'):
             file_substr = file.split('/')[-1]
@@ -236,7 +251,7 @@ class UsedModel:
                 name = class_img.find('name').text
 
 
-            iou_stats = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_stats, tree)
+            iou_stats = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_stats, root)
             #print(iou_stats)
 
             # plot graph of normalized IoU distributions for whole test dataset - updated after each processed image
@@ -255,20 +270,37 @@ class UsedModel:
             plt.clf()
             ax.cla()
 
-            correctly_filled_area = self.compute_area_test(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, tree)
+            correctly_detected_area, extra_detected_area = self.compute_area_test(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, root, False)
+            not_detected_annotated_area = 100 - correctly_detected_area # percentage of area which is annotated but not detected
 
+            # correctly detected and recognized area
+            correctly_detected_recognized_area, extra_detected_recognized_area = self.compute_area_test(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, root, True)
             if name == "atopic":
                 atopic_count += 1
-                atopic_correctly_filled_area_sum += correctly_filled_area
+                atopic_correctly_detected_area_sum += correctly_detected_area
+                atopic_not_detected_annotated_area_sum += not_detected_annotated_area
+                atopic_correctly_detected_recognized_area_sum += correctly_detected_recognized_area
+                atopic_extra_detected_area_sum += extra_detected_area
             elif name == "dysh":
                 dysh_count += 1
-                dysh_correctly_filled_area_sum += correctly_filled_area
+                dysh_correctly_detected_area_sum += correctly_detected_area
+                dysh_not_detected_annotated_area_sum += not_detected_annotated_area
+                dysh_correctly_detected_recognized_area_sum += correctly_detected_recognized_area
+                dysh_extra_detected_area_sum += extra_detected_area
             elif name == "verruca":
                 verruca_count += 1
-                verruca_correctly_filled_area_sum += correctly_filled_area
+                verruca_correctly_detected_area_sum += correctly_detected_area
+                verruca_not_detected_annotated_area_sum += not_detected_annotated_area
+                verruca_correctly_detected_recognized_area_sum += correctly_detected_recognized_area
+                verruca_extra_detected_area_sum += extra_detected_area
             else:
                 healthy_count += 1
-                healthy_correctly_filled_area_sum += correctly_filled_area
+                healthy_correctly_detected_area_sum += correctly_detected_area
+                healthy_not_detected_annotated_area_sum += not_detected_annotated_area
+                healthy_correctly_detected_recognized_area_sum += correctly_detected_recognized_area
+                healthy_extra_detected_area_sum += extra_detected_area
+
+
 
             image_np_array_result = image_np_array.copy()
 
@@ -290,11 +322,29 @@ class UsedModel:
 
         f.close()
 
-        print("Average correctly filled area for individual classes:")
-        print("Atopic: " + str(atopic_correctly_filled_area_sum / atopic_count))
-        print("Dysh: " + str(dysh_correctly_filled_area_sum / dysh_count))
-        print("Verruca: " + str(verruca_correctly_filled_area_sum / verruca_count))
-        print("Healthy: " + str(healthy_correctly_filled_area_sum / healthy_count))
+        print("Average correctly detected area for individual classes:")
+        print("Atopic: " + str(atopic_correctly_detected_area_sum / atopic_count))
+        print("Dysh: " + str(dysh_correctly_detected_area_sum / dysh_count))
+        print("Verruca: " + str(verruca_correctly_detected_area_sum / verruca_count))
+        print("Healthy: " + str(healthy_correctly_detected_area_sum / healthy_count))
+
+        print("Average not detected annotated area for individual classes:")
+        print("Atopic: " + str(atopic_not_detected_annotated_area_sum/ atopic_count))
+        print("Dysh: " + str(dysh_not_detected_annotated_area_sum / dysh_count))
+        print("Verruca: " + str(verruca_not_detected_annotated_area_sum / verruca_count))
+        print("Healthy: " + str(healthy_not_detected_annotated_area_sum / healthy_count))
+
+        print("Average correctly detected and recognized area for individual classes:")
+        print("Atopic: " + str(atopic_correctly_detected_recognized_area_sum / atopic_count))
+        print("Dysh: " + str(dysh_correctly_detected_recognized_area_sum / dysh_count))
+        print("Verruca: " + str(verruca_correctly_detected_recognized_area_sum / verruca_count))
+        print("Healthy: " + str(healthy_correctly_detected_recognized_area_sum / healthy_count))
+
+        print("Average extra detected area for individual classes in % of image:")
+        print("Atopic: " + str(atopic_extra_detected_area_sum / atopic_count))
+        print("Dysh: " + str(dysh_extra_detected_area_sum / dysh_count))
+        print("Verruca: " + str(verruca_extra_detected_area_sum / verruca_count))
+        print("Healthy: " + str(healthy_extra_detected_area_sum / healthy_count))
 
     '''
     You must evaluate IoUs directly to know how tight a model’s bounding boxes are to the underlying ground truth.
@@ -305,9 +355,9 @@ class UsedModel:
     Plot a histogram with normalized counts
     https://towardsdatascience.com/iou-a-better-detection-evaluation-metric-45a511185be1
     '''
-    def compute_iou(self, test_image_name, predicted_classes, predicted_scores, predicted_boxes, iou_stats, tree):
+    def compute_iou(self, test_image_name, predicted_classes, predicted_scores, predicted_boxes, iou_stats, root):
         #tree = ET.parse(os.path.join('dataset', 'test_preprocessed', test_image_name + '.xml'))
-        root = tree.getroot()
+        #root = tree.getroot()
         #print(len(predicted_boxes))
 
         for size in root.findall('size'):
@@ -354,14 +404,22 @@ class UsedModel:
             iou_stats[round(max_iou_score,1)] = current_value + 1
         return iou_stats
 
-    def compute_area_test(self, test_image_name, predicted_classes, predicted_scores, predicted_boxes, tree):
+    def compute_area_test(self, test_image_name, predicted_classes, predicted_scores, predicted_boxes, root, correct_class_recognition):
+        labels = [{'name':'atopic', 'id':1}, {'name':'verruca', 'id':2}, {'name':'dysh', 'id':3}]
         #tree = ET.parse(os.path.join('dataset', 'test_preprocessed', test_image_name + '.xml'))
-        root = tree.getroot()
+        #root = tree.getroot()
         #print(len(predicted_boxes))
 
         for size in root.findall('size'):
             width = int (size.find('width').text)
             height = int (size.find('height').text)
+
+
+        if correct_class_recognition == True:
+            name = "healthy"
+            for class_img in root.findall('object'):
+                # get class of bounding boxes if image has any, if image doesnt have any annotated bounding boxes - it is healthy image without any disease
+                name = class_img.find('name').text
 
         all_bndboxes_pixels = np.array([[]])
         i = 0
@@ -396,12 +454,26 @@ class UsedModel:
         #print(predicted_boxes)
 
         if predicted_boxes != []:
-            for predicted_box in predicted_boxes:
+            for predicted_box, predicted_class in zip(predicted_boxes, predicted_classes):
+                if correct_class_recognition == True:
+                    # figure whether annotated bounding box is really from correct class:
+                    if name == "atopic" and predicted_class != 0:
+                        print("Wrong class")
+                        continue
+                    elif name == "verruca" and predicted_class != 1:
+                        print("Wrong class")
+                        continue
+                    elif name == "dysh" and predicted_class != 2:
+                        print("Wrong class")
+                        continue
+
+
                 # convert predicted coordinates to real coordinates cause predicted are normalized
                 xmin_predicted = round(predicted_box[1] * width)
                 ymin_predicted = round(predicted_box[0] * height)
                 xmax_predicted = round(predicted_box[3] * width)
                 ymax_predicted = round(predicted_box[2] * height)
+
 
                 X_predicted, Y_predicted = np.mgrid[xmin_predicted:xmax_predicted, ymin_predicted:ymax_predicted]
 
@@ -419,17 +491,29 @@ class UsedModel:
         if all_predicted_bndboxes_pixels != [] and all_bndboxes_pixels != []:
             correctly_predicted_bndboxes_pixels = self.compute_same_pixels(all_bndboxes_pixels, all_predicted_bndboxes_pixels)
 
+            # compute extra detected pixels which are not annotated
+            extra_detected_bndboxes_pixels = self.compute_extra_not_annotated_pixels(all_predicted_bndboxes_pixels, all_bndboxes_pixels)
+        else:
+            extra_detected_bndboxes_pixels = []
         #print(all_predicted_bndboxes_pixels)
         #print(all_bndboxes_pixels)
-        print("Correctly filled area in %:")
+        print("Correctly detected area in %:")
         if all_predicted_bndboxes_pixels != [] and all_bndboxes_pixels != []:
-            correctly_filled_area = (correctly_predicted_bndboxes_pixels.shape[0] / all_bndboxes_pixels.shape[0]) * 100
+            correctly_detected_area = (correctly_predicted_bndboxes_pixels.shape[0] / all_bndboxes_pixels.shape[0]) * 100
         elif all_predicted_bndboxes_pixels.size == 0 and all_bndboxes_pixels.size == 0: # for healthy fingerprint - no annotations of diseases and no prediction
-            correctly_filled_area = 100
+            correctly_detected_area = 100
         else: # healthy fingerprint with some prediction of disease or diseased fingerprint with no predictions at all:
-            correctly_filled_area = 0
-        print(correctly_filled_area)
-        return correctly_filled_area
+            correctly_detected_area = 0
+        #print(correctly_detected_area)
+
+        print("Extra detected not annotated area in % (value 100 % is whole image)")
+        if extra_detected_bndboxes_pixels != []:
+            extra_detected_area = (extra_detected_bndboxes_pixels.shape[0] / (width * height)) * 100
+        else: # for healthy fingerprint - no annotations of diseases and no prediction
+            extra_detected_area = 0
+
+        print(extra_detected_area)
+        return correctly_detected_area, extra_detected_area
 
 
 
@@ -452,5 +536,18 @@ class UsedModel:
         C = np.intersect1d(A.view(dtype), B.view(dtype))
 
        # This last bit is optional if you're okay with "C" being a structured array...
+        C = C.view(A.dtype).reshape(-1, ncols)
+        return C
+
+
+    # compute pixels which are detected but not annotated - difference of two sets
+    # inspired by compute_same_pixels method
+    def compute_extra_not_annotated_pixels(self, A, B):
+        nrows, ncols = A.shape
+        dtype={'names':['f{}'.format(i) for i in range(ncols)],'formats':ncols * [A.dtype]}
+
+        C = np.setdiff1d(A.view(dtype), B.view(dtype))
+
+        # This last bit is optional if you're okay with "C" being a structured array...
         C = C.view(A.dtype).reshape(-1, ncols)
         return C

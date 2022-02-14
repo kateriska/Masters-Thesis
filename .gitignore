@@ -19,3 +19,5 @@ scripts/norm.png
 scripts/opening.png
 scripts/result.png
 scripts/thresh.png
+scripts/atopic_generated_dataset/*
+scripts/atopic_generated_xml_files/*
