@@ -30,7 +30,7 @@ class Dataset:
             ret, tresh_img = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
             # noise removal
-            kernel = np.ones((23,23), np.uint8)
+            kernel = np.ones((51,51), np.uint8)
             opening = cv2.morphologyEx(tresh_img, cv2.MORPH_OPEN,kernel) # use morphological operations
 
             cv2.Canny(opening, 100, 200)

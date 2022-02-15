@@ -9,9 +9,9 @@ Real dysh: 89
 Real psor: 62
 Real atopic: 286
 '''
-file_path = "/media/katerina/DATA/Stazene/TFODCourse-main/TFODCourse-main/Tensorflow/workspace/images/atopic_eczema_png/atopic_png"
+file_path = "/media/katerina/DATA/DB_disease_wart_dishy/real_dys_png"
 train_path = "../dataset/train"
-class_name = "atopic"
+class_name = "dysh"
 print(os.path.isdir(train_path))
 annotated_files_count = 0
 for file in glob.glob(file_path + '/*'):
@@ -44,7 +44,7 @@ for file in glob.glob(file_path + '/*'):
             exit()
 
     shutil.copyfile(file, train_path + "/" + file_substr)
-    shutil.copyfile(file, train_path + "/" + test_image_name + ".xml")
+    shutil.copyfile(file_path + "/" + test_image_name + ".xml", train_path + "/" + test_image_name + ".xml")
     annotated_files_count += 1
 
 print("Annotated files count: " + str(annotated_files_count))
