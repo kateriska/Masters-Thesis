@@ -10,6 +10,7 @@ class Dataset:
         super().__init__()
         self.dataset_path = os.path.join('dataset', 'train', '*')
         self.preprocessed_dataset_path = os.path.join('dataset', 'train_preprocessed', '*')
+        self.preprocessed_dataset_val_path = os.path.join('dataset', 'val_preprocessed', '*')
         self.preprocessed_dataset_test_path = os.path.join('dataset', 'test_preprocessed', '*')
 
     def preprocess_dataset(self):
@@ -47,6 +48,9 @@ class Dataset:
         #    print("Directory is empty")
         #else:
         print(os.path.abspath(self.preprocessed_dataset_test_path))
+        for file in glob.glob(os.path.abspath(self.preprocessed_dataset_val_path)):
+            os.remove(file)
+
         for file in glob.glob(os.path.abspath(self.preprocessed_dataset_test_path)):
             os.remove(file)
 
@@ -60,6 +64,14 @@ class Dataset:
         dysh_real = []
         psor_real = []
         verruca_real = []
+
+        dysh_generated = []
+        verruca_generated = []
+        atopic_generated = []
+        healthy_generated = []
+
+        nist_real = []
+
         for file in glob.glob(self.preprocessed_dataset_path):
             file_substr = file.split('/')[-1]
             extension = os.path.splitext(file)[1][1:]
@@ -77,11 +89,35 @@ class Dataset:
                 psor_real.append(test_image_name)
             elif all(x in test_image_name for x in ["verruca", "_FP_"]):
                 verruca_real.append(test_image_name)
+            elif "dys_SG" in test_image_name:
+                dysh_generated.append(test_image_name)
+            elif "atopic_eczema_SG" in test_image_name:
+                atopic_generated.append(test_image_name)
+            elif "healthy_SG" in test_image_name:
+                healthy_generated.append(test_image_name)
+            elif "nist_" in test_image_name:
+                nist_real.append(test_image_name)
+            elif "SG" in test_image_name:
+                verruca_generated.append(test_image_name)
 
-        self.split_train_val_test(atopic_real, 0.6, 0.2, 0.2)
+
+        # split real samples from each class 60 : 20 : 20 (train : val : test)
+        atopic_real_train, atopic_real_val, atopic_real_test = self.split_train_val_test(atopic_real, 0.6, 0.8)
+        dysh_real_train, dysh_real_val, dysh_real_test = self.split_train_val_test(dysh_real, 0.6, 0.8)
+        psor_real_train, psor_real_val, psor_real_test = self.split_train_val_test(psor_real, 0.6, 0.8)
+        verruca_real_train, verruca_real_val, verruca_real_test = self.split_train_val_test(verruca_real, 0.6, 0.8)
+
+        # split generated fingerprints in ratio 80 : 10 : 10
+        dysh_generated_train, dysh_generated_val, dysh_generated_test = self.split_train_val_test(dysh_generated, 0.8, 0.9)
+        verruca_generated_train, verruca_generated_val, verruca_generated_test = self.split_train_val_test(verruca_generated, 0.8, 0.9)
+        atopic_generated_train, atopic_generated_val, atopic_generated_test = self.split_train_val_test(atopic_generated, 0.8, 0.9)
+        healthy_generated_train, healthy_generated_val, healthy_generated_test = self.split_train_val_test(atopic_generated, 0.8, 0.9)
+
+        nist_real_train, nist_real_val, nist_real_test = self.split_train_val_test(nist_real, 0.8, 0.9)
 
 
-
+        val_images_names = []
+        test_images_names = []
         for file in glob.glob(self.preprocessed_dataset_path):
             file_substr = file.split('/')[-1]
             extension = os.path.splitext(file)[1][1:]
@@ -89,30 +125,42 @@ class Dataset:
             if extension == 'xml':
                 continue
 
-            generated_random_number = random.random()
+            #generated_random_number = random.random()
 
             test_image_name = file_substr.rsplit('.', 1)[0]
             #if (generated_random_number >= 0.8):
-            if test_image_name in test_dataset_names:
-                shutil.move(file, os.path.join('dataset', 'test_preprocessed', file_substr))
+            #if test_image_name in test_dataset_names:
+            if test_image_name in atopic_real_val or test_image_name in dysh_real_val or test_image_name in psor_real_val or test_image_name in verruca_real_val or test_image_name in dysh_generated_val or test_image_name in verruca_generated_val or test_image_name in atopic_generated_val or test_image_name in healthy_generated_val or test_image_name in nist_real_val:
+                shutil.move(file, os.path.join('dataset', 'val_preprocessed', file_substr))
+                shutil.move(os.path.join('dataset', 'train_preprocessed', test_image_name + ".xml"), os.path.join('dataset', 'val_preprocessed', test_image_name + ".xml"))
                 #test_image_name = file_substr.rsplit('.', 1)[0]
-                test_images_names.append(test_image_name)
+                val_images_names.append(test_image_name)
+            elif test_image_name in atopic_real_test or test_image_name in dysh_real_test or test_image_name in psor_real_test or test_image_name in verruca_real_test or test_image_name in dysh_generated_test or test_image_name in verruca_generated_test or test_image_name in atopic_generated_test or test_image_name in healthy_generated_test or test_image_name in nist_real_test:
+                shutil.move(file, os.path.join('dataset', 'test_preprocessed', file_substr))
+                shutil.move(os.path.join('dataset', 'train_preprocessed', test_image_name + ".xml"), os.path.join('dataset', 'test_preprocessed', test_image_name + ".xml"))
 
+                test_images_names.append(test_image_name)
+        print("Val images:")
+        print(val_images_names)
+        print("Test images:")
         print(test_images_names)
 
-        for file in glob.glob(self.preprocessed_dataset_path):
-            file_substr = file.split('/')[-1]
-            test_xml_name = file_substr.rsplit('.', 1)[0]
 
-            if test_xml_name in test_images_names:
-                shutil.move(file, os.path.join('dataset', 'test_preprocessed', file_substr))
+        #for file in glob.glob(self.preprocessed_dataset_path):
+        #file_substr = file.split('/')[-1]
+        #test_xml_name = file_substr.rsplit('.', 1)[0]
 
-    def split_train_val_test(self, samples, train_ratio, val_ratio, test_ratio):
+        #if test_xml_name in test_images_names:
+            #shutil.move(file, os.path.join('dataset', 'test_preprocessed', file_substr))
+
+
+    def split_train_val_test(self, samples, split_val_value, split_test_value):
         print(samples)
         random.shuffle(samples)
         print(samples)
 
-        train, validate, test = np.split(samples, [int(len(samples)* 0.6), int(len(samples)*0.8)])
+        train, val, test = np.split(samples, [int(len(samples)* split_val_value), int(len(samples)*split_test_value)])
         print(train)
-        print(validate)
+        print(val)
         print(test)
+        return train, val, test

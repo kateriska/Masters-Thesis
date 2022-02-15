@@ -56,7 +56,7 @@ class UsedModel:
         with tf.io.gfile.GFile(os.path.join('trained_models', full_model_name, 'pipeline.config'), "r") as f:
             text_format.Merge(f.read(), pipeline_config)
 
-        pipeline_config.model.ssd.num_classes = 3
+        pipeline_config.model.ssd.num_classes = 4
         pipeline_config.train_config.batch_size = 4
 
         trained_model_latest_checkpoint = tf.train.latest_checkpoint(os.path.join('trained_models', full_model_name))
@@ -71,7 +71,7 @@ class UsedModel:
         pipeline_config.train_input_reader.label_map_path= os.path.join('annotations', 'label_map.pbtxt')
         pipeline_config.train_input_reader.tf_record_input_reader.input_path[:] = [os.path.join('annotations', 'train.record')]
         pipeline_config.eval_input_reader[0].label_map_path = os.path.join('annotations', 'label_map.pbtxt')
-        pipeline_config.eval_input_reader[0].tf_record_input_reader.input_path[:] = [os.path.join('annotations', 'test.record')]
+        pipeline_config.eval_input_reader[0].tf_record_input_reader.input_path[:] = [os.path.join('annotations', 'val.record')]
 
         pipeline_config_text = text_format.MessageToString(pipeline_config)
         with tf.io.gfile.GFile(os.path.join('trained_models', full_model_name, 'pipeline.config'), "wb") as f:
@@ -113,7 +113,7 @@ class UsedModel:
 
 
     def create_label_map(self):
-        labels = [{'name':'atopic', 'id':1}, {'name':'verruca', 'id':2}, {'name':'dysh', 'id':3}]
+        labels = [{'name':'atopic', 'id':1}, {'name':'verruca', 'id':2}, {'name':'dysh', 'id':3}, {'name':'psor', 'id':4}]
 
         label_map_path = os.path.join('annotations', 'label_map.pbtxt')
 
@@ -129,7 +129,7 @@ class UsedModel:
 
     def create_tf_record(self):
         subprocess.call(['python', './GenerateTFRecord/generate_tfrecord.py', '-x', os.path.join('dataset', 'train_preprocessed'), '-l', os.path.join('annotations', 'label_map.pbtxt'), '-o', os.path.join('annotations', 'train.record')])
-        subprocess.call(['python', './GenerateTFRecord/generate_tfrecord.py', '-x', os.path.join('dataset', 'test_preprocessed'), '-l', os.path.join('annotations', 'label_map.pbtxt'), '-o', os.path.join('annotations', 'test.record')])
+        subprocess.call(['python', './GenerateTFRecord/generate_tfrecord.py', '-x', os.path.join('dataset', 'val_preprocessed'), '-l', os.path.join('annotations', 'label_map.pbtxt'), '-o', os.path.join('annotations', 'val.record')])
 
 
     # test trained model on test dataset, save results into ./results folder - images with bounding box and txt file with predictions (at least for now)

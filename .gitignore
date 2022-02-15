@@ -21,3 +21,5 @@ scripts/result.png
 scripts/thresh.png
 scripts/atopic_generated_dataset/*
 scripts/atopic_generated_xml_files/*
+scripts/nist_dataset/*
+scripts/nist_dataset_xml_files/*
