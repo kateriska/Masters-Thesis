@@ -38,7 +38,7 @@ class UsedModel:
 
     # download pretrained model from TensorFlow Detection Model Zoo
     def download_pretrained_model(self, model, full_model_name, url):
-        if not os.path.exists(os.path.join('pretrained_models','ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8')):
+        if not os.path.exists(os.path.join('pretrained_models',full_model_name)):
             filename = wget.download(url)
             archive_name = full_model_name + '.tar.gz'
             os.rename(archive_name, os.path.join('pretrained_models', archive_name))
@@ -56,7 +56,10 @@ class UsedModel:
         with tf.io.gfile.GFile(os.path.join('trained_models', full_model_name, 'pipeline.config'), "r") as f:
             text_format.Merge(f.read(), pipeline_config)
 
-        pipeline_config.model.ssd.num_classes = 4
+        if (self.model == "ssd_mobilenet_v2"):
+            pipeline_config.model.ssd.num_classes = 4
+        elif self.model == "faster_rcnn_resnet50":
+            pipeline_config.model.faster_rcnn.num_classes = 4
         pipeline_config.train_config.batch_size = 4
 
         trained_model_latest_checkpoint = tf.train.latest_checkpoint(os.path.join('trained_models', full_model_name))
@@ -81,19 +84,24 @@ class UsedModel:
 
     def config_model(self):
 
-        if (self.model == "ssd_mobilenet_v2"):
+        if self.model == "ssd_mobilenet_v2":
             self.download_pretrained_model(self.model, 'ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8', 'http://download.tensorflow.org/models/object_detection/tf2/20200711/ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8.tar.gz')
-
+        elif self.model == "faster_rcnn_resnet50":
+            self.download_pretrained_model(self.model, 'faster_rcnn_resnet50_v1_640x640_coco17_tpu-8', 'http://download.tensorflow.org/models/object_detection/tf2/20200711/faster_rcnn_resnet50_v1_640x640_coco17_tpu-8.tar.gz')
         self.load_dataset()
         self.create_label_map()
         self.create_tf_record()
-        if (self.model == "ssd_mobilenet_v2"):
+        if self.model == "ssd_mobilenet_v2":
             self.config_pipeline(self.model, 'ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8')
+            self.train_model('ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8')
+        elif self.model == "faster_rcnn_resnet50":
+            self.config_pipeline(self.model, 'faster_rcnn_resnet50_v1_640x640_coco17_tpu-8')
+            self.train_model('faster_rcnn_resnet50_v1_640x640_coco17_tpu-8')
 
-        self.train_model()
+
 
     # generate train command of model
-    def train_model(self):
+    def train_model(self, full_model_name):
         print(os.getcwd())
         train_command = "python {} --model_dir={} --pipeline_config_path={} --num_train_steps={}".format(os.path.join('.','models', 'research', 'object_detection', 'model_main_tf2.py'), os.path.join('trained_models', 'ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8'),os.path.join('trained_models', 'ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8', 'pipeline.config'), self.epochs)
         print("Command for training model:")
@@ -143,6 +151,8 @@ class UsedModel:
 
         if self.model == "ssd_mobilenet_v2":
             full_model_name = "ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8"
+        elif (self.model == "faster_rcnn_resnet50"):
+            full_model_name = 'faster_rcnn_resnet50_v1_640x640_coco17_tpu-8'
 
         # configure trained model
         configs = config_util.get_configs_from_pipeline_file(os.path.join('trained_models', full_model_name, 'pipeline.config'))

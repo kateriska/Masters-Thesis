@@ -4,7 +4,7 @@ from model import UsedModel
 def parse_args():
     argParser = argparse.ArgumentParser(description='Train model for detection and classification of diseased fingerprints')
     argParser.add_argument('--model', dest='model', action='store', default="ssd_mobilenet_v2", choices=['ssd_mobilenet_v2', 'faster_rcnn_resnet50', 'rfcn_resnet101', 'ssd_resnet50', 'ssd_mobilenet_v1', 'faster_rcnn_nas'], help='Select type of model.')
-    argParser.add_argument('--epochs', dest='epochs', default=10, action='store', type=int, help='Number of epochs to train for.')
+    argParser.add_argument('--epochs', dest='epochs', default=25000, action='store', type=int, help='Number of epochs to train for.')
     argParser.add_argument('--test', dest='test', action='store_true', default=False, help='Run model on test folder, detect and clasify diseases.')
     return argParser.parse_args()
 
