@@ -62,15 +62,22 @@ class UsedModel:
             pipeline_config.model.faster_rcnn.num_classes = 4
         pipeline_config.train_config.batch_size = 4
 
-        trained_model_latest_checkpoint = tf.train.latest_checkpoint(os.path.join('trained_models', full_model_name))
+        if os.path.isdir(os.path.join('trained_models', full_model_name, 'trained_checkpoint')) and tf.train.latest_checkpoint(os.path.join('trained_models', full_model_name, 'trained_checkpoint')) is not None:
+            trained_model_latest_checkpoint = tf.train.latest_checkpoint(os.path.join('trained_models', full_model_name, 'trained_checkpoint'))
+            pipeline_config.train_config.fine_tune_checkpoint = trained_model_latest_checkpoint
+            pipeline_config.train_config.fine_tune_checkpoint_type = "full"
+        else:
+            pipeline_config.train_config.fine_tune_checkpoint = os.path.join('pretrained_models', full_model_name, 'checkpoint', 'ckpt-0')
+            pipeline_config.train_config.fine_tune_checkpoint_type = "detection"
 
         # if our model of detection and classification of fingerprint damages has some checkpoint, load them and continue training, otherwise load initial checkpoint of downloaded model
+        '''
         if (trained_model_latest_checkpoint is None):
             pipeline_config.train_config.fine_tune_checkpoint = os.path.join('pretrained_models', full_model_name, 'checkpoint', 'ckpt-0')
         else:
             pipeline_config.train_config.fine_tune_checkpoint = trained_model_latest_checkpoint
-
-        pipeline_config.train_config.fine_tune_checkpoint_type = "detection"
+        '''
+        #pipeline_config.train_config.fine_tune_checkpoint_type = "detection"
         pipeline_config.train_input_reader.label_map_path= os.path.join('annotations', 'label_map.pbtxt')
         pipeline_config.train_input_reader.tf_record_input_reader.input_path[:] = [os.path.join('annotations', 'train.record')]
         pipeline_config.eval_input_reader[0].label_map_path = os.path.join('annotations', 'label_map.pbtxt')

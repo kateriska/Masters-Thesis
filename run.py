@@ -21,5 +21,4 @@ if __name__ == "__main__":
     if args.test == False: # train model
         model.config_model()
     else: # load model from latest checkpoint, detect and clasify diseases on test dataset
-        if (args.model == "ssd_mobilenet_v2"):
-            model.test_model()
+        model.test_model()
