@@ -24,3 +24,4 @@ scripts/atopic_generated_xml_files/*
 scripts/nist_dataset/*
 scripts/nist_dataset_xml_files/*
 scripts/atopic_generated_dataset_bounding_boxes/*
+scripts/atopic_real_new_annotations/*

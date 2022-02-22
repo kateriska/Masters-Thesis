@@ -61,7 +61,7 @@ class Dataset:
         '''
         '''
         All imgs stats:
-        
+
         Real verruca: 42
         Real dysh: 89
         Real psor: 62
@@ -125,7 +125,7 @@ class Dataset:
         dysh_generated_train, dysh_generated_val, dysh_generated_test = self.split_train_val_test(dysh_generated, 0.8, 0.9)
         verruca_generated_train, verruca_generated_val, verruca_generated_test = self.split_train_val_test(verruca_generated, 0.8, 0.9)
         atopic_generated_train, atopic_generated_val, atopic_generated_test = self.split_train_val_test(atopic_generated, 0.8, 0.9)
-        healthy_generated_train, healthy_generated_val, healthy_generated_test = self.split_train_val_test(atopic_generated, 0.8, 0.9)
+        healthy_generated_train, healthy_generated_val, healthy_generated_test = self.split_train_val_test(healthy_generated, 0.8, 0.9)
 
         nist_real_train, nist_real_val, nist_real_test = self.split_train_val_test(nist_real, 0.8, 0.9)
 

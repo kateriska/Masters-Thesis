@@ -49,7 +49,8 @@ class UsedModel:
     # configuration of model pipeline
     def config_pipeline(self, model, full_model_name):
         if not os.path.exists(os.path.join('trained_models',full_model_name, 'pipeline.config')):
-            os.mkdir('./trained_models/' + full_model_name)
+            if os.path.isdir('./trained_models/' + full_model_name) == False:
+                os.mkdir('./trained_models/' + full_model_name)
             shutil.copyfile(os.path.join('pretrained_models', full_model_name, 'pipeline.config'), os.path.join('trained_models', full_model_name, 'pipeline.config'))
 
         pipeline_config = pipeline_pb2.TrainEvalPipelineConfig()
@@ -178,34 +179,68 @@ class UsedModel:
 
         # count of images from each class for separate statistics
         healthy_count = 0
+        healthy_real_count = 0
+        healthy_generated_count = 0
+
         atopic_count = 0
+
         dysh_count = 0
+        dysh_real_count = 0
+        dysh_generated_count = 0
+
         verruca_count = 0
+        verruca_real_count = 0
+        verruca_generated_count = 0
+
         psor_count = 0
 
         # count of correctly detected area percentage for each class for separate statistics
         healthy_correctly_detected_area_sum = 0
+        healthy_real_correctly_detected_area_sum = 0
+        healthy_generated_correctly_detected_area_sum = 0
         atopic_correctly_detected_area_sum = 0
         dysh_correctly_detected_area_sum = 0
+        dysh_real_correctly_detected_area_sum = 0
+        dysh_generated_correctly_detected_area_sum = 0
         verruca_correctly_detected_area_sum = 0
+        verruca_real_correctly_detected_area_sum = 0
+        verruca_generated_correctly_detected_area_sum = 0
         psor_correctly_detected_area_sum = 0
 
         healthy_not_detected_annotated_area_sum = 0
+        healthy_real_not_detected_annotated_area_sum = 0
+        healthy_generated_not_detected_annotated_area_sum = 0
         atopic_not_detected_annotated_area_sum = 0
         dysh_not_detected_annotated_area_sum = 0
+        dysh_real_not_detected_annotated_area_sum = 0
+        dysh_generated_not_detected_annotated_area_sum = 0
         verruca_not_detected_annotated_area_sum = 0
+        verruca_real_not_detected_annotated_area_sum = 0
+        verruca_generated_not_detected_annotated_area_sum = 0
         psor_not_detected_annotated_area_sum = 0
 
         healthy_correctly_detected_recognized_area_sum = 0
+        healthy_real_correctly_detected_recognized_area_sum = 0
+        healthy_generated_correctly_detected_recognized_area_sum = 0
         atopic_correctly_detected_recognized_area_sum = 0
         dysh_correctly_detected_recognized_area_sum = 0
+        dysh_real_correctly_detected_recognized_area_sum = 0
+        dysh_generated_correctly_detected_recognized_area_sum = 0
         verruca_correctly_detected_recognized_area_sum = 0
+        verruca_real_correctly_detected_recognized_area_sum = 0
+        verruca_generated_correctly_detected_recognized_area_sum = 0
         psor_correctly_detected_recognized_area_sum = 0
 
         healthy_extra_detected_area_sum = 0
+        healthy_real_extra_detected_area_sum = 0
+        healthy_generated_extra_detected_area_sum = 0
         atopic_extra_detected_area_sum = 0
         dysh_extra_detected_area_sum = 0
+        dysh_real_extra_detected_area_sum = 0
+        dysh_generated_extra_detected_area_sum = 0
         verruca_extra_detected_area_sum = 0
+        verruca_real_extra_detected_area_sum = 0
+        verruca_generated_extra_detected_area_sum = 0
         psor_extra_detected_area_sum = 0
         # detect and clasify each image from test dataset
         for file in glob.glob('./dataset/test_preprocessed/*'):
@@ -236,7 +271,7 @@ class UsedModel:
             detections['num_detections'] = num_detections_int
             detections['detection_classes'] = detections['detection_classes'].astype(np.int64)
 
-            set_min_score_thresh = 0.4
+            set_min_score_thresh = 0.3
 
             detection_classes_tolist = detections['detection_classes'].tolist()
             detection_scores_tolist = detections['detection_scores'].tolist()
@@ -339,6 +374,45 @@ class UsedModel:
                 healthy_correctly_detected_recognized_area_sum += correctly_detected_recognized_area
                 healthy_extra_detected_area_sum += extra_detected_area
 
+
+            # separate statistics for both real and generated fingerprints (for verruca, dysh and real), atopic and psoriasis only use real fingerprints
+            if all(x in test_image_name for x in ["dys", "_FP_"]):
+                dysh_real_count += 1
+                dysh_real_correctly_detected_area_sum += correctly_detected_area
+                dysh_real_not_detected_annotated_area_sum += not_detected_annotated_area
+                dysh_real_correctly_detected_recognized_area_sum += correctly_detected_recognized_area
+                dysh_real_extra_detected_area_sum += extra_detected_area
+            elif all(x in test_image_name for x in ["verruca", "_FP_"]):
+                verruca_real_count += 1
+                verruca_real_correctly_detected_area_sum += correctly_detected_area
+                verruca_real_not_detected_annotated_area_sum += not_detected_annotated_area
+                verruca_real_correctly_detected_recognized_area_sum += correctly_detected_recognized_area
+                verruca_real_extra_detected_area_sum += extra_detected_area
+            elif "dys_SG" in test_image_name:
+                dysh_generated_count += 1
+                dysh_generated_correctly_detected_area_sum += correctly_detected_area
+                dysh_generated_not_detected_annotated_area_sum += not_detected_annotated_area
+                dysh_generated_correctly_detected_recognized_area_sum += correctly_detected_recognized_area
+                dysh_generated_extra_detected_area_sum += extra_detected_area
+            elif "healthy_SG" in test_image_name:
+                healthy_generated_count += 1
+                healthy_generated_correctly_detected_area_sum += correctly_detected_area
+                healthy_generated_not_detected_annotated_area_sum += not_detected_annotated_area
+                healthy_generated_correctly_detected_recognized_area_sum += correctly_detected_recognized_area
+                healthy_generated_extra_detected_area_sum += extra_detected_area
+            elif "nist_" in test_image_name:
+                healthy_real_count += 1
+                healthy_real_correctly_detected_area_sum += correctly_detected_area
+                healthy_real_not_detected_annotated_area_sum += not_detected_annotated_area
+                healthy_real_correctly_detected_recognized_area_sum += correctly_detected_recognized_area
+                healthy_real_extra_detected_area_sum += extra_detected_area
+            elif "SG" in test_image_name:
+                verruca_generated_count += 1
+                verruca_generated_correctly_detected_area_sum += correctly_detected_area
+                verruca_generated_not_detected_annotated_area_sum += not_detected_annotated_area
+                verruca_generated_correctly_detected_recognized_area_sum += correctly_detected_recognized_area
+                verruca_generated_extra_detected_area_sum += extra_detected_area
+
             image_np_array_result = image_np_array.copy()
 
             viz_utils.visualize_boxes_and_labels_on_image_array(
@@ -360,32 +434,56 @@ class UsedModel:
         f.close()
 
         print("Average correctly detected area for individual classes:")
-        print("Atopic: " + str(atopic_correctly_detected_area_sum / atopic_count))
-        print("Dysh: " + str(dysh_correctly_detected_area_sum / dysh_count))
-        print("Verruca: " + str(verruca_correctly_detected_area_sum / verruca_count))
-        print("Healthy: " + str(healthy_correctly_detected_area_sum / healthy_count))
-        print("Psoriasis: " + str(psor_correctly_detected_area_sum / psor_count))
+        print("Atopic (real): " + str(atopic_correctly_detected_area_sum / atopic_count))
+        print("Dysh (real and generated): " + str(dysh_correctly_detected_area_sum / dysh_count))
+        print("Dysh (real): " + str(dysh_real_correctly_detected_area_sum / dysh_real_count))
+        print("Dysh (generated): " + str(dysh_generated_correctly_detected_area_sum / dysh_generated_count))
+        print("Verruca (real and generated): " + str(verruca_correctly_detected_area_sum / verruca_count))
+        print("Verruca (real): " + str(verruca_real_correctly_detected_area_sum / verruca_real_count))
+        print("Verruca (generated): " + str(verruca_generated_correctly_detected_area_sum / verruca_generated_count))
+        print("Healthy (real and generated): " + str(healthy_correctly_detected_area_sum / healthy_count))
+        print("Healthy (real): " + str(healthy_real_correctly_detected_area_sum / healthy_real_count))
+        print("Healthy (generated): " + str(healthy_generated_correctly_detected_area_sum / healthy_generated_count))
+        print("Psoriasis (real): " + str(psor_correctly_detected_area_sum / psor_count))
         print()
         print("Average not detected annotated area for individual classes:")
-        print("Atopic: " + str(atopic_not_detected_annotated_area_sum/ atopic_count))
-        print("Dysh: " + str(dysh_not_detected_annotated_area_sum / dysh_count))
-        print("Verruca: " + str(verruca_not_detected_annotated_area_sum / verruca_count))
-        print("Healthy: " + str(healthy_not_detected_annotated_area_sum / healthy_count))
-        print("Psoriasis: " + str(psor_not_detected_annotated_area_sum / psor_count))
+        print("Atopic (real): " + str(atopic_not_detected_annotated_area_sum/ atopic_count))
+        print("Dysh (real and generated): " + str(dysh_not_detected_annotated_area_sum / dysh_count))
+        print("Dysh (real): " + str(dysh_real_not_detected_annotated_area_sum / dysh_real_count))
+        print("Dysh (generated): " + str(dysh_generated_not_detected_annotated_area_sum / dysh_generated_count))
+        print("Verruca (real and generated): " + str(verruca_not_detected_annotated_area_sum / verruca_count))
+        print("Verruca (real): " + str(verruca_real_not_detected_annotated_area_sum / verruca_real_count))
+        print("Verruca (generated): " + str(verruca_generated_not_detected_annotated_area_sum / verruca_generated_count))
+        print("Healthy (real and generated): " + str(healthy_not_detected_annotated_area_sum / healthy_count))
+        print("Healthy (real): " + str(healthy_real_not_detected_annotated_area_sum / healthy_real_count))
+        print("Healthy (generated): " + str(healthy_generated_not_detected_annotated_area_sum / healthy_generated_count))
+        print("Psoriasis (real): " + str(psor_not_detected_annotated_area_sum / psor_count))
         print()
         print("Average correctly detected and recognized area for individual classes:")
-        print("Atopic: " + str(atopic_correctly_detected_recognized_area_sum / atopic_count))
-        print("Dysh: " + str(dysh_correctly_detected_recognized_area_sum / dysh_count))
-        print("Verruca: " + str(verruca_correctly_detected_recognized_area_sum / verruca_count))
-        print("Healthy: " + str(healthy_correctly_detected_recognized_area_sum / healthy_count))
-        print("Psoriasis: " + str(psor_correctly_detected_recognized_area_sum / psor_count))
+        print("Atopic (real): " + str(atopic_correctly_detected_recognized_area_sum / atopic_count))
+        print("Dysh (real and generated): " + str(dysh_correctly_detected_recognized_area_sum / dysh_count))
+        print("Dysh (real): " + str(dysh_real_correctly_detected_recognized_area_sum / dysh_real_count))
+        print("Dysh (generated): " + str(dysh_generated_correctly_detected_recognized_area_sum / dysh_generated_count))
+        print("Verruca (real and generated): " + str(verruca_correctly_detected_recognized_area_sum / verruca_count))
+        print("Verruca (real): " + str(verruca_real_correctly_detected_recognized_area_sum / verruca_real_count))
+        print("Verruca (generated): " + str(verruca_generated_correctly_detected_recognized_area_sum / verruca_generated_count))
+        print("Healthy (real and generated): " + str(healthy_correctly_detected_recognized_area_sum / healthy_count))
+        print("Healthy (real): " + str(healthy_real_correctly_detected_recognized_area_sum / healthy_real_count))
+        print("Healthy (generated): " + str(healthy_generated_correctly_detected_recognized_area_sum / healthy_generated_count))
+        print("Psoriasis (real): " + str(psor_correctly_detected_recognized_area_sum / psor_count))
         print()
         print("Average extra detected area for individual classes in % of image:")
-        print("Atopic: " + str(atopic_extra_detected_area_sum / atopic_count))
-        print("Dysh: " + str(dysh_extra_detected_area_sum / dysh_count))
-        print("Verruca: " + str(verruca_extra_detected_area_sum / verruca_count))
-        print("Healthy: " + str(healthy_extra_detected_area_sum / healthy_count))
-        print("Psoriasis: " + str(psor_extra_detected_area_sum / psor_count))
+        print("Atopic (real): " + str(atopic_extra_detected_area_sum / atopic_count))
+        print("Dysh (real and generated): " + str(dysh_extra_detected_area_sum / dysh_count))
+        print("Dysh (real): " + str(dysh_real_extra_detected_area_sum / dysh_real_count))
+        print("Dysh (generated): " + str(dysh_generated_extra_detected_area_sum / dysh_generated_count))
+        print("Verruca (real and generated): " + str(verruca_extra_detected_area_sum / verruca_count))
+        print("Verruca (real): " + str(verruca_real_extra_detected_area_sum / verruca_real_count))
+        print("Verruca (generated): " + str(verruca_generated_extra_detected_area_sum / verruca_generated_count))
+        print("Healthy (real and generated): " + str(healthy_extra_detected_area_sum / healthy_count))
+        print("Healthy (real): " + str(healthy_real_extra_detected_area_sum / healthy_real_count))
+        print("Healthy (generated): " + str(healthy_generated_extra_detected_area_sum / healthy_generated_count))
+        print("Psoriasis (real): " + str(psor_extra_detected_area_sum / psor_count))
 
 
     '''
