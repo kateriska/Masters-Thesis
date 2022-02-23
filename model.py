@@ -149,7 +149,6 @@ class UsedModel:
 
 
     # test trained model on test dataset, save results into ./results folder - images with bounding box and txt file with predictions (at least for now)
-    # TO DO: evaluate test images predicted bounding boxes and real xml annotated bounding boxes
     def test_model(self):
         print("Only test trained model on test dataset")
 
@@ -177,71 +176,38 @@ class UsedModel:
         # declare dictionary for plotting normalized IoU distributions
         iou_stats = {0.0 : 0, 0.1 : 0, 0.2 : 0, 0.3 : 0, 0.4 : 0, 0.5 : 0, 0.6 : 0, 0.7 : 0, 0.8 : 0, 0.9 : 0, 1.0 : 0}
 
-        # count of images from each class for separate statistics
-        healthy_count = 0
-        healthy_real_count = 0
-        healthy_generated_count = 0
+        '''
+        item {
+	       name:'atopic'
+	          id:1
+        }
+        item {
+	       name:'verruca'
+	          id:2
+        }
+        item {
+	       name:'dysh'
+	          id:3
+        }
+        item {
+	       name:'psor'
+	          id:4
+        }
+        '''
 
-        atopic_count = 0
+        # create dictionary for storing sums of all evaluate metrics for separate classes to compute average of these metrics in the end
+        dataset_parts = ['atopic_real', 'atopic_generated', 'verruca_real', 'verruca_generated', 'dysh_real', 'dysh_generated', 'psor_real', 'psor_generated', 'healthy_real', 'healthy_generated']
+        evaluate_dict = {}
+        for item in dataset_parts:
+            evaluate_dict[item] = {}
+            evaluate_dict[item]['count'] = 0
+            evaluate_dict[item]['correctly_detected_area_sum'] = 0
+            evaluate_dict[item]['not_detected_annotated_area_sum'] = 0
+            evaluate_dict[item]['correctly_detected_recognized_area_sum'] = 0
+            evaluate_dict[item]['extra_detected_area_sum'] = 0
+            evaluate_dict[item]['extra_detected_recognized_area_sum'] = 0
 
-        dysh_count = 0
-        dysh_real_count = 0
-        dysh_generated_count = 0
-
-        verruca_count = 0
-        verruca_real_count = 0
-        verruca_generated_count = 0
-
-        psor_count = 0
-
-        # count of correctly detected area percentage for each class for separate statistics
-        healthy_correctly_detected_area_sum = 0
-        healthy_real_correctly_detected_area_sum = 0
-        healthy_generated_correctly_detected_area_sum = 0
-        atopic_correctly_detected_area_sum = 0
-        dysh_correctly_detected_area_sum = 0
-        dysh_real_correctly_detected_area_sum = 0
-        dysh_generated_correctly_detected_area_sum = 0
-        verruca_correctly_detected_area_sum = 0
-        verruca_real_correctly_detected_area_sum = 0
-        verruca_generated_correctly_detected_area_sum = 0
-        psor_correctly_detected_area_sum = 0
-
-        healthy_not_detected_annotated_area_sum = 0
-        healthy_real_not_detected_annotated_area_sum = 0
-        healthy_generated_not_detected_annotated_area_sum = 0
-        atopic_not_detected_annotated_area_sum = 0
-        dysh_not_detected_annotated_area_sum = 0
-        dysh_real_not_detected_annotated_area_sum = 0
-        dysh_generated_not_detected_annotated_area_sum = 0
-        verruca_not_detected_annotated_area_sum = 0
-        verruca_real_not_detected_annotated_area_sum = 0
-        verruca_generated_not_detected_annotated_area_sum = 0
-        psor_not_detected_annotated_area_sum = 0
-
-        healthy_correctly_detected_recognized_area_sum = 0
-        healthy_real_correctly_detected_recognized_area_sum = 0
-        healthy_generated_correctly_detected_recognized_area_sum = 0
-        atopic_correctly_detected_recognized_area_sum = 0
-        dysh_correctly_detected_recognized_area_sum = 0
-        dysh_real_correctly_detected_recognized_area_sum = 0
-        dysh_generated_correctly_detected_recognized_area_sum = 0
-        verruca_correctly_detected_recognized_area_sum = 0
-        verruca_real_correctly_detected_recognized_area_sum = 0
-        verruca_generated_correctly_detected_recognized_area_sum = 0
-        psor_correctly_detected_recognized_area_sum = 0
-
-        healthy_extra_detected_area_sum = 0
-        healthy_real_extra_detected_area_sum = 0
-        healthy_generated_extra_detected_area_sum = 0
-        atopic_extra_detected_area_sum = 0
-        dysh_extra_detected_area_sum = 0
-        dysh_real_extra_detected_area_sum = 0
-        dysh_generated_extra_detected_area_sum = 0
-        verruca_extra_detected_area_sum = 0
-        verruca_real_extra_detected_area_sum = 0
-        verruca_generated_extra_detected_area_sum = 0
-        psor_extra_detected_area_sum = 0
+        set_min_score_thresh = 0.3 # minimum detection score of predicted bounding boxes - means how model is sure that bounding box belongs to particular class - bounding boxes of lower score are not used for evaluation
         # detect and clasify each image from test dataset
         for file in glob.glob('./dataset/test_preprocessed/*'):
             file_substr = file.split('/')[-1]
@@ -270,8 +236,6 @@ class UsedModel:
 
             detections['num_detections'] = num_detections_int
             detections['detection_classes'] = detections['detection_classes'].astype(np.int64)
-
-            set_min_score_thresh = 0.3
 
             detection_classes_tolist = detections['detection_classes'].tolist()
             detection_scores_tolist = detections['detection_scores'].tolist()
@@ -331,6 +295,7 @@ class UsedModel:
             plt.clf()
             ax.cla()
 
+            # compute evaluation metrics
             correctly_detected_area, extra_detected_area = self.compute_area_test(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, root, False)
             not_detected_annotated_area = 100 - correctly_detected_area # percentage of area which is annotated but not detected
             print("Correctly detected area in % of annotated bounding boxes: " + str(correctly_detected_area))
@@ -341,80 +306,33 @@ class UsedModel:
 
             print("Correctly detected and recognized area in % of annotated bounding boxes: " + str(correctly_detected_recognized_area))
             print("Extra detected area in % of whole image: " + str(extra_detected_area))
+            print("Extra detected but correctly recognized area in % of whole image: " + str(extra_detected_recognized_area))
             print()
 
-            if name == "atopic":
-                atopic_count += 1
-                atopic_correctly_detected_area_sum += correctly_detected_area
-                atopic_not_detected_annotated_area_sum += not_detected_annotated_area
-                atopic_correctly_detected_recognized_area_sum += correctly_detected_recognized_area
-                atopic_extra_detected_area_sum += extra_detected_area
-            elif name == "dysh":
-                dysh_count += 1
-                dysh_correctly_detected_area_sum += correctly_detected_area
-                dysh_not_detected_annotated_area_sum += not_detected_annotated_area
-                dysh_correctly_detected_recognized_area_sum += correctly_detected_recognized_area
-                dysh_extra_detected_area_sum += extra_detected_area
-            elif name == "verruca":
-                verruca_count += 1
-                verruca_correctly_detected_area_sum += correctly_detected_area
-                verruca_not_detected_annotated_area_sum += not_detected_annotated_area
-                verruca_correctly_detected_recognized_area_sum += correctly_detected_recognized_area
-                verruca_extra_detected_area_sum += extra_detected_area
-            elif name == "psor":
-                psor_count += 1
-                psor_correctly_detected_area_sum += correctly_detected_area
-                psor_not_detected_annotated_area_sum += not_detected_annotated_area
-                psor_correctly_detected_recognized_area_sum += correctly_detected_recognized_area
-                psor_extra_detected_area_sum += extra_detected_area
-            else:
-                healthy_count += 1
-                healthy_correctly_detected_area_sum += correctly_detected_area
-                healthy_not_detected_annotated_area_sum += not_detected_annotated_area
-                healthy_correctly_detected_recognized_area_sum += correctly_detected_recognized_area
-                healthy_extra_detected_area_sum += extra_detected_area
-
-
-            # separate statistics for both real and generated fingerprints (for verruca, dysh and real), atopic and psoriasis only use real fingerprints
-            if all(x in test_image_name for x in ["dys", "_FP_"]):
-                dysh_real_count += 1
-                dysh_real_correctly_detected_area_sum += correctly_detected_area
-                dysh_real_not_detected_annotated_area_sum += not_detected_annotated_area
-                dysh_real_correctly_detected_recognized_area_sum += correctly_detected_recognized_area
-                dysh_real_extra_detected_area_sum += extra_detected_area
+            # values of metrics are added to current value of these metrics in dictionary for particular class - used to compute average of metrics in the end
+            dataset_parts = ['atopic_real', 'atopic_generated', 'verruca_real', 'verruca_generated', 'dysh_real', 'dysh_generated', 'psor_real', 'psor_generated', 'healthy_real', 'healthy_generated']
+            if all(x in test_image_name for x in ["atopic", "_FP_"]):
+                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'atopic_real', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
+            elif all(x in test_image_name for x in ["dys", "_FP_"]):
+                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'dysh_real', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
+            elif all(x in test_image_name for x in ["psor", "_FP_"]):
+                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'psor_real', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
             elif all(x in test_image_name for x in ["verruca", "_FP_"]):
-                verruca_real_count += 1
-                verruca_real_correctly_detected_area_sum += correctly_detected_area
-                verruca_real_not_detected_annotated_area_sum += not_detected_annotated_area
-                verruca_real_correctly_detected_recognized_area_sum += correctly_detected_recognized_area
-                verruca_real_extra_detected_area_sum += extra_detected_area
+                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'verruca_real', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
             elif "dys_SG" in test_image_name:
-                dysh_generated_count += 1
-                dysh_generated_correctly_detected_area_sum += correctly_detected_area
-                dysh_generated_not_detected_annotated_area_sum += not_detected_annotated_area
-                dysh_generated_correctly_detected_recognized_area_sum += correctly_detected_recognized_area
-                dysh_generated_extra_detected_area_sum += extra_detected_area
+                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'dysh_generated', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
+            elif "atopic_eczema_SG" in test_image_name:
+                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'atopic_generated', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
             elif "healthy_SG" in test_image_name:
-                healthy_generated_count += 1
-                healthy_generated_correctly_detected_area_sum += correctly_detected_area
-                healthy_generated_not_detected_annotated_area_sum += not_detected_annotated_area
-                healthy_generated_correctly_detected_recognized_area_sum += correctly_detected_recognized_area
-                healthy_generated_extra_detected_area_sum += extra_detected_area
+                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'healthy_generated', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
             elif "nist_" in test_image_name:
-                healthy_real_count += 1
-                healthy_real_correctly_detected_area_sum += correctly_detected_area
-                healthy_real_not_detected_annotated_area_sum += not_detected_annotated_area
-                healthy_real_correctly_detected_recognized_area_sum += correctly_detected_recognized_area
-                healthy_real_extra_detected_area_sum += extra_detected_area
+                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'healthy_real', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
             elif "SG" in test_image_name:
-                verruca_generated_count += 1
-                verruca_generated_correctly_detected_area_sum += correctly_detected_area
-                verruca_generated_not_detected_annotated_area_sum += not_detected_annotated_area
-                verruca_generated_correctly_detected_recognized_area_sum += correctly_detected_recognized_area
-                verruca_generated_extra_detected_area_sum += extra_detected_area
+                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'verruca_generated', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
 
             image_np_array_result = image_np_array.copy()
 
+            # visualize result with predicted bounding boxes
             viz_utils.visualize_boxes_and_labels_on_image_array(
                 image_np_array_result,
                 detections['detection_boxes'],
@@ -433,57 +351,24 @@ class UsedModel:
 
         f.close()
 
-        print("Average correctly detected area for individual classes:")
-        print("Atopic (real): " + str(atopic_correctly_detected_area_sum / atopic_count))
-        print("Dysh (real and generated): " + str(dysh_correctly_detected_area_sum / dysh_count))
-        print("Dysh (real): " + str(dysh_real_correctly_detected_area_sum / dysh_real_count))
-        print("Dysh (generated): " + str(dysh_generated_correctly_detected_area_sum / dysh_generated_count))
-        print("Verruca (real and generated): " + str(verruca_correctly_detected_area_sum / verruca_count))
-        print("Verruca (real): " + str(verruca_real_correctly_detected_area_sum / verruca_real_count))
-        print("Verruca (generated): " + str(verruca_generated_correctly_detected_area_sum / verruca_generated_count))
-        print("Healthy (real and generated): " + str(healthy_correctly_detected_area_sum / healthy_count))
-        print("Healthy (real): " + str(healthy_real_correctly_detected_area_sum / healthy_real_count))
-        print("Healthy (generated): " + str(healthy_generated_correctly_detected_area_sum / healthy_generated_count))
-        print("Psoriasis (real): " + str(psor_correctly_detected_area_sum / psor_count))
+
+        # print detailed average statistics for each metric, classes, real samples, generated samples
+        print("========================")
+        print("Average correctly detected area:")
+        self.print_evaluate_metrics(evaluate_dict, 'correctly_detected_area_sum')
         print()
-        print("Average not detected annotated area for individual classes:")
-        print("Atopic (real): " + str(atopic_not_detected_annotated_area_sum/ atopic_count))
-        print("Dysh (real and generated): " + str(dysh_not_detected_annotated_area_sum / dysh_count))
-        print("Dysh (real): " + str(dysh_real_not_detected_annotated_area_sum / dysh_real_count))
-        print("Dysh (generated): " + str(dysh_generated_not_detected_annotated_area_sum / dysh_generated_count))
-        print("Verruca (real and generated): " + str(verruca_not_detected_annotated_area_sum / verruca_count))
-        print("Verruca (real): " + str(verruca_real_not_detected_annotated_area_sum / verruca_real_count))
-        print("Verruca (generated): " + str(verruca_generated_not_detected_annotated_area_sum / verruca_generated_count))
-        print("Healthy (real and generated): " + str(healthy_not_detected_annotated_area_sum / healthy_count))
-        print("Healthy (real): " + str(healthy_real_not_detected_annotated_area_sum / healthy_real_count))
-        print("Healthy (generated): " + str(healthy_generated_not_detected_annotated_area_sum / healthy_generated_count))
-        print("Psoriasis (real): " + str(psor_not_detected_annotated_area_sum / psor_count))
+        print("Average not detected annotated area:")
+        self.print_evaluate_metrics(evaluate_dict, 'not_detected_annotated_area_sum')
         print()
-        print("Average correctly detected and recognized area for individual classes:")
-        print("Atopic (real): " + str(atopic_correctly_detected_recognized_area_sum / atopic_count))
-        print("Dysh (real and generated): " + str(dysh_correctly_detected_recognized_area_sum / dysh_count))
-        print("Dysh (real): " + str(dysh_real_correctly_detected_recognized_area_sum / dysh_real_count))
-        print("Dysh (generated): " + str(dysh_generated_correctly_detected_recognized_area_sum / dysh_generated_count))
-        print("Verruca (real and generated): " + str(verruca_correctly_detected_recognized_area_sum / verruca_count))
-        print("Verruca (real): " + str(verruca_real_correctly_detected_recognized_area_sum / verruca_real_count))
-        print("Verruca (generated): " + str(verruca_generated_correctly_detected_recognized_area_sum / verruca_generated_count))
-        print("Healthy (real and generated): " + str(healthy_correctly_detected_recognized_area_sum / healthy_count))
-        print("Healthy (real): " + str(healthy_real_correctly_detected_recognized_area_sum / healthy_real_count))
-        print("Healthy (generated): " + str(healthy_generated_correctly_detected_recognized_area_sum / healthy_generated_count))
-        print("Psoriasis (real): " + str(psor_correctly_detected_recognized_area_sum / psor_count))
+        print("Average correctly detected and recognized area:")
+        self.print_evaluate_metrics(evaluate_dict, 'correctly_detected_recognized_area_sum')
         print()
-        print("Average extra detected area for individual classes in % of image:")
-        print("Atopic (real): " + str(atopic_extra_detected_area_sum / atopic_count))
-        print("Dysh (real and generated): " + str(dysh_extra_detected_area_sum / dysh_count))
-        print("Dysh (real): " + str(dysh_real_extra_detected_area_sum / dysh_real_count))
-        print("Dysh (generated): " + str(dysh_generated_extra_detected_area_sum / dysh_generated_count))
-        print("Verruca (real and generated): " + str(verruca_extra_detected_area_sum / verruca_count))
-        print("Verruca (real): " + str(verruca_real_extra_detected_area_sum / verruca_real_count))
-        print("Verruca (generated): " + str(verruca_generated_extra_detected_area_sum / verruca_generated_count))
-        print("Healthy (real and generated): " + str(healthy_extra_detected_area_sum / healthy_count))
-        print("Healthy (real): " + str(healthy_real_extra_detected_area_sum / healthy_real_count))
-        print("Healthy (generated): " + str(healthy_generated_extra_detected_area_sum / healthy_generated_count))
-        print("Psoriasis (real): " + str(psor_extra_detected_area_sum / psor_count))
+        print("Average extra detected area in % of whole image:")
+        self.print_evaluate_metrics(evaluate_dict, 'extra_detected_area_sum')
+        print()
+        print("Average extra detected but correctly recognized area in % of whole image:")
+        self.print_evaluate_metrics(evaluate_dict, 'extra_detected_recognized_area_sum')
+        print()
 
 
     '''
@@ -667,3 +552,59 @@ class UsedModel:
 
         C = C.view(A.dtype).reshape(-1, ncols)
         return C
+
+    '''
+    evaluate_dict[item]['count'] = 0
+    evaluate_dict[item]['correctly_detected_area_sum'] = 0
+    evaluate_dict[item]['not_detected_annotated_area_sum'] = 0
+    evaluate_dict[item]['correctly_detected_recognized_area_sum'] = 0
+    evaluate_dict[item]['extra_detected_area_sum'] = 0
+    evaluate_dict[item]['extra_detected_but_correctly_recognized_area_sum'] = 0
+    '''
+    # increment current values of metrics with new value
+    def add_to_evaluate_dict(self, evaluate_dict, dataset_part, correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area):
+        evaluate_dict[dataset_part]['count'] = evaluate_dict[dataset_part]['count'] + 1
+        evaluate_dict[dataset_part]['correctly_detected_area_sum'] = evaluate_dict[dataset_part]['correctly_detected_area_sum'] + correctly_detected_area
+        evaluate_dict[dataset_part]['not_detected_annotated_area_sum'] = evaluate_dict[dataset_part]['not_detected_annotated_area_sum'] + not_detected_annotated_area
+        evaluate_dict[dataset_part]['correctly_detected_recognized_area_sum'] = evaluate_dict[dataset_part]['correctly_detected_recognized_area_sum'] + correctly_detected_recognized_area
+        evaluate_dict[dataset_part]['extra_detected_area_sum'] = evaluate_dict[dataset_part]['extra_detected_area_sum'] + extra_detected_area
+        evaluate_dict[dataset_part]['extra_detected_recognized_area_sum'] = evaluate_dict[dataset_part]['extra_detected_recognized_area_sum'] + extra_detected_recognized_area
+        return evaluate_dict
+
+    # compute average of metrics for input classes and parts of dataset
+    def compute_average_evaluate_metrics(self, evaluate_dict, dataset_parts, metrics_name):
+        metrics_value_count = 0
+        dataset_parts_count = 0
+        for item in dataset_parts:
+            metrics_value_count += evaluate_dict[item][metrics_name]
+            dataset_parts_count += evaluate_dict[item]['count']
+
+        if dataset_parts_count != 0:
+            result = metrics_value_count / dataset_parts_count
+        else:
+            # theyre no images in test folder of input part
+            result = None
+        return result
+
+    # print average detailed statistics of evaluation
+    def print_evaluate_metrics(self, evaluate_dict, metrics_name):
+        # dataset_parts = ['atopic_real', 'atopic_generated', 'verruca_real', 'verruca_generated', 'dysh_real', 'dysh_generated', 'psor_real', 'psor_generated', 'healthy_real', 'healthy_generated']
+
+        print("Atopic (real and generated): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['atopic_real', 'atopic_generated'], metrics_name)))
+        print("Atopic (real): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['atopic_real'], metrics_name)))
+        print("Atopic (generated): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['atopic_generated'], metrics_name)))
+        print("Verruca (real and generated): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['verruca_real', 'verruca_generated'], metrics_name)))
+        print("Verruca (real): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['verruca_real'], metrics_name)))
+        print("Verruca (generated): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['verruca_generated'], metrics_name)))
+        print("Dysh (real and generated): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['dysh_real', 'dysh_generated'], metrics_name)))
+        print("Dysh (real): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['dysh_real'], metrics_name)))
+        print("Dysh (generated): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['dysh_generated'], metrics_name)))
+        print("Psoriasis (real and generated): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['psor_real', 'psor_generated'], metrics_name)))
+        print("Psoriasis (real): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['psor_real'], metrics_name)))
+        print("Psoriasis (generated): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['psor_generated'], metrics_name)))
+        print("Healthy (real and generated): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['healthy_real', 'healthy_generated'], metrics_name)))
+        print("Healthy (real): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['healthy_real'], metrics_name)))
+        print("Healthy (generated): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['healthy_generated'], metrics_name)))
+        print("Total (real and generated): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['atopic_real', 'atopic_generated', 'verruca_real', 'verruca_generated', 'dysh_real', 'dysh_generated', 'psor_real', 'psor_generated', 'healthy_real', 'healthy_generated'], metrics_name)))
+        print("Total (real): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['atopic_real', 'verruca_real', 'dysh_real', 'psor_real', 'healthy_real'], metrics_name)))
+        print("Total (generated): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['atopic_generated', 'verruca_generated', 'dysh_generated', 'psor_generated', 'healthy_generated'], metrics_name)))
