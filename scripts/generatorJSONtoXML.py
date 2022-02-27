@@ -4,7 +4,7 @@ import json
 import os
 
 # [{"Type": "wart", "p1": [131, 321], "p2": [179, 369]}, {"Type": "wart", "p1": [165, 278], "p2": [209, 320]}]
-for file in glob.glob('./nist_dataset/*'):
+for file in glob.glob('/media/katerina/DATA/Stazene/NISTSpecialDatabase4GrayScaleImagesofFIGS/sd04/png_txt/figs_5_filtered/*'):
     root = ET.Element("annotation")
 
     file_substr = file.split('/')[-1]
@@ -49,4 +49,4 @@ for file in glob.glob('./nist_dataset/*'):
     tree = ET.ElementTree(root)
 
 
-    tree.write("./nist_dataset_xml_files/" + image_name + ".xml")
+    tree.write("/media/katerina/DATA/Stazene/NISTSpecialDatabase4GrayScaleImagesofFIGS/sd04/png_txt/figs_5_filtered/" + image_name + ".xml")

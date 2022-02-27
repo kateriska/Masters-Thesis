@@ -6,9 +6,18 @@ import xml.etree.cElementTree as ET
 import numpy as np
 '''
 Real verruca: 42
-Real dysh: 89
-Real psor: 62
+Real dysh: 96
+Real psor: 98
 Real atopic: 286
+
+Sfinge atopic: 411
+Sfinge psor: 271
+Sfinge dysh: 200
+Sfinge verruca: 225
+
+Sfinge healthy: 400
+Nist healthy: 1531
+
 '''
 
 def get_folder_images_names(path):
@@ -25,8 +34,11 @@ def get_folder_images_names(path):
         folder_images_names.append(test_image_name)
     return folder_images_names
 
-file_path = "./atopic_real_new_annotations"
-train_path = "../dataset/train_preprocessed"
+file_path = "/media/katerina/DATA/nist_filtered_dataset"
+train_path = "/media/katerina/DATA/new_train_dataset"
+class_name = "psor"
+annotated_files_count = 0
+'''
 val_path = "../dataset/val_preprocessed"
 test_path = "../dataset/test_preprocessed"
 class_name = "atopic"
@@ -49,30 +61,38 @@ if is_in_more_folders == True:
     sys.stderr.write("Some image is in more than one folder (train, test or val)\n")
     exit()
 
-
-
+'''
+to_delete_list = []
 for file in glob.glob(file_path + '/*'):
     file_substr = file.split('/')[-1]
-    print(file_substr)
 
     test_image_name = file_substr.rsplit('.', 1)[0]
     extension = os.path.splitext(file)[1][1:]
 
-    '''
-    if extension != 'png':
+
+    if extension != 'xml':
         continue
+
+    print(file_substr)
+    print(test_image_name + ".png")
+    print(os.path.exists(file_path + "/" + test_image_name + ".png"))
+
+    if not os.path.exists(file_path + "/" + test_image_name + ".png"):
+        to_delete_list.append(test_image_name)
+
     '''
     try:
         print("Try parse xml")
-        #tree = ET.parse(file_path + "/" + test_image_name + ".xml")
-        tree = ET.parse(file)
+        tree = ET.parse(file_path + "/" + test_image_name + ".xml")
         print(tree)
     except:
         continue
+    '''
 
-    root = tree.getroot()
+    #root = tree.getroot()
 
     # get class of image - is it healthy fingerprint or fingerprint with some disease?
+    '''
     name = "healthy"
     for class_img in root.findall('object'):
         # get class of bounding boxes if image has any, if image doesnt have any annotated bounding boxes - it is healthy image without any disease
@@ -82,14 +102,29 @@ for file in glob.glob(file_path + '/*'):
             sys.stderr.write("Wrong class name in annotation for file " + test_image_name + "\n")
             exit()
 
+    print(file)
+    shutil.copyfile(file, train_path + "/" + file_substr)
+    shutil.copyfile(file_path + "/" + test_image_name + ".xml", train_path + "/" + test_image_name + ".xml")
+    annotated_files_count += 1
+
     if test_image_name in train_images_names:
         shutil.copyfile(file, train_path + "/" + file_substr)
     elif test_image_name in val_images_names:
         shutil.copyfile(file, val_path + "/" + file_substr)
     elif test_image_name in test_images_names:
         shutil.copyfile(file, test_path + "/" + file_substr)
-    #shutil.copyfile(file, train_path + "/" + file_substr)
-    #shutil.copyfile(file_path + "/" + test_image_name + ".xml", train_path + "/" + test_image_name + ".xml")
-    annotated_files_count += 1
+    '''
+
 
 print("Annotated files count: " + str(annotated_files_count))
+for file in glob.glob(file_path + '/*'):
+    file_substr = file.split('/')[-1]
+    print(file_substr)
+
+    test_image_name = file_substr.rsplit('.', 1)[0]
+    extension = os.path.splitext(file)[1][1:]
+
+
+    if test_image_name in to_delete_list:
+        print("To delete")
+        os.remove(file)

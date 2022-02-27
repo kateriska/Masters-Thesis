@@ -25,3 +25,5 @@ scripts/nist_dataset/*
 scripts/nist_dataset_xml_files/*
 scripts/atopic_generated_dataset_bounding_boxes/*
 scripts/atopic_real_new_annotations/*
+scripts/sfinge_partial_original/*
+scripts/sfinge_partial_resized/*
