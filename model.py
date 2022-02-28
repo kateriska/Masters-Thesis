@@ -8,6 +8,9 @@ import cv2
 import numpy as np
 from matplotlib import pyplot as plt
 import xml.etree.cElementTree as ET
+import collections
+import functools
+import operator
 
 import tensorflow as tf
 import object_detection
@@ -173,8 +176,15 @@ class UsedModel:
 
         f = open("./results/predictions.txt", "w+") # file for predictions of tested images
 
+        # declare names of parts of dataset
+        dataset_parts = ['atopic_real', 'atopic_generated', 'verruca_real', 'verruca_generated', 'dysh_real', 'dysh_generated', 'psor_real', 'psor_generated', 'healthy_real', 'healthy_generated']
+
         # declare dictionary for plotting normalized IoU distributions
         iou_stats = {0.0 : 0, 0.1 : 0, 0.2 : 0, 0.3 : 0, 0.4 : 0, 0.5 : 0, 0.6 : 0, 0.7 : 0, 0.8 : 0, 0.9 : 0, 1.0 : 0}
+        iou_dict = {}
+        for item in dataset_parts:
+            iou_dict[item] = iou_stats
+        print(iou_dict)
 
         '''
         item {
@@ -196,7 +206,6 @@ class UsedModel:
         '''
 
         # create dictionary for storing sums of all evaluate metrics for separate classes to compute average of these metrics in the end
-        dataset_parts = ['atopic_real', 'atopic_generated', 'verruca_real', 'verruca_generated', 'dysh_real', 'dysh_generated', 'psor_real', 'psor_generated', 'healthy_real', 'healthy_generated']
         evaluate_dict = {}
         for item in dataset_parts:
             evaluate_dict[item] = {}
@@ -276,10 +285,11 @@ class UsedModel:
                 # get class of bounding boxes if image has any, if image doesnt have any annotated bounding boxes - it is healthy image without any disease
                 name = class_img.find('name').text
 
-            iou_stats = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_stats, root)
+            #iou_dict = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_dict, root)
             #print(iou_stats)
 
             # plot graph of normalized IoU distributions for whole test dataset - updated after each processed image
+            '''
             fig = plt.figure()
             ax = fig.add_axes([0,0,1,1])
             normalized_iou_scores = iou_stats.keys()
@@ -294,6 +304,7 @@ class UsedModel:
             plt.savefig('./results/normalized_iou_distributions.jpg', bbox_inches='tight')
             plt.clf()
             ax.cla()
+            '''
 
             # compute evaluation metrics
             correctly_detected_area, extra_detected_area = self.compute_area_test(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, root, False)
@@ -305,30 +316,42 @@ class UsedModel:
             correctly_detected_recognized_area, extra_detected_recognized_area = self.compute_area_test(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, root, True)
 
             print("Correctly detected and recognized area in % of annotated bounding boxes: " + str(correctly_detected_recognized_area))
-            print("Extra detected area in % of whole image: " + str(extra_detected_area))
-            print("Extra detected but correctly recognized area in % of whole image: " + str(extra_detected_recognized_area))
+            print("Extra detected area in % of predicted bounding boxes: " + str(extra_detected_area))
+            print("Extra detected but correctly recognized area in % of predicted bounding boxes: " + str(extra_detected_recognized_area))
             print()
 
             # values of metrics are added to current value of these metrics in dictionary for particular class - used to compute average of metrics in the end
-            dataset_parts = ['atopic_real', 'atopic_generated', 'verruca_real', 'verruca_generated', 'dysh_real', 'dysh_generated', 'psor_real', 'psor_generated', 'healthy_real', 'healthy_generated']
+            #dataset_parts = ['atopic_real', 'atopic_generated', 'verruca_real', 'verruca_generated', 'dysh_real', 'dysh_generated', 'psor_real', 'psor_generated', 'healthy_real', 'healthy_generated']
             if all(x in test_image_name for x in ["atopic", "_FP_"]):
                 evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'atopic_real', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
+                iou_dict = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_dict, root, 'atopic_real')
             elif all(x in test_image_name for x in ["dys", "_FP_"]):
                 evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'dysh_real', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
+                iou_dict = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_dict, root, 'dysh_real')
             elif all(x in test_image_name for x in ["psor", "_FP_"]):
                 evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'psor_real', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
+                iou_dict = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_dict, root, 'psor_real')
             elif all(x in test_image_name for x in ["verruca", "_FP_"]):
                 evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'verruca_real', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
+                iou_dict = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_dict, root, 'verruca_real')
             elif "dys_SG" in test_image_name:
                 evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'dysh_generated', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
+                iou_dict = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_dict, root, 'dysh_generated')
             elif "atopic_eczema_SG" in test_image_name:
                 evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'atopic_generated', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
+                iou_dict = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_dict, root, 'atopic_generated')
             elif "healthy_SG" in test_image_name:
                 evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'healthy_generated', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
+                iou_dict = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_dict, root, 'healthy_generated')
             elif "nist_" in test_image_name:
                 evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'healthy_real', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
+                iou_dict = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_dict, root, 'healthy_real')
+            elif "PsoriasisDamagedImg-SG" in test_image_name:
+                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'psor_generated', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
+                iou_dict = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_dict, root, 'psor_generated')
             elif "SG" in test_image_name:
                 evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'verruca_generated', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
+                iou_dict = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_dict, root, 'verruca_generated')
 
             image_np_array_result = image_np_array.copy()
 
@@ -348,6 +371,7 @@ class UsedModel:
             plt.imshow(cv2.cvtColor(image_np_array_result, cv2.COLOR_BGR2RGB))
             # image with detected bounding box is saved in results folder
             plt.savefig("./results/" + file_substr, bbox_inches='tight', pad_inches = 0)
+            plt.close('all')
 
         f.close()
 
@@ -363,12 +387,36 @@ class UsedModel:
         print("Average correctly detected and recognized area:")
         self.print_evaluate_metrics(evaluate_dict, 'correctly_detected_recognized_area_sum')
         print()
-        print("Average extra detected area in % of whole image:")
+        print("Average extra detected area in % of predicted bounding boxes:")
         self.print_evaluate_metrics(evaluate_dict, 'extra_detected_area_sum')
         print()
-        print("Average extra detected but correctly recognized area in % of whole image:")
+        print("Average extra detected but correctly recognized area in % of predicted bounding boxes:")
         self.print_evaluate_metrics(evaluate_dict, 'extra_detected_recognized_area_sum')
         print()
+        print(iou_dict)
+
+        iou_edited_dict = []
+        for i in iou_dict:
+            iou_edited_dict.append(iou_dict[i])
+        # sum all iou values for each dataset part to get final graph of whole test dataset
+        iou_all_classes = dict(functools.reduce(operator.add, map(collections.Counter, iou_edited_dict)))
+        print(iou_all_classes)
+
+        fig = plt.figure()
+        ax = fig.add_axes([0,0,1,1])
+        normalized_iou_scores = iou_all_classes.keys()
+        normalized_iou_scores = [str(i) for i in normalized_iou_scores]
+        #print(normalized_iou_scores)
+        counts = iou_stats.values()
+        ax.bar(normalized_iou_scores, counts)
+        plt.title('Normalized IoU Distributions')
+        plt.xlabel('Normalized IoU (Intersection over Union Score)')
+        plt.ylabel('Count of Predicted Bounding Boxes')
+        plt.show()
+        plt.savefig('./results/normalized_iou_distributions.jpg', bbox_inches='tight')
+        plt.clf()
+        ax.cla()
+
 
 
     '''
@@ -380,7 +428,7 @@ class UsedModel:
     Plot a histogram with normalized counts
     https://towardsdatascience.com/iou-a-better-detection-evaluation-metric-45a511185be1
     '''
-    def compute_iou(self, test_image_name, predicted_classes, predicted_scores, predicted_boxes, iou_stats, root):
+    def compute_iou(self, test_image_name, predicted_classes, predicted_scores, predicted_boxes, iou_dict, root, dataset_part):
         for size in root.findall('size'):
             width = int (size.find('width').text)
             height = int (size.find('height').text)
@@ -421,9 +469,9 @@ class UsedModel:
                     ground_truth_box_with_max_iou_score.append(ymax)
 
 
-            current_value = iou_stats[round(max_iou_score,1)]
-            iou_stats[round(max_iou_score,1)] = current_value + 1
-        return iou_stats
+            current_value = iou_dict[dataset_part][round(max_iou_score,1)]
+            iou_dict[dataset_part][round(max_iou_score,1)] = current_value + 1
+        return iou_dict
 
     def compute_area_test(self, test_image_name, predicted_classes, predicted_scores, predicted_boxes, root, correct_class_recognition):
         for size in root.findall('size'):
@@ -510,8 +558,8 @@ class UsedModel:
         else: # healthy fingerprint with some prediction of disease or diseased fingerprint with no predictions at all:
             correctly_detected_area = 0
 
-        if extra_detected_bndboxes_pixels != []:
-            extra_detected_area = (extra_detected_bndboxes_pixels.shape[0] / (width * height)) * 100
+        if extra_detected_bndboxes_pixels != []: # which percent from predicted bounding boxes pixels is extra detected
+            extra_detected_area = (extra_detected_bndboxes_pixels.shape[0] / all_predicted_bndboxes_pixels.shape[0]) * 100
         else: # for healthy fingerprint - no annotations of diseases and no prediction
             extra_detected_area = 0
 

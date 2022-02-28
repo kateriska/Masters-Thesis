@@ -83,6 +83,7 @@ class Dataset:
         verruca_generated = []
         atopic_generated = []
         healthy_generated = []
+        psor_generated = []
 
         nist_real = []
 
@@ -111,8 +112,11 @@ class Dataset:
                 healthy_generated.append(test_image_name)
             elif "nist_" in test_image_name:
                 nist_real.append(test_image_name)
+            elif "PsoriasisDamagedImg-SG" in test_image_name:
+                psor_generated.append(test_image_name)
             elif "SG" in test_image_name:
                 verruca_generated.append(test_image_name)
+
 
 
         # split real samples from each class 60 : 20 : 20 (train : val : test)
@@ -130,6 +134,7 @@ class Dataset:
         verruca_generated_train, verruca_generated_val, verruca_generated_test = self.split_train_val_test(verruca_generated, 0.8, 0.9)
         atopic_generated_train, atopic_generated_val, atopic_generated_test = self.split_train_val_test(atopic_generated, 0.8, 0.9)
         healthy_generated_train, healthy_generated_val, healthy_generated_test = self.split_train_val_test(healthy_generated, 0.8, 0.9)
+        psor_generated_train, psor_generated_val, psor_generated_test = self.split_train_val_test(psor_generated, 0.8, 0.9)
 
         nist_real_train, nist_real_val, nist_real_test = self.split_train_val_test(nist_real, 0.8, 0.9)
 
@@ -148,12 +153,12 @@ class Dataset:
             test_image_name = file_substr.rsplit('.', 1)[0]
             #if (generated_random_number >= 0.8):
             #if test_image_name in test_dataset_names:
-            if test_image_name in atopic_real_val or test_image_name in dysh_real_val or test_image_name in psor_real_val or test_image_name in verruca_real_val or test_image_name in dysh_generated_val or test_image_name in verruca_generated_val or test_image_name in atopic_generated_val or test_image_name in healthy_generated_val or test_image_name in nist_real_val:
+            if test_image_name in atopic_real_val or test_image_name in dysh_real_val or test_image_name in psor_real_val or test_image_name in verruca_real_val or test_image_name in dysh_generated_val or test_image_name in verruca_generated_val or test_image_name in atopic_generated_val or test_image_name in healthy_generated_val or test_image_name in nist_real_val or test_image_name in psor_generated_val:
                 shutil.move(file, os.path.join('dataset', 'val_preprocessed', file_substr))
                 shutil.move(os.path.join('dataset', 'train_preprocessed', test_image_name + ".xml"), os.path.join('dataset', 'val_preprocessed', test_image_name + ".xml"))
                 #test_image_name = file_substr.rsplit('.', 1)[0]
                 val_images_names.append(test_image_name)
-            elif test_image_name in atopic_real_test or test_image_name in dysh_real_test or test_image_name in psor_real_test or test_image_name in verruca_real_test or test_image_name in dysh_generated_test or test_image_name in verruca_generated_test or test_image_name in atopic_generated_test or test_image_name in healthy_generated_test or test_image_name in nist_real_test:
+            elif test_image_name in atopic_real_test or test_image_name in dysh_real_test or test_image_name in psor_real_test or test_image_name in verruca_real_test or test_image_name in dysh_generated_test or test_image_name in verruca_generated_test or test_image_name in atopic_generated_test or test_image_name in healthy_generated_test or test_image_name in nist_real_test or test_image_name in psor_generated_test:
                 shutil.move(file, os.path.join('dataset', 'test_preprocessed', file_substr))
                 shutil.move(os.path.join('dataset', 'train_preprocessed', test_image_name + ".xml"), os.path.join('dataset', 'test_preprocessed', test_image_name + ".xml"))
 
