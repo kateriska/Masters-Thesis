@@ -180,11 +180,22 @@ class UsedModel:
         dataset_parts = ['atopic_real', 'atopic_generated', 'verruca_real', 'verruca_generated', 'dysh_real', 'dysh_generated', 'psor_real', 'psor_generated', 'healthy_real', 'healthy_generated']
 
         # declare dictionary for plotting normalized IoU distributions
-        iou_stats = {0.0 : 0, 0.1 : 0, 0.2 : 0, 0.3 : 0, 0.4 : 0, 0.5 : 0, 0.6 : 0, 0.7 : 0, 0.8 : 0, 0.9 : 0, 1.0 : 0}
+        #iou_stats = {0.0 : 0, 0.1 : 0, 0.2 : 0, 0.3 : 0, 0.4 : 0, 0.5 : 0, 0.6 : 0, 0.7 : 0, 0.8 : 0, 0.9 : 0, 1.0 : 0}
         iou_dict = {}
         for item in dataset_parts:
-            iou_dict[item] = iou_stats
-        print(iou_dict)
+            iou_dict[item] = {}
+            iou_dict[item][0.0] = 0
+            iou_dict[item][0.1] = 0
+            iou_dict[item][0.2] = 0
+            iou_dict[item][0.3] = 0
+            iou_dict[item][0.4] = 0
+            iou_dict[item][0.5] = 0
+            iou_dict[item][0.6] = 0
+            iou_dict[item][0.7] = 0
+            iou_dict[item][0.8] = 0
+            iou_dict[item][0.9] = 0
+            iou_dict[item][1.0] = 0
+        #print(iou_dict)
 
         '''
         item {
@@ -354,6 +365,7 @@ class UsedModel:
                 iou_dict = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_dict, root, 'verruca_generated')
 
             image_np_array_result = image_np_array.copy()
+            #print(iou_dict)
 
             # visualize result with predicted bounding boxes
             viz_utils.visualize_boxes_and_labels_on_image_array(
@@ -393,6 +405,8 @@ class UsedModel:
         print("Average extra detected but correctly recognized area in % of predicted bounding boxes:")
         self.print_evaluate_metrics(evaluate_dict, 'extra_detected_recognized_area_sum')
         print()
+        print("Most frequent normalized IoU value:")
+        self.print_evaluate_metrics(iou_dict, 'most_frequent_iou_value')
         print(iou_dict)
 
         iou_edited_dict = []
@@ -407,12 +421,11 @@ class UsedModel:
         normalized_iou_scores = iou_all_classes.keys()
         normalized_iou_scores = [str(i) for i in normalized_iou_scores]
         #print(normalized_iou_scores)
-        counts = iou_stats.values()
+        counts = iou_all_classes.values()
         ax.bar(normalized_iou_scores, counts)
         plt.title('Normalized IoU Distributions')
         plt.xlabel('Normalized IoU (Intersection over Union Score)')
         plt.ylabel('Count of Predicted Bounding Boxes')
-        plt.show()
         plt.savefig('./results/normalized_iou_distributions.jpg', bbox_inches='tight')
         plt.clf()
         ax.cla()
@@ -429,6 +442,7 @@ class UsedModel:
     https://towardsdatascience.com/iou-a-better-detection-evaluation-metric-45a511185be1
     '''
     def compute_iou(self, test_image_name, predicted_classes, predicted_scores, predicted_boxes, iou_dict, root, dataset_part):
+        print(dataset_part)
         for size in root.findall('size'):
             width = int (size.find('width').text)
             height = int (size.find('height').text)
@@ -468,9 +482,17 @@ class UsedModel:
                     ground_truth_box_with_max_iou_score.append(xmax)
                     ground_truth_box_with_max_iou_score.append(ymax)
 
-
             current_value = iou_dict[dataset_part][round(max_iou_score,1)]
+            '''
+            print("====")
+            print(current_value)
+            print("=====")
+            '''
+
+            #print(iou_dict)
             iou_dict[dataset_part][round(max_iou_score,1)] = current_value + 1
+            #print(iou_dict[dataset_part][round(max_iou_score,1)])
+            #print(iou_dict)
         return iou_dict
 
     def compute_area_test(self, test_image_name, predicted_classes, predicted_scores, predicted_boxes, root, correct_class_recognition):
@@ -621,17 +643,36 @@ class UsedModel:
 
     # compute average of metrics for input classes and parts of dataset
     def compute_average_evaluate_metrics(self, evaluate_dict, dataset_parts, metrics_name):
-        metrics_value_count = 0
-        dataset_parts_count = 0
-        for item in dataset_parts:
-            metrics_value_count += evaluate_dict[item][metrics_name]
-            dataset_parts_count += evaluate_dict[item]['count']
 
-        if dataset_parts_count != 0:
-            result = metrics_value_count / dataset_parts_count
+        if metrics_name != 'most_frequent_iou_value':
+            metrics_value_count = 0
+            dataset_parts_count = 0
+            for item in dataset_parts:
+                metrics_value_count += evaluate_dict[item][metrics_name]
+                dataset_parts_count += evaluate_dict[item]['count']
+
+            if dataset_parts_count != 0:
+                result = metrics_value_count / dataset_parts_count
+            else:
+                # theyre no images in test folder of input part
+                result = None
+
         else:
-            # theyre no images in test folder of input part
-            result = None
+            metrics_value_count = 0
+            iou_edited_dict = []
+            for i in evaluate_dict:
+                if i in dataset_parts:
+                    iou_edited_dict.append(evaluate_dict[i])
+            # sum all iou values for each dataset part
+            iou_selected_classes = dict(functools.reduce(operator.add, map(collections.Counter, iou_edited_dict)))
+            max_key = max(iou_selected_classes, key=iou_selected_classes.get)
+            all_values = iou_selected_classes.values()
+            max_value = max(all_values)
+            result = {}
+            # return most frequent value of normalized IoU and count of bounding boxes for this normalized value for dataset part(s)
+            result[max_key] = max_value
+
+
         return result
 
     # print average detailed statistics of evaluation
