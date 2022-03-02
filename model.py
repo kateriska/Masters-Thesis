@@ -62,7 +62,7 @@ class UsedModel:
 
         if (self.model == "ssd_mobilenet_v2"):
             pipeline_config.model.ssd.num_classes = 4
-        elif self.model == "faster_rcnn_resnet50":
+        elif self.model == "faster_rcnn_resnet50" or self.model == "faster_rcnn_resnet101":
             pipeline_config.model.faster_rcnn.num_classes = 4
         pipeline_config.train_config.batch_size = 4
 
@@ -99,6 +99,10 @@ class UsedModel:
             self.download_pretrained_model(self.model, 'ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8', 'http://download.tensorflow.org/models/object_detection/tf2/20200711/ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8.tar.gz')
         elif self.model == "faster_rcnn_resnet50":
             self.download_pretrained_model(self.model, 'faster_rcnn_resnet50_v1_640x640_coco17_tpu-8', 'http://download.tensorflow.org/models/object_detection/tf2/20200711/faster_rcnn_resnet50_v1_640x640_coco17_tpu-8.tar.gz')
+        elif self.model == "faster_rcnn_resnet101":
+            self.download_pretrained_model(self.model, 'faster_rcnn_resnet101_v1_640x640_coco17_tpu-8', 'http://download.tensorflow.org/models/object_detection/tf2/20200711/faster_rcnn_resnet101_v1_640x640_coco17_tpu-8.tar.gz')
+
+
         self.load_dataset()
         self.create_label_map()
         self.create_tf_record()
@@ -108,13 +112,16 @@ class UsedModel:
         elif self.model == "faster_rcnn_resnet50":
             self.config_pipeline(self.model, 'faster_rcnn_resnet50_v1_640x640_coco17_tpu-8')
             self.train_model('faster_rcnn_resnet50_v1_640x640_coco17_tpu-8')
+        elif self.model == "faster_rcnn_resnet101":
+            self.config_pipeline(self.model, 'faster_rcnn_resnet101_v1_640x640_coco17_tpu-8')
+            self.train_model('faster_rcnn_resnet101_v1_640x640_coco17_tpu-8')
 
 
 
     # generate train command of model
     def train_model(self, full_model_name):
         print(os.getcwd())
-        train_command = "python {} --model_dir={} --pipeline_config_path={} --num_train_steps={}".format(os.path.join('.','models', 'research', 'object_detection', 'model_main_tf2.py'), os.path.join('trained_models', 'ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8'),os.path.join('trained_models', 'ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8', 'pipeline.config'), self.epochs)
+        train_command = "python {} --model_dir={} --pipeline_config_path={} --num_train_steps={}".format(os.path.join('.','models', 'research', 'object_detection', 'model_main_tf2.py'), os.path.join('trained_models', full_model_name),os.path.join('trained_models', full_model_name, 'pipeline.config'), self.epochs)
         print("Command for training model:")
         print(train_command)
         #subprocess.Popen(['python', os.path.join('models', 'research', 'object_detection', 'model_main_tf2.py'), '--model_dir=' + os.path.join('trained_models', 'ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8'), '--pipeline_config_path=' + os.path.join('trained_models', 'ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8', 'pipeline.config'), '--num_train_steps=' + str(self.epochs)])
@@ -161,8 +168,10 @@ class UsedModel:
 
         if self.model == "ssd_mobilenet_v2":
             full_model_name = "ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8"
-        elif (self.model == "faster_rcnn_resnet50"):
+        elif self.model == "faster_rcnn_resnet50":
             full_model_name = 'faster_rcnn_resnet50_v1_640x640_coco17_tpu-8'
+        elif self.model == "faster_rcnn_resnet101":
+            full_model_name = "faster_rcnn_resnet101_v1_640x640_coco17_tpu-8"
 
         # configure trained model
         configs = config_util.get_configs_from_pipeline_file(os.path.join('trained_models', full_model_name, 'pipeline.config'))
