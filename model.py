@@ -60,7 +60,7 @@ class UsedModel:
         with tf.io.gfile.GFile(os.path.join('trained_models', full_model_name, 'pipeline.config'), "r") as f:
             text_format.Merge(f.read(), pipeline_config)
 
-        if (self.model == "ssd_mobilenet_v2"):
+        if self.model == "ssd_mobilenet_v2" or self.model == "ssd_resnet50":
             pipeline_config.model.ssd.num_classes = 4
         elif self.model == "faster_rcnn_resnet50" or self.model == "faster_rcnn_resnet101":
             pipeline_config.model.faster_rcnn.num_classes = 4
@@ -101,7 +101,8 @@ class UsedModel:
             self.download_pretrained_model(self.model, 'faster_rcnn_resnet50_v1_640x640_coco17_tpu-8', 'http://download.tensorflow.org/models/object_detection/tf2/20200711/faster_rcnn_resnet50_v1_640x640_coco17_tpu-8.tar.gz')
         elif self.model == "faster_rcnn_resnet101":
             self.download_pretrained_model(self.model, 'faster_rcnn_resnet101_v1_640x640_coco17_tpu-8', 'http://download.tensorflow.org/models/object_detection/tf2/20200711/faster_rcnn_resnet101_v1_640x640_coco17_tpu-8.tar.gz')
-
+        elif self.model == "ssd_resnet50":
+            self.download_pretrained_model(self.model, 'ssd_resnet50_v1_fpn_640x640_coco17_tpu-8', 'http://download.tensorflow.org/models/object_detection/tf2/20200711/ssd_resnet50_v1_fpn_640x640_coco17_tpu-8.tar.gz')
 
         self.load_dataset()
         self.create_label_map()
@@ -115,6 +116,9 @@ class UsedModel:
         elif self.model == "faster_rcnn_resnet101":
             self.config_pipeline(self.model, 'faster_rcnn_resnet101_v1_640x640_coco17_tpu-8')
             self.train_model('faster_rcnn_resnet101_v1_640x640_coco17_tpu-8')
+        elif self.model == "ssd_resnet50":
+            self.config_pipeline(self.model, 'ssd_resnet50_v1_fpn_640x640_coco17_tpu-8')
+            self.train_model('ssd_resnet50_v1_fpn_640x640_coco17_tpu-8')
 
 
 
@@ -172,7 +176,8 @@ class UsedModel:
             full_model_name = 'faster_rcnn_resnet50_v1_640x640_coco17_tpu-8'
         elif self.model == "faster_rcnn_resnet101":
             full_model_name = "faster_rcnn_resnet101_v1_640x640_coco17_tpu-8"
-
+        elif self.model == "ssd_resnet50":
+            full_model_name = "ssd_resnet50_v1_fpn_640x640_coco17_tpu-8"
         # configure trained model
         configs = config_util.get_configs_from_pipeline_file(os.path.join('trained_models', full_model_name, 'pipeline.config'))
         detection_model = model_builder.build(model_config=configs['model'], is_training=False)
