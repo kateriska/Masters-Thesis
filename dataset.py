@@ -120,11 +120,13 @@ class Dataset:
 
 
         # split real samples from each class 60 : 20 : 20 (train : val : test)
-        print(len(atopic_real))
+        #print(len(atopic_real))
         atopic_real_train, atopic_real_val, atopic_real_test = self.split_train_val_test(atopic_real, 0.6, 0.8)
+        '''
         print(len(atopic_real_train))
         print(len(atopic_real_val))
         print(len(atopic_real_test))
+        '''
         dysh_real_train, dysh_real_val, dysh_real_test = self.split_train_val_test(dysh_real, 0.6, 0.8)
         psor_real_train, psor_real_val, psor_real_test = self.split_train_val_test(psor_real, 0.6, 0.8)
         verruca_real_train, verruca_real_val, verruca_real_test = self.split_train_val_test(verruca_real, 0.6, 0.8)
