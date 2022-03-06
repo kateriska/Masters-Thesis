@@ -107,6 +107,8 @@ class UsedModel:
             self.download_pretrained_model(self.model, 'efficientdet_d0_coco17_tpu-32', 'http://download.tensorflow.org/models/object_detection/tf2/20200711/efficientdet_d0_coco17_tpu-32.tar.gz')
         elif self.model == 'efficient_det_d1':
             self.download_pretrained_model(self.model, 'efficientdet_d1_coco17_tpu-32', 'http://download.tensorflow.org/models/object_detection/tf2/20200711/efficientdet_d1_coco17_tpu-32.tar.gz')
+        elif self.model == 'centernet_hourglass':
+            self.download_pretrained_model(self.model, 'centernet_hg104_512x512_coco17_tpu-8', 'http://download.tensorflow.org/models/object_detection/tf2/20200713/centernet_hg104_512x512_coco17_tpu-8.tar.gz')
 
         self.load_dataset()
         self.create_label_map()
@@ -129,6 +131,9 @@ class UsedModel:
         elif self.model == 'efficient_det_d1':
             self.config_pipeline(self.model, 'efficientdet_d1_coco17_tpu-32')
             self.train_model('efficientdet_d1_coco17_tpu-32')
+        elif self.model == 'centernet_hourglass':
+            self.config_pipeline(self.model, 'centernet_hg104_512x512_coco17_tpu-8')
+            self.train_model('centernet_hg104_512x512_coco17_tpu-8')
 
 
 
@@ -192,6 +197,9 @@ class UsedModel:
             full_model_name = 'efficientdet_d0_coco17_tpu-32'
         elif self.model == 'efficient_det_d1':
             full_model_name = 'efficientdet_d1_coco17_tpu-32'
+        elif self.model == 'centernet_hourglass':
+            full_model_name = 'centernet_hg104_512x512_coco17_tpu-8'
+    
         # configure trained model
         configs = config_util.get_configs_from_pipeline_file(os.path.join('trained_models', full_model_name, 'pipeline.config'))
         detection_model = model_builder.build(model_config=configs['model'], is_training=False)
