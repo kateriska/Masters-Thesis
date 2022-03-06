@@ -64,6 +64,8 @@ class UsedModel:
             pipeline_config.model.ssd.num_classes = 4
         elif self.model == "faster_rcnn_resnet50" or self.model == "faster_rcnn_resnet101":
             pipeline_config.model.faster_rcnn.num_classes = 4
+        elif self.model == 'centernet_hourglass':
+          pipeline_config.model.center_net.num_classes = 4
         pipeline_config.train_config.batch_size = 4
 
         if os.path.isdir(os.path.join('trained_models', full_model_name, 'trained_checkpoint')) and tf.train.latest_checkpoint(os.path.join('trained_models', full_model_name, 'trained_checkpoint')) is not None:
@@ -199,7 +201,7 @@ class UsedModel:
             full_model_name = 'efficientdet_d1_coco17_tpu-32'
         elif self.model == 'centernet_hourglass':
             full_model_name = 'centernet_hg104_512x512_coco17_tpu-8'
-    
+
         # configure trained model
         configs = config_util.get_configs_from_pipeline_file(os.path.join('trained_models', full_model_name, 'pipeline.config'))
         detection_model = model_builder.build(model_config=configs['model'], is_training=False)
