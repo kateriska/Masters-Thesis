@@ -272,6 +272,8 @@ class UsedModel:
             evaluate_dict[item]['correctly_detected_recognized_area_sum'] = 0
             evaluate_dict[item]['extra_detected_area_sum'] = 0
             evaluate_dict[item]['extra_detected_recognized_area_sum'] = 0
+            evaluate_dict[item]['average_detection_score_correctly_detected_area_sum'] = 0
+            evaluate_dict[item]['average_detection_score_correctly_detected_recognized_area_sum'] = 0
 
         set_min_score_thresh = 0.3 # minimum detection score of predicted bounding boxes - means how model is sure that bounding box belongs to particular class - bounding boxes of lower score are not used for evaluation
         # detect and clasify each image from test dataset
@@ -377,37 +379,40 @@ class UsedModel:
             print("Extra detected but correctly recognized area in % of predicted bounding boxes: " + str(extra_detected_recognized_area))
             print()
 
+            average_detection_score_correctly_detected_area = self.compute_detection_scores_test(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, root, False)
+            average_detection_score_correctly_detected_recognized_area = self.compute_detection_scores_test(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, root, True)
+
             # values of metrics are added to current value of these metrics in dictionary for particular class - used to compute average of metrics in the end
             #dataset_parts = ['atopic_real', 'atopic_generated', 'verruca_real', 'verruca_generated', 'dysh_real', 'dysh_generated', 'psor_real', 'psor_generated', 'healthy_real', 'healthy_generated']
             if all(x in test_image_name for x in ["atopic", "_FP_"]):
-                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'atopic_real', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
+                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'atopic_real', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area, average_detection_score_correctly_detected_area, average_detection_score_correctly_detected_recognized_area)
                 iou_dict = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_dict, root, 'atopic_real')
             elif all(x in test_image_name for x in ["dys", "_FP_"]):
-                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'dysh_real', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
+                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'dysh_real', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area, average_detection_score_correctly_detected_area, average_detection_score_correctly_detected_recognized_area)
                 iou_dict = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_dict, root, 'dysh_real')
             elif all(x in test_image_name for x in ["psor", "_FP_"]):
-                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'psor_real', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
+                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'psor_real', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area, average_detection_score_correctly_detected_area, average_detection_score_correctly_detected_recognized_area)
                 iou_dict = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_dict, root, 'psor_real')
             elif all(x in test_image_name for x in ["verruca", "_FP_"]):
-                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'verruca_real', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
+                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'verruca_real', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area, average_detection_score_correctly_detected_area, average_detection_score_correctly_detected_recognized_area)
                 iou_dict = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_dict, root, 'verruca_real')
             elif "dys_SG" in test_image_name:
-                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'dysh_generated', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
+                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'dysh_generated', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area, average_detection_score_correctly_detected_area, average_detection_score_correctly_detected_recognized_area)
                 iou_dict = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_dict, root, 'dysh_generated')
             elif "atopic_eczema_SG" in test_image_name:
-                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'atopic_generated', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
+                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'atopic_generated', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area, average_detection_score_correctly_detected_area, average_detection_score_correctly_detected_recognized_area)
                 iou_dict = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_dict, root, 'atopic_generated')
             elif "healthy_SG" in test_image_name:
-                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'healthy_generated', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
+                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'healthy_generated', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area, average_detection_score_correctly_detected_area, average_detection_score_correctly_detected_recognized_area)
                 iou_dict = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_dict, root, 'healthy_generated')
             elif "nist_" in test_image_name:
-                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'healthy_real', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
+                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'healthy_real', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area, average_detection_score_correctly_detected_area, average_detection_score_correctly_detected_recognized_area)
                 iou_dict = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_dict, root, 'healthy_real')
             elif "PsoriasisDamagedImg-SG" in test_image_name:
-                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'psor_generated', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
+                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'psor_generated', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area, average_detection_score_correctly_detected_area, average_detection_score_correctly_detected_recognized_area)
                 iou_dict = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_dict, root, 'psor_generated')
             elif "SG" in test_image_name:
-                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'verruca_generated', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area)
+                evaluate_dict = self.add_to_evaluate_dict(evaluate_dict, 'verruca_generated', correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area, average_detection_score_correctly_detected_area, average_detection_score_correctly_detected_recognized_area)
                 iou_dict = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_dict, root, 'verruca_generated')
 
             image_np_array_result = image_np_array.copy()
@@ -450,6 +455,12 @@ class UsedModel:
         print()
         print("Average extra detected but correctly recognized area in % of predicted bounding boxes:")
         self.print_evaluate_metrics(evaluate_dict, 'extra_detected_recognized_area_sum')
+        print()
+        print("Average detection score of correctly detected area in %:")
+        self.print_evaluate_metrics(evaluate_dict, 'average_detection_score_correctly_detected_area_sum')
+        print()
+        print("Average detection score of correctly detected and recognized area in %:")
+        self.print_evaluate_metrics(evaluate_dict, 'average_detection_score_correctly_detected_recognized_area_sum')
         print()
         print("Most frequent normalized IoU value:")
         self.print_evaluate_metrics(iou_dict, 'most_frequent_iou_value')
@@ -633,6 +644,95 @@ class UsedModel:
 
         return correctly_detected_area, extra_detected_area
 
+    def compute_detection_scores_test(self, test_image_name, predicted_classes, predicted_scores, predicted_boxes, root, correct_class_recognition):
+        for size in root.findall('size'):
+            width = int (size.find('width').text)
+            height = int (size.find('height').text)
+
+        if correct_class_recognition == True:
+            name = "healthy"
+            for class_img in root.findall('object'):
+                # get class of bounding boxes if image has any, if image doesnt have any annotated bounding boxes - it is healthy image without any disease
+                name = class_img.find('name').text
+
+        all_bndboxes_pixels = np.array([[]])
+        i = 0
+
+        for bndbox in root.findall('object/bndbox'):
+            xmin = int (bndbox.find('xmin').text)
+            ymin = int (bndbox.find('ymin').text)
+            xmax = int (bndbox.find('xmax').text)
+            ymax = int (bndbox.find('ymax').text)
+
+            X, Y = np.mgrid[xmin:xmax, ymin:ymax]
+
+            bndbox_pixels = np.stack(np.vstack((X.ravel(), Y.ravel())), axis=-1)
+
+            if i == 0:
+                all_bndboxes_pixels = bndbox_pixels
+            else:
+                all_bndboxes_pixels = np.concatenate((all_bndboxes_pixels, bndbox_pixels), axis=0)
+            i += 1
+
+        all_bndboxes_pixels = np.unique(all_bndboxes_pixels, axis=0)
+        #print(all_bndboxes_pixels)
+        j = 0
+        all_predicted_bndboxes_detection_scores = np.array([])
+
+        if predicted_boxes != []:
+            for predicted_box, predicted_class, predicted_detection_score in zip(predicted_boxes, predicted_classes, predicted_scores):
+                if correct_class_recognition == True:
+                    # figure whether annotated bounding box is really from correct class:
+                    if name == "atopic" and predicted_class != 0:
+                        continue
+                    elif name == "verruca" and predicted_class != 1:
+                        continue
+                    elif name == "dysh" and predicted_class != 2:
+                        continue
+                    elif name == "psor" and predicted_class != 3:
+                        continue
+
+                # convert predicted coordinates to real coordinates cause predicted are normalized
+                xmin_predicted = round(predicted_box[1] * width)
+                ymin_predicted = round(predicted_box[0] * height)
+                xmax_predicted = round(predicted_box[3] * width)
+                ymax_predicted = round(predicted_box[2] * height)
+
+
+                X_predicted, Y_predicted = np.mgrid[xmin_predicted:xmax_predicted, ymin_predicted:ymax_predicted]
+
+                predicted_bndbox_pixels = np.stack(np.vstack((X_predicted.ravel(), Y_predicted.ravel())), axis=-1)
+                print(predicted_bndbox_pixels.shape)
+
+                if j == 0:
+                    all_predicted_bndboxes_pixels = predicted_bndbox_pixels
+                else:
+                    all_predicted_bndboxes_pixels = np.concatenate((all_predicted_bndboxes_pixels, predicted_bndbox_pixels), axis=0)
+
+                j += 1
+        else:
+            all_predicted_bndboxes_pixels = []
+
+        if correct_class_recognition == True and j == 0:
+          all_predicted_bndboxes_pixels = []
+        all_predicted_bndboxes_pixels = np.unique(all_predicted_bndboxes_pixels, axis=0)
+        #print(all_predicted_bndboxes_pixels)
+        if all_predicted_bndboxes_pixels != [] and all_bndboxes_pixels != []:
+            correctly_predicted_bndboxes_pixels = self.compute_same_pixels(all_bndboxes_pixels, all_predicted_bndboxes_pixels)
+
+            for i in range(0, correctly_predicted_bndboxes_pixels.shape[0]):
+                all_predicted_bndboxes_detection_scores = np.append(all_predicted_bndboxes_detection_scores, predicted_detection_score)
+
+            print(all_predicted_bndboxes_detection_scores)
+
+            average_detection_score = (np.sum(all_predicted_bndboxes_detection_scores) / all_predicted_bndboxes_detection_scores.shape[0]) * 100
+            print(average_detection_score)
+        else:
+            average_detection_score = None;
+
+
+        return average_detection_score
+
 
 
     def compute_same_pixels(self, A, B):
@@ -678,13 +778,18 @@ class UsedModel:
     evaluate_dict[item]['extra_detected_but_correctly_recognized_area_sum'] = 0
     '''
     # increment current values of metrics with new value
-    def add_to_evaluate_dict(self, evaluate_dict, dataset_part, correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area):
+    def add_to_evaluate_dict(self, evaluate_dict, dataset_part, correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area, average_detection_score_correctly_detected_area, average_detection_score_correctly_detected_recognized_area):
         evaluate_dict[dataset_part]['count'] = evaluate_dict[dataset_part]['count'] + 1
         evaluate_dict[dataset_part]['correctly_detected_area_sum'] = evaluate_dict[dataset_part]['correctly_detected_area_sum'] + correctly_detected_area
         evaluate_dict[dataset_part]['not_detected_annotated_area_sum'] = evaluate_dict[dataset_part]['not_detected_annotated_area_sum'] + not_detected_annotated_area
         evaluate_dict[dataset_part]['correctly_detected_recognized_area_sum'] = evaluate_dict[dataset_part]['correctly_detected_recognized_area_sum'] + correctly_detected_recognized_area
         evaluate_dict[dataset_part]['extra_detected_area_sum'] = evaluate_dict[dataset_part]['extra_detected_area_sum'] + extra_detected_area
         evaluate_dict[dataset_part]['extra_detected_recognized_area_sum'] = evaluate_dict[dataset_part]['extra_detected_recognized_area_sum'] + extra_detected_recognized_area
+
+        if average_detection_score_correctly_detected_area != None:
+            evaluate_dict[dataset_part]['average_detection_score_correctly_detected_area_sum'] = evaluate_dict[dataset_part]['average_detection_score_correctly_detected_area_sum'] + average_detection_score_correctly_detected_area
+        if average_detection_score_correctly_detected_recognized_area != None:
+            evaluate_dict[dataset_part]['average_detection_score_correctly_detected_recognized_area_sum'] = evaluate_dict[dataset_part]['average_detection_score_correctly_detected_recognized_area_sum'] + average_detection_score_correctly_detected_recognized_area
         return evaluate_dict
 
     # compute average of metrics for input classes and parts of dataset
