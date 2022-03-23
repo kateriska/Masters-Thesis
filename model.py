@@ -377,10 +377,15 @@ class UsedModel:
             print("Correctly detected and recognized area in % of annotated bounding boxes: " + str(correctly_detected_recognized_area))
             print("Extra detected area in % of predicted bounding boxes: " + str(extra_detected_area))
             print("Extra detected but correctly recognized area in % of predicted bounding boxes: " + str(extra_detected_recognized_area))
-            print()
 
+            # compute average detection score of correctly detected and correctly detected and recognized pixels of bounding boxes
             average_detection_score_correctly_detected_area = self.compute_detection_scores_test(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, root, False)
             average_detection_score_correctly_detected_recognized_area = self.compute_detection_scores_test(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, root, True)
+
+            print("Average detection score of correctly detected area in %: " + str(average_detection_score_correctly_detected_area))
+            print("Average detection and recognized score of correctly detected area in %: " + str(average_detection_score_correctly_detected_area))
+
+            print()
 
             # values of metrics are added to current value of these metrics in dictionary for particular class - used to compute average of metrics in the end
             #dataset_parts = ['atopic_real', 'atopic_generated', 'verruca_real', 'verruca_generated', 'dysh_real', 'dysh_generated', 'psor_real', 'psor_generated', 'healthy_real', 'healthy_generated']
@@ -499,7 +504,6 @@ class UsedModel:
     https://towardsdatascience.com/iou-a-better-detection-evaluation-metric-45a511185be1
     '''
     def compute_iou(self, test_image_name, predicted_classes, predicted_scores, predicted_boxes, iou_dict, root, dataset_part):
-        print(dataset_part)
         for size in root.findall('size'):
             width = int (size.find('width').text)
             height = int (size.find('height').text)
@@ -540,16 +544,9 @@ class UsedModel:
                     ground_truth_box_with_max_iou_score.append(ymax)
 
             current_value = iou_dict[dataset_part][round(max_iou_score,1)]
-            '''
-            print("====")
-            print(current_value)
-            print("=====")
-            '''
-
-            #print(iou_dict)
+            # increment value on matched normalized key value
             iou_dict[dataset_part][round(max_iou_score,1)] = current_value + 1
-            #print(iou_dict[dataset_part][round(max_iou_score,1)])
-            #print(iou_dict)
+
         return iou_dict
 
     def compute_area_test(self, test_image_name, predicted_classes, predicted_scores, predicted_boxes, root, correct_class_recognition):
@@ -572,8 +569,8 @@ class UsedModel:
             xmax = int (bndbox.find('xmax').text)
             ymax = int (bndbox.find('ymax').text)
 
+            # get all pixels coordinates in bounding box
             X, Y = np.mgrid[xmin:xmax, ymin:ymax]
-
             bndbox_pixels = np.stack(np.vstack((X.ravel(), Y.ravel())), axis=-1)
 
             if i == 0:
@@ -605,9 +602,8 @@ class UsedModel:
                 xmax_predicted = round(predicted_box[3] * width)
                 ymax_predicted = round(predicted_box[2] * height)
 
-
+                # get all pixels coordinates in bounding box
                 X_predicted, Y_predicted = np.mgrid[xmin_predicted:xmax_predicted, ymin_predicted:ymax_predicted]
-
                 predicted_bndbox_pixels = np.stack(np.vstack((X_predicted.ravel(), Y_predicted.ravel())), axis=-1)
 
                 if j == 0:
@@ -624,7 +620,6 @@ class UsedModel:
         #print(all_predicted_bndboxes_pixels)
         if all_predicted_bndboxes_pixels != [] and all_bndboxes_pixels != []:
             correctly_predicted_bndboxes_pixels = self.compute_same_pixels(all_bndboxes_pixels, all_predicted_bndboxes_pixels)
-
             # compute extra detected pixels which are not annotated
             extra_detected_bndboxes_pixels = self.compute_extra_not_annotated_pixels(all_predicted_bndboxes_pixels, all_bndboxes_pixels)
         else:
@@ -664,6 +659,7 @@ class UsedModel:
             xmax = int (bndbox.find('xmax').text)
             ymax = int (bndbox.find('ymax').text)
 
+            # get all pixels coordinates in bounding box
             X, Y = np.mgrid[xmin:xmax, ymin:ymax]
 
             bndbox_pixels = np.stack(np.vstack((X.ravel(), Y.ravel())), axis=-1)
@@ -698,16 +694,18 @@ class UsedModel:
                 xmax_predicted = round(predicted_box[3] * width)
                 ymax_predicted = round(predicted_box[2] * height)
 
-
+                # get all pixels coordinates in bounding box
                 X_predicted, Y_predicted = np.mgrid[xmin_predicted:xmax_predicted, ymin_predicted:ymax_predicted]
-
                 predicted_bndbox_pixels = np.stack(np.vstack((X_predicted.ravel(), Y_predicted.ravel())), axis=-1)
-                print(predicted_bndbox_pixels.shape)
 
                 if j == 0:
                     all_predicted_bndboxes_pixels = predicted_bndbox_pixels
                 else:
                     all_predicted_bndboxes_pixels = np.concatenate((all_predicted_bndboxes_pixels, predicted_bndbox_pixels), axis=0)
+
+                # insert detection score of whole bounding box for every pixel in bounding box
+                for i in range(0, predicted_bndbox_pixels.shape[0]):
+                    all_predicted_bndboxes_detection_scores = np.append(all_predicted_bndboxes_detection_scores, predicted_detection_score)
 
                 j += 1
         else:
@@ -715,21 +713,35 @@ class UsedModel:
 
         if correct_class_recognition == True and j == 0:
           all_predicted_bndboxes_pixels = []
-        all_predicted_bndboxes_pixels = np.unique(all_predicted_bndboxes_pixels, axis=0)
+        all_predicted_bndboxes_pixels_edit = np.unique(all_predicted_bndboxes_pixels, axis=0)
         #print(all_predicted_bndboxes_pixels)
-        if all_predicted_bndboxes_pixels != [] and all_bndboxes_pixels != []:
-            correctly_predicted_bndboxes_pixels = self.compute_same_pixels(all_bndboxes_pixels, all_predicted_bndboxes_pixels)
+        if all_predicted_bndboxes_pixels_edit != [] and all_bndboxes_pixels != []:
+            correctly_predicted_bndboxes_pixels = self.compute_same_pixels(all_bndboxes_pixels, all_predicted_bndboxes_pixels_edit)
 
-            for i in range(0, correctly_predicted_bndboxes_pixels.shape[0]):
-                all_predicted_bndboxes_detection_scores = np.append(all_predicted_bndboxes_detection_scores, predicted_detection_score)
+            # stack pixels coordinates and their detection_score, each row contains pixel coordinate and detection score of pixel coordinate
+            stacked_values = np.column_stack((all_predicted_bndboxes_pixels,all_predicted_bndboxes_detection_scores))
 
-            print(all_predicted_bndboxes_detection_scores)
+            #A = np.array([[ 1,  2],[ 3,  4],[ 5,  6],[ 7,  8],[ 9, 10],[1,2]])
+            #B = np.array([[1, 4],[1, 2],[5, 6],[6, 3]])
 
-            average_detection_score = (np.sum(all_predicted_bndboxes_detection_scores) / all_predicted_bndboxes_detection_scores.shape[0]) * 100
-            print(average_detection_score)
+            #A = stacked_values[:,[0,1]].astype(np.int64) # stack pixels coordinates and their detection_score, each row contains pixel coordinate and detection score of pixel coordinate
+            #B = correctly_predicted_bndboxes_pixels
+
+            #stacked_values = np.array([[1,2,60.5],[2,5,100.7],[1,3,8.5],[1,2,70.7],[2,5,80.5]])
+            #correctly_predicted_bndboxes_pixels = np.array([[1,2],[2,5],[6,3]])
+
+            stacked_values_pixels = stacked_values[:,[0,1]].astype(np.int64)
+            filtered_indexes = self.get_indexes_of_intersecting_rows(stacked_values_pixels, correctly_predicted_bndboxes_pixels)
+
+            if filtered_indexes != []:
+                stacked_values_filtered = self.filter_largest_pixels_detection_score(stacked_values[filtered_indexes,:])
+                # sum all detection scores from filtered array and compute average
+                correctly_predicted_pixels_detection_scores = stacked_values_filtered[:, -1].sum()
+                average_detection_score = (correctly_predicted_pixels_detection_scores / stacked_values_filtered.shape[0]) * 100
+            else:
+                average_detection_score = None
         else:
             average_detection_score = None;
-
 
         return average_detection_score
 
@@ -769,14 +781,64 @@ class UsedModel:
         C = C.view(A.dtype).reshape(-1, ncols)
         return C
 
-    '''
-    evaluate_dict[item]['count'] = 0
-    evaluate_dict[item]['correctly_detected_area_sum'] = 0
-    evaluate_dict[item]['not_detected_annotated_area_sum'] = 0
-    evaluate_dict[item]['correctly_detected_recognized_area_sum'] = 0
-    evaluate_dict[item]['extra_detected_area_sum'] = 0
-    evaluate_dict[item]['extra_detected_but_correctly_recognized_area_sum'] = 0
-    '''
+    def filter_largest_pixels_detection_score(self, a):
+        '''
+        Function for getting filtered list of pixel coordinates and their detection score with filtering only biggest detection score if pixel
+        is occured in input list more times
+
+        Input array is in format [[x0,y0,d0], [x1,y1,d1], [x0,y0,d2],..]] where x,y are pixel coordinates and d is detection score
+        Problem is that same pixel can have different detection score because is in several different overlapping bounding boxes
+        Therefore array is filtered and if pixel is in array more times, only row with biggest detection score is filtered
+        Source:
+        ***************************************************************************************
+        *    Title: Filter a numpy array based on largest value
+        *    Author: user of stackoverflow with nickname "Jaime" -> https://stackoverflow.com/users/110026/jaime
+        *    Date: 17.8.2015
+        *    Code version: 1
+        *    Availability: https://stackoverflow.com/questions/32052594/filter-a-numpy-array-based-on-largest-value
+        **************************************************************************************
+        Code is only edited because of using of numpy array of 3-dimensional vectors instead of 4-dimensional in problem of submitted question
+        '''
+        perm = np.lexsort(a[:, 2::-1].T)
+        a_sorted = a[perm]
+        last = np.concatenate((np.all(a_sorted[:-1, :2] != a_sorted[1:, :2], axis=1),
+                                   [True]))
+        a_unique_max = a_sorted[last]
+        res = a_unique_max[np.argsort(perm[last])]
+
+        return res
+
+    def get_indexes_of_intersecting_rows(self, A, B):
+        '''
+        Function for getting indexes of intersecting rows of 2D array A with rows of 2D array B
+        Indexes are calculated with respect to array A
+        e.g.
+        A=array([[1, 2],[3, 4],[5, 6],[7, 8],[9, 10]])
+        B=array([[1, 4],[1, 2],[5, 6],[6, 3]])
+        result=[0,2]
+        Source:
+        ***************************************************************************************
+        *    Title: Get indices of intersecting rows of Numpy 2d Array
+        *    Author: user of stackoverflow with nickname "Jaime" -> https://stackoverflow.com/users/110026/jaime
+        *    Date: 22.5.2014
+        *    Code version: 1
+        *    Availability: https://stackoverflow.com/questions/23814517/get-indices-of-intersecting-rows-of-numpy-2d-array
+        **************************************************************************************
+        Code is only edited because in current NumPy version, dtype in view method needs to be ('int,int') instead of ('i,i') in submitted question
+        '''
+        # correction because of numpy view method, sometimes NumPy can create F order array and trying to create a view on an array with an incompatible memory layout
+        #(https://stackoverflow.com/questions/55024259/valueerror-when-changing-to-a-larger-dtype-its-size-must-be-a-divisor-of-the-t)
+        if A.flags['F_CONTIGUOUS']:  # ‘C_CONTIGUOUS’ (‘C’) - ensure a C-contiguous array
+            A = np.require(A, requirements= ["C"])
+        if B.flags['F_CONTIGUOUS']:  # ‘C_CONTIGUOUS’ (‘C’) - ensure a C-contiguous array
+            B = np.require(B, requirements= ["C"])
+
+        np.in1d(A.view(dtype='int,int').reshape(-1), B.view(dtype='int,int').reshape(-1))
+        np.nonzero(np.in1d(A.view(dtype='int,int').reshape(-1), B.view(dtype='int,int').reshape(-1)))
+        filtered_indexes = np.nonzero(np.in1d(A.view(dtype='int,int').reshape(-1), B.view(dtype='int,int').reshape(-1)))[0]
+        return filtered_indexes
+
+
     # increment current values of metrics with new value
     def add_to_evaluate_dict(self, evaluate_dict, dataset_part, correctly_detected_area, not_detected_annotated_area, correctly_detected_recognized_area, extra_detected_area, extra_detected_recognized_area, average_detection_score_correctly_detected_area, average_detection_score_correctly_detected_recognized_area):
         evaluate_dict[dataset_part]['count'] = evaluate_dict[dataset_part]['count'] + 1
@@ -794,7 +856,6 @@ class UsedModel:
 
     # compute average of metrics for input classes and parts of dataset
     def compute_average_evaluate_metrics(self, evaluate_dict, dataset_parts, metrics_name):
-
         if metrics_name != 'most_frequent_iou_value':
             metrics_value_count = 0
             dataset_parts_count = 0
@@ -822,7 +883,6 @@ class UsedModel:
             result = {}
             # return most frequent value of normalized IoU and count of bounding boxes for this normalized value for dataset part(s)
             result[max_key] = max_value
-
 
         return result
 
