@@ -782,3 +782,659 @@ Total (real): {0.8: 108}
 Total (generated): {0.8: 86}
 {'atopic_real': {0.0: 24, 0.1: 13, 0.2: 10, 0.3: 13, 0.4: 17, 0.5: 28, 0.6: 34, 0.7: 61, 0.8: 72, 0.9: 34, 1.0: 1}, 'atopic_generated': {0.0: 26, 0.1: 2, 0.2: 0, 0.3: 0, 0.4: 0, 0.5: 7, 0.6: 12, 0.7: 45, 0.8: 44, 0.9: 33, 1.0: 1}, 'verruca_real': {0.0: 0, 0.1: 0, 0.2: 0, 0.3: 0, 0.4: 0, 0.5: 0, 0.6: 1, 0.7: 2, 0.8: 6, 0.9: 5, 1.0: 0}, 'verruca_generated': {0.0: 0, 0.1: 0, 0.2: 0, 0.3: 0, 0.4: 0, 0.5: 0, 0.6: 0, 0.7: 0, 0.8: 2, 0.9: 17, 1.0: 16}, 'dysh_real': {0.0: 4, 0.1: 1, 0.2: 2, 0.3: 1, 0.4: 0, 0.5: 2, 0.6: 5, 0.7: 8, 0.8: 15, 0.9: 10, 1.0: 1}, 'dysh_generated': {0.0: 2, 0.1: 10, 0.2: 4, 0.3: 8, 0.4: 14, 0.5: 22, 0.6: 22, 0.7: 15, 0.8: 16, 0.9: 4, 1.0: 1}, 'psor_real': {0.0: 2, 0.1: 1, 0.2: 0, 0.3: 0, 0.4: 1, 0.5: 6, 0.6: 9, 0.7: 15, 0.8: 15, 0.9: 6, 1.0: 0}, 'psor_generated': {0.0: 11, 0.1: 5, 0.2: 4, 0.3: 16, 0.4: 19, 0.5: 19, 0.6: 24, 0.7: 24, 0.8: 24, 0.9: 9, 1.0: 0}, 'healthy_real': {0.0: 28, 0.1: 0, 0.2: 0, 0.3: 0, 0.4: 0, 0.5: 0, 0.6: 0, 0.7: 0, 0.8: 0, 0.9: 0, 1.0: 0}, 'healthy_generated': {0.0: 4, 0.1: 0, 0.2: 0, 0.3: 0, 0.4: 0, 0.5: 0, 0.6: 0, 0.7: 0, 0.8: 0, 0.9: 0, 1.0: 0}}
 {0.0: 101, 0.1: 32, 0.2: 20, 0.3: 38, 0.4: 51, 0.5: 84, 0.6: 107, 0.7: 170, 0.8: 194, 0.9: 118, 1.0: 20}
+
+centernet_resnet101_v1_fpn_512x512_coco17_tpu
+========================
+Average correctly detected area:
+Atopic (real and generated): 65.54059661898866
+Atopic (real): 59.798182845943245
+Atopic (generated): 73.47059659128946
+Verruca (real and generated): 96.18611147189901
+Verruca (real): 94.10367144629737
+Verruca (generated): 97.00097930800399
+Dysh (real and generated): 69.86963327773012
+Dysh (real): 69.89154297432964
+Dysh (generated): 69.84772358113062
+Psoriasis (real and generated): 70.51006997211799
+Psoriasis (real): 71.0033390195115
+Psoriasis (generated): 70.15773493826548
+Healthy (real and generated): 85.06493506493507
+Healthy (real): 82.45614035087719
+Healthy (generated): 92.5
+Total (real and generated): 77.30289817853075
+Total (real): 74.81052166496926
+Total (generated): 80.90299758700847
+
+Average not detected annotated area:
+Atopic (real and generated): 34.45940338101136
+Atopic (real): 40.20181715405677
+Atopic (generated): 26.52940340871056
+Verruca (real and generated): 3.813888528100992
+Verruca (real): 5.896328553702621
+Verruca (generated): 2.999020691996007
+Dysh (real and generated): 30.130366722269866
+Dysh (real): 30.10845702567036
+Dysh (generated): 30.15227641886937
+Psoriasis (real and generated): 29.48993002788201
+Psoriasis (real): 28.996660980488514
+Psoriasis (generated): 29.84226506173451
+Healthy (real and generated): 14.935064935064934
+Healthy (real): 17.54385964912281
+Healthy (generated): 7.5
+Total (real and generated): 22.697101821469246
+Total (real): 25.189478335030742
+Total (generated): 19.09700241299154
+
+Average correctly detected and recognized area:
+Atopic (real and generated): 65.54059661898866
+Atopic (real): 59.798182845943245
+Atopic (generated): 73.47059659128946
+Verruca (real and generated): 96.18611147189901
+Verruca (real): 94.10367144629737
+Verruca (generated): 97.00097930800399
+Dysh (real and generated): 69.86963327773012
+Dysh (real): 69.89154297432964
+Dysh (generated): 69.84772358113062
+Psoriasis (real and generated): 69.65213417371639
+Psoriasis (real): 68.94429310334769
+Psoriasis (generated): 70.15773493826548
+Healthy (real and generated): 85.06493506493507
+Healthy (real): 82.45614035087719
+Healthy (generated): 92.5
+Total (real and generated): 77.19278877124927
+Total (real): 74.62418266803135
+Total (generated): 80.90299758700847
+
+Average extra detected area in % of predicted bounding boxes:
+Atopic (real and generated): 22.628499510050787
+Atopic (real): 20.755867147089923
+Atopic (generated): 25.214515630330077
+Verruca (real and generated): 5.742390235118958
+Verruca (real): 8.539291451498334
+Verruca (generated): 4.647950628709638
+Dysh (real and generated): 10.052427905529594
+Dysh (real): 12.42546078949058
+Dysh (generated): 7.679395021568611
+Psoriasis (real and generated): 13.92211971201782
+Psoriasis (real): 14.106376036786207
+Psoriasis (generated): 13.790508051468972
+Healthy (real and generated): 0.0
+Healthy (real): 0.0
+Healthy (generated): 0.0
+Total (real and generated): 9.403650537237768
+Total (real): 8.196066308236363
+Total (generated): 11.147938868017572
+
+Average extra detected but correctly recognized area in % of predicted bounding boxes:
+Atopic (real and generated): 21.82829486715363
+Atopic (real): 19.386991230162334
+Atopic (generated): 25.199618937284473
+Verruca (real and generated): 5.742390235118958
+Verruca (real): 8.539291451498334
+Verruca (generated): 4.647950628709638
+Dysh (real and generated): 10.052427905529594
+Dysh (real): 12.42546078949058
+Dysh (generated): 7.679395021568611
+Psoriasis (real and generated): 13.677669215385697
+Psoriasis (real): 13.519694844869113
+Psoriasis (generated): 13.790508051468972
+Healthy (real and generated): 0.0
+Healthy (real): 0.0
+Healthy (generated): 0.0
+Total (real and generated): 9.15831875079911
+Total (real): 7.783720484615811
+Total (generated): 11.143849579730542
+
+Average detection score of correctly detected area in %:
+Atopic (real and generated): 62.64188448485921
+Atopic (real): 63.65237221120429
+Atopic (generated): 61.24644905323982
+Verruca (real and generated): 85.38484608064314
+Verruca (real): 80.75757169675323
+Verruca (generated): 87.19551866564355
+Dysh (real and generated): 66.55585171580654
+Dysh (real): 72.96096115668392
+Dysh (generated): 60.150742274929165
+Psoriasis (real and generated): 73.71904913672131
+Psoriasis (real): 70.76745525261694
+Psoriasis (generated): 75.82733048251013
+Healthy (real and generated): 0.0
+Healthy (real): 0.0
+Healthy (generated): 0.0
+Total (real and generated): 40.63436350337269
+Total (real): 33.001013853876216
+Total (generated): 51.66031299708981
+
+Average detection score of correctly detected and recognized area in %:
+Atopic (real and generated): 62.64188448485921
+Atopic (real): 63.65237221120429
+Atopic (generated): 61.24644905323982
+Verruca (real and generated): 85.38484608064314
+Verruca (real): 80.75757169675323
+Verruca (generated): 87.19551866564355
+Dysh (real and generated): 66.55585171580654
+Dysh (real): 72.96096115668392
+Dysh (generated): 60.150742274929165
+Psoriasis (real and generated): 74.39644376225503
+Psoriasis (real): 72.39320235389788
+Psoriasis (generated): 75.82733048251013
+Healthy (real and generated): 0.0
+Healthy (real): 0.0
+Healthy (generated): 0.0
+Total (real and generated): 40.72130185103477
+Total (real): 33.14814028838128
+Total (generated): 51.66031299708981
+
+Most frequent normalized IoU value:
+Atopic (real and generated): {0.8: 122}
+Atopic (real): {0.8: 72}
+Atopic (generated): {0.8: 50}
+Verruca (real and generated): {0.9: 27}
+Verruca (real): {0.9: 9}
+Verruca (generated): {0.9: 18}
+Dysh (real and generated): {0.7: 38}
+Dysh (real): {0.8: 14}
+Dysh (generated): {0.6: 29}
+Psoriasis (real and generated): {0.7: 37}
+Psoriasis (real): {0.7: 14}
+Psoriasis (generated): {0.6: 28}
+Healthy (real and generated): {0.0: 23}
+Healthy (real): {0.0: 20}
+Healthy (generated): {0.0: 3}
+Total (real and generated): {0.7: 191}
+Total (real): {0.8: 103}
+Total (generated): {0.7: 95}
+{'atopic_real': {0.0: 9, 0.1: 12, 0.2: 8, 0.3: 11, 0.4: 12, 0.5: 23, 0.6: 47, 0.7: 68, 0.8: 72, 0.9: 28, 1.0: 1}, 'atopic_generated': {0.0: 23, 0.1: 4, 0.2: 0, 0.3: 0, 0.4: 0, 0.5: 5, 0.6: 20, 0.7: 45, 0.8: 50, 0.9: 15, 1.0: 0}, 'verruca_real': {0.0: 0, 0.1: 0, 0.2: 0, 0.3: 0, 0.4: 0, 0.5: 0, 0.6: 0, 0.7: 3, 0.8: 3, 0.9: 9, 1.0: 0}, 'verruca_generated': {0.0: 0, 0.1: 0, 0.2: 0, 0.3: 0, 0.4: 0, 0.5: 0, 0.6: 0, 0.7: 0, 0.8: 4, 0.9: 18, 1.0: 13}, 'dysh_real': {0.0: 1, 0.1: 1, 0.2: 1, 0.3: 0, 0.4: 1, 0.5: 4, 0.6: 6, 0.7: 11, 0.8: 14, 0.9: 7, 1.0: 1}, 'dysh_generated': {0.0: 1, 0.1: 14, 0.2: 12, 0.3: 9, 0.4: 17, 0.5: 19, 0.6: 29, 0.7: 27, 0.8: 11, 0.9: 3, 1.0: 0}, 'psor_real': {0.0: 5, 0.1: 1, 0.2: 0, 0.3: 0, 0.4: 2, 0.5: 5, 0.6: 7, 0.7: 14, 0.8: 14, 0.9: 9, 1.0: 1}, 'psor_generated': {0.0: 8, 0.1: 5, 0.2: 4, 0.3: 13, 0.4: 11, 0.5: 14, 0.6: 28, 0.7: 23, 0.8: 19, 0.9: 9, 1.0: 0}, 'healthy_real': {0.0: 20, 0.1: 0, 0.2: 0, 0.3: 0, 0.4: 0, 0.5: 0, 0.6: 0, 0.7: 0, 0.8: 0, 0.9: 0, 1.0: 0}, 'healthy_generated': {0.0: 3, 0.1: 0, 0.2: 0, 0.3: 0, 0.4: 0, 0.5: 0, 0.6: 0, 0.7: 0, 0.8: 0, 0.9: 0, 1.0: 0}}
+{0.0: 70, 0.1: 37, 0.2: 25, 0.3: 33, 0.4: 43, 0.5: 70, 0.6: 137, 0.7: 191, 0.8: 187, 0.9: 98, 1.0: 16}
+
+efficientdet_d0_coco17_tpu
+========================
+Average correctly detected area:
+Atopic (real and generated): 60.26094601919839
+Atopic (real): 62.11850655537096
+Atopic (generated): 57.6957433740077
+Verruca (real and generated): 94.76321490266105
+Verruca (real): 90.82569262562298
+Verruca (generated): 96.3039844893281
+Dysh (real and generated): 78.06827714080273
+Dysh (real): 79.66155513046792
+Dysh (generated): 76.47499915113755
+Psoriasis (real and generated): 80.02847654707925
+Psoriasis (real): 82.76839035212367
+Psoriasis (generated): 78.0713952577618
+Healthy (real and generated): 72.72727272727273
+Healthy (real): 69.29824561403508
+Healthy (generated): 82.5
+Total (real and generated): 72.78774181469761
+Total (real): 70.44752725562876
+Total (generated): 76.16805173335263
+
+Average not detected annotated area:
+Atopic (real and generated): 39.739053980801614
+Atopic (real): 37.88149344462906
+Atopic (generated): 42.30425662599229
+Verruca (real and generated): 5.236785097338947
+Verruca (real): 9.174307374377015
+Verruca (generated): 3.6960155106718764
+Dysh (real and generated): 21.931722859197258
+Dysh (real): 20.338444869532086
+Dysh (generated): 23.52500084886243
+Psoriasis (real and generated): 19.971523452920753
+Psoriasis (real): 17.231609647876322
+Psoriasis (generated): 21.928604742238207
+Healthy (real and generated): 27.272727272727273
+Healthy (real): 30.70175438596491
+Healthy (generated): 17.5
+Total (real and generated): 27.21225818530239
+Total (real): 29.55247274437125
+Total (generated): 23.83194826664737
+
+Average correctly detected and recognized area:
+Atopic (real and generated): 60.26094601919839
+Atopic (real): 62.11850655537096
+Atopic (generated): 57.6957433740077
+Verruca (real and generated): 94.76321490266105
+Verruca (real): 90.82569262562298
+Verruca (generated): 96.3039844893281
+Dysh (real and generated): 78.06827714080273
+Dysh (real): 79.66155513046792
+Dysh (generated): 76.47499915113755
+Psoriasis (real and generated): 80.02847654707925
+Psoriasis (real): 82.76839035212367
+Psoriasis (generated): 78.0713952577618
+Healthy (real and generated): 72.72727272727273
+Healthy (real): 69.29824561403508
+Healthy (generated): 82.5
+Total (real and generated): 72.78774181469761
+Total (real): 70.44752725562876
+Total (generated): 76.16805173335263
+
+Average extra detected area in % of predicted bounding boxes:
+Atopic (real and generated): 26.876014158604022
+Atopic (real): 25.478698369243496
+Atopic (generated): 28.805640724863792
+Verruca (real and generated): 8.422031881326749
+Verruca (real): 11.935162662666984
+Verruca (generated): 7.047328532106658
+Dysh (real and generated): 15.613938083823873
+Dysh (real): 23.52816021635444
+Dysh (generated): 7.699715951293307
+Psoriasis (real and generated): 19.27655820158516
+Psoriasis (real): 21.387371336143406
+Psoriasis (generated): 17.76883453404356
+Healthy (real and generated): 0.0
+Healthy (real): 0.0
+Healthy (generated): 0.0
+Total (real and generated): 12.050638377251072
+Total (real): 11.237518553982275
+Total (generated): 13.225144788639334
+
+Average extra detected but correctly recognized area in % of predicted bounding boxes:
+Atopic (real and generated): 26.876014158604022
+Atopic (real): 25.478698369243496
+Atopic (generated): 28.805640724863792
+Verruca (real and generated): 7.098718928428198
+Verruca (real): 7.230049941249915
+Verruca (generated): 7.047328532106658
+Dysh (real and generated): 14.744661433275045
+Dysh (real): 21.78960691525678
+Dysh (generated): 7.699715951293307
+Psoriasis (real and generated): 19.27655820158516
+Psoriasis (real): 21.387371336143406
+Psoriasis (generated): 17.76883453404356
+Healthy (real and generated): 0.0
+Healthy (real): 0.0
+Healthy (generated): 0.0
+Total (real and generated): 11.84444297480533
+Total (real): 10.888572488304868
+Total (generated): 13.225144788639334
+
+Average detection score of correctly detected area in %:
+Atopic (real and generated): 56.816003598648216
+Atopic (real): 60.49698799122353
+Atopic (generated): 51.73273943747278
+Verruca (real and generated): 97.95359144872995
+Verruca (real): 94.50699916631669
+Verruca (generated): 99.3022579940221
+Dysh (real and generated): 79.56665388765497
+Dysh (real): 86.39672915716872
+Dysh (generated): 72.73657861814121
+Psoriasis (real and generated): 79.1179692398055
+Psoriasis (real): 84.55403877202892
+Psoriasis (generated): 75.23506243107447
+Healthy (real and generated): 0.0
+Healthy (real): 0.0
+Healthy (generated): 0.0
+Total (real and generated): 42.236481190484064
+Total (real): 35.19639662702158
+Total (generated): 52.405492226596564
+
+Average detection score of correctly detected and recognized area in %:
+Atopic (real and generated): 56.816003598648216
+Atopic (real): 60.49698799122353
+Atopic (generated): 51.73273943747278
+Verruca (real and generated): 97.95359144872995
+Verruca (real): 94.50699916631669
+Verruca (generated): 99.3022579940221
+Dysh (real and generated): 79.56665388765497
+Dysh (real): 86.39672915716872
+Dysh (generated): 72.73657861814121
+Psoriasis (real and generated): 79.1179692398055
+Psoriasis (real): 84.55403877202892
+Psoriasis (generated): 75.23506243107447
+Healthy (real and generated): 0.0
+Healthy (real): 0.0
+Healthy (generated): 0.0
+Total (real and generated): 42.236481190484064
+Total (real): 35.19639662702158
+Total (generated): 52.405492226596564
+
+Most frequent normalized IoU value:
+Atopic (real and generated): {0.7: 100}
+Atopic (real): {0.7: 65}
+Atopic (generated): {0.7: 35}
+Verruca (real and generated): {0.9: 35}
+Verruca (real): {0.8: 7}
+Verruca (generated): {0.9: 29}
+Dysh (real and generated): {0.7: 40}
+Dysh (real): {0.8: 17}
+Dysh (generated): {0.6: 27}
+Psoriasis (real and generated): {0.8: 41}
+Psoriasis (real): {0.8: 21}
+Psoriasis (generated): {0.5: 28}
+Healthy (real and generated): {0.0: 66}
+Healthy (real): {0.0: 59}
+Healthy (generated): {0.0: 7}
+Total (real and generated): {0.8: 183}
+Total (real): {0.8: 110}
+Total (generated): {0.7: 79}
+{'atopic_real': {0.0: 11, 0.1: 12, 0.2: 11, 0.3: 12, 0.4: 22, 0.5: 32, 0.6: 52, 0.7: 65, 0.8: 65, 0.9: 11, 1.0: 1}, 'atopic_generated': {0.0: 18, 0.1: 3, 0.2: 2, 0.3: 0, 0.4: 1, 0.5: 3, 0.6: 16, 0.7: 35, 0.8: 33, 0.9: 12, 1.0: 1}, 'verruca_real': {0.0: 1, 0.1: 0, 0.2: 0, 0.3: 0, 0.4: 0, 0.5: 0, 0.6: 1, 0.7: 1, 0.8: 7, 0.9: 6, 1.0: 0}, 'verruca_generated': {0.0: 0, 0.1: 0, 0.2: 0, 0.3: 0, 0.4: 0, 0.5: 1, 0.6: 1, 0.7: 0, 0.8: 5, 0.9: 29, 1.0: 1}, 'dysh_real': {0.0: 4, 0.1: 1, 0.2: 2, 0.3: 1, 0.4: 1, 0.5: 7, 0.6: 4, 0.7: 14, 0.8: 17, 0.9: 7, 1.0: 0}, 'dysh_generated': {0.0: 1, 0.1: 0, 0.2: 1, 0.3: 2, 0.4: 12, 0.5: 22, 0.6: 27, 0.7: 26, 0.8: 15, 0.9: 3, 1.0: 0}, 'psor_real': {0.0: 6, 0.1: 0, 0.2: 2, 0.3: 3, 0.4: 5, 0.5: 12, 0.6: 10, 0.7: 14, 0.8: 21, 0.9: 4, 1.0: 0}, 'psor_generated': {0.0: 11, 0.1: 4, 0.2: 2, 0.3: 14, 0.4: 19, 0.5: 28, 0.6: 28, 0.7: 18, 0.8: 20, 0.9: 6, 1.0: 0}, 'healthy_real': {0.0: 59, 0.1: 0, 0.2: 0, 0.3: 0, 0.4: 0, 0.5: 0, 0.6: 0, 0.7: 0, 0.8: 0, 0.9: 0, 1.0: 0}, 'healthy_generated': {0.0: 7, 0.1: 0, 0.2: 0, 0.3: 0, 0.4: 0, 0.5: 0, 0.6: 0, 0.7: 0, 0.8: 0, 0.9: 0, 1.0: 0}}
+{0.0: 118, 0.1: 20, 0.2: 20, 0.3: 32, 0.4: 60, 0.5: 105, 0.6: 139, 0.7: 173, 0.8: 183, 0.9: 78, 1.0: 3}
+
+efficientdet_d1_coco17_tpu
+========================
+Average correctly detected area:
+Atopic (real and generated): 61.29680837659504
+Atopic (real): 61.79317417777507
+Atopic (generated): 60.61135084163214
+Verruca (real and generated): 94.60559655711435
+Verruca (real): 89.9998980664231
+Verruca (generated): 96.40782640129788
+Dysh (real and generated): 77.31513832876036
+Dysh (real): 79.79557215691399
+Dysh (generated): 74.83470450060673
+Psoriasis (real and generated): 80.92215774358282
+Psoriasis (real): 82.8915536189891
+Psoriasis (generated): 79.5154464040069
+Healthy (real and generated): 79.87012987012987
+Healthy (real): 78.94736842105263
+Healthy (generated): 82.5
+Total (real and generated): 76.0265482147849
+Total (real): 75.32916606527974
+Total (generated): 77.03387798629234
+
+Average not detected annotated area:
+Atopic (real and generated): 38.70319162340496
+Atopic (real): 38.20682582222494
+Atopic (generated): 39.388649158367855
+Verruca (real and generated): 5.394403442885679
+Verruca (real): 10.00010193357691
+Verruca (generated): 3.5921735987021526
+Dysh (real and generated): 22.684861671239645
+Dysh (real): 20.204427843086023
+Dysh (generated): 25.16529549939327
+Psoriasis (real and generated): 19.077842256417192
+Psoriasis (real): 17.108446381010918
+Psoriasis (generated): 20.484553595993102
+Healthy (real and generated): 20.12987012987013
+Healthy (real): 21.05263157894737
+Healthy (generated): 17.5
+Total (real and generated): 23.973451785215108
+Total (real): 24.67083393472026
+Total (generated): 22.966122013707658
+
+Average correctly detected and recognized area:
+Atopic (real and generated): 61.29669059691036
+Atopic (real): 61.792971109353196
+Atopic (generated): 60.61135084163214
+Verruca (real and generated): 94.60559655711435
+Verruca (real): 89.9998980664231
+Verruca (generated): 96.40782640129788
+Dysh (real and generated): 77.31513832876036
+Dysh (real): 79.79557215691399
+Dysh (generated): 74.83470450060673
+Psoriasis (real and generated): 80.92215774358282
+Psoriasis (real): 82.8915536189891
+Psoriasis (generated): 79.5154464040069
+Healthy (real and generated): 79.87012987012987
+Healthy (real): 78.94736842105263
+Healthy (generated): 82.5
+Total (real and generated): 76.0265167228906
+Total (real): 75.32911277130478
+Total (generated): 77.03387798629234
+
+Average extra detected area in % of predicted bounding boxes:
+Atopic (real and generated): 27.198777873640196
+Atopic (real): 25.424771955206655
+Atopic (generated): 29.648595570524613
+Verruca (real and generated): 6.624645580043195
+Verruca (real): 6.81687909854586
+Verruca (generated): 6.5494237684551955
+Dysh (real and generated): 15.535605356061698
+Dysh (real): 23.838067263539642
+Dysh (generated): 7.233143448583751
+Psoriasis (real and generated): 18.628700461069087
+Psoriasis (real): 22.21881368913798
+Psoriasis (generated): 16.0643338695913
+Healthy (real and generated): 0.0
+Healthy (real): 0.0
+Healthy (generated): 0.0
+Total (real and generated): 11.891626423259854
+Total (real): 11.1182185716853
+Total (generated): 13.008771097756437
+
+Average extra detected but correctly recognized area in % of predicted bounding boxes:
+Atopic (real and generated): 27.193829742163743
+Atopic (real): 25.416240694040354
+Atopic (generated): 29.648595570524613
+Verruca (real and generated): 6.624645580043195
+Verruca (real): 6.81687909854586
+Verruca (generated): 6.5494237684551955
+Dysh (real and generated): 15.535605356061698
+Dysh (real): 23.838067263539642
+Dysh (generated): 7.233143448583751
+Psoriasis (real and generated): 18.628700461069087
+Psoriasis (real): 22.21881368913798
+Psoriasis (generated): 16.0643338695913
+Healthy (real and generated): 0.0
+Healthy (real): 0.0
+Healthy (generated): 0.0
+Total (real and generated): 11.890303393453317
+Total (real): 11.115979598166541
+Total (generated): 13.008771097756437
+
+Average detection score of correctly detected area in %:
+Atopic (real and generated): 54.138527656736834
+Atopic (real): 58.433072458066725
+Atopic (generated): 48.20796578823364
+Verruca (real and generated): 99.58820609763114
+Verruca (real): 98.95749810014547
+Verruca (generated): 99.83500487925596
+Dysh (real and generated): 69.80826427203533
+Dysh (real): 77.53176864294896
+Dysh (generated): 62.08475990112171
+Psoriasis (real and generated): 76.37137348302478
+Psoriasis (real): 80.277211045098
+Psoriasis (generated): 73.58148951011533
+Healthy (real and generated): 0.0
+Healthy (real): 0.0
+Healthy (generated): 0.0
+Total (real and generated): 40.264256307124285
+Total (real): 33.64667547162949
+Total (generated): 49.82298418061675
+
+Average detection score of correctly detected and recognized area in %:
+Atopic (real and generated): 54.138527656736834
+Atopic (real): 58.433072458066725
+Atopic (generated): 48.20796578823364
+Verruca (real and generated): 99.58820609763114
+Verruca (real): 98.95749810014547
+Verruca (generated): 99.83500487925596
+Dysh (real and generated): 69.80826427203533
+Dysh (real): 77.53176864294896
+Dysh (generated): 62.08475990112171
+Psoriasis (real and generated): 76.37137348302478
+Psoriasis (real): 80.277211045098
+Psoriasis (generated): 73.58148951011533
+Healthy (real and generated): 0.0
+Healthy (real): 0.0
+Healthy (generated): 0.0
+Total (real and generated): 40.264256307124285
+Total (real): 33.64667547162949
+Total (generated): 49.82298418061675
+
+Most frequent normalized IoU value:
+Atopic (real and generated): {0.7: 100}
+Atopic (real): {0.7: 73}
+Atopic (generated): {0.8: 37}
+Verruca (real and generated): {0.9: 33}
+Verruca (real): {0.8: 8}
+Verruca (generated): {0.9: 29}
+Dysh (real and generated): {0.5: 37}
+Dysh (real): {0.8: 16}
+Dysh (generated): {0.5: 28}
+Psoriasis (real and generated): {0.8: 46}
+Psoriasis (real): {0.5: 17}
+Psoriasis (generated): {0.8: 29}
+Healthy (real and generated): {0.0: 38}
+Healthy (real): {0.0: 30}
+Healthy (generated): {0.0: 8}
+Total (real and generated): {0.7: 175}
+Total (real): {0.7: 101}
+Total (generated): {0.8: 84}
+{'atopic_real': {0.0: 21, 0.1: 13, 0.2: 16, 0.3: 13, 0.4: 17, 0.5: 38, 0.6: 62, 0.7: 73, 0.8: 50, 0.9: 14, 1.0: 0}, 'atopic_generated': {0.0: 25, 0.1: 3, 0.2: 0, 0.3: 1, 0.4: 0, 0.5: 5, 0.6: 13, 0.7: 27, 0.8: 37, 0.9: 17, 1.0: 0}, 'verruca_real': {0.0: 0, 0.1: 0, 0.2: 0, 0.3: 0, 0.4: 0, 0.5: 0, 0.6: 0, 0.7: 2, 0.8: 8, 0.9: 4, 1.0: 1}, 'verruca_generated': {0.0: 0, 0.1: 0, 0.2: 0, 0.3: 0, 0.4: 1, 0.5: 0, 0.6: 0, 0.7: 0, 0.8: 4, 0.9: 29, 1.0: 2}, 'dysh_real': {0.0: 5, 0.1: 0, 0.2: 1, 0.3: 4, 0.4: 5, 0.5: 9, 0.6: 5, 0.7: 10, 0.8: 16, 0.9: 10, 1.0: 1}, 'dysh_generated': {0.0: 3, 0.1: 0, 0.2: 2, 0.3: 1, 0.4: 16, 0.5: 28, 0.6: 24, 0.7: 26, 0.8: 14, 0.9: 3, 1.0: 0}, 'psor_real': {0.0: 6, 0.1: 1, 0.2: 1, 0.3: 2, 0.4: 4, 0.5: 17, 0.6: 8, 0.7: 16, 0.8: 17, 0.9: 3, 1.0: 0}, 'psor_generated': {0.0: 10, 0.1: 9, 0.2: 4, 0.3: 14, 0.4: 26, 0.5: 24, 0.6: 23, 0.7: 21, 0.8: 29, 0.9: 7, 1.0: 0}, 'healthy_real': {0.0: 30, 0.1: 0, 0.2: 0, 0.3: 0, 0.4: 0, 0.5: 0, 0.6: 0, 0.7: 0, 0.8: 0, 0.9: 0, 1.0: 0}, 'healthy_generated': {0.0: 8, 0.1: 0, 0.2: 0, 0.3: 0, 0.4: 0, 0.5: 0, 0.6: 0, 0.7: 0, 0.8: 0, 0.9: 0, 1.0: 0}}
+{0.0: 108, 0.1: 26, 0.2: 24, 0.3: 35, 0.4: 69, 0.5: 121, 0.6: 135, 0.7: 175, 0.8: 175, 0.9: 87, 1.0: 4}
+
+faster_rcnn_resnet101_v1_640x640_coco17_tpu_1_36
+========================
+Average correctly detected area:
+Atopic (real and generated): 65.1767592752773
+Atopic (real): 55.695143948479725
+Atopic (generated): 78.27041853609303
+Verruca (real and generated): 92.84525357340104
+Verruca (real): 86.70699993714814
+Verruca (generated): 95.24717890932608
+Dysh (real and generated): 76.68925623427889
+Dysh (real): 69.01355747324902
+Dysh (generated): 84.36495499530875
+Psoriasis (real and generated): 60.564227533257224
+Psoriasis (real): 38.976806292827504
+Psoriasis (generated): 75.98381413356417
+Healthy (real and generated): 84.41558441558442
+Healthy (real): 81.57894736842105
+Healthy (generated): 92.5
+Total (real and generated): 76.10528666535848
+Total (real): 70.0022109672746
+Total (generated): 84.92084045147959
+
+Average not detected annotated area:
+Atopic (real and generated): 34.82324072472268
+Atopic (real): 44.30485605152028
+Atopic (generated): 21.72958146390695
+Verruca (real and generated): 7.1547464265989635
+Verruca (real): 13.293000062851867
+Verruca (generated): 4.752821090673915
+Dysh (real and generated): 23.310743765721117
+Dysh (real): 30.986442526750984
+Dysh (generated): 15.635045004691246
+Psoriasis (real and generated): 39.435772466742776
+Psoriasis (real): 61.023193707172496
+Psoriasis (generated): 24.016185866435837
+Healthy (real and generated): 15.584415584415584
+Healthy (real): 18.42105263157895
+Healthy (generated): 7.5
+Total (real and generated): 23.894713334641533
+Total (real): 29.997789032725397
+Total (generated): 15.079159548520396
+
+Average correctly detected and recognized area:
+Atopic (real and generated): 63.78799601532575
+Atopic (real): 54.712978232328865
+Atopic (generated): 76.32016342994051
+Verruca (real and generated): 89.16880415602473
+Verruca (real): 73.63517978647684
+Verruca (generated): 95.24717890932608
+Dysh (real and generated): 76.22793955444936
+Dysh (real): 68.18685674613367
+Dysh (generated): 84.26902236276504
+Psoriasis (real and generated): 60.15311327851171
+Psoriasis (real): 37.99013208143826
+Psoriasis (generated): 75.98381413356417
+Healthy (real and generated): 84.41558441558442
+Healthy (real): 81.57894736842105
+Healthy (generated): 92.5
+Total (real and generated): 75.31729506436338
+Total (real): 69.04800512264617
+Total (generated): 84.37293609128824
+
+Average extra detected area in % of predicted bounding boxes:
+Atopic (real and generated): 27.341344425017695
+Atopic (real): 29.090197745039976
+Atopic (generated): 24.926261268796445
+Verruca (real and generated): 9.47264393930322
+Verruca (real): 20.319310492033807
+Verruca (generated): 5.228296157799947
+Dysh (real and generated): 18.049692871317017
+Dysh (real): 26.026958317738764
+Dysh (generated): 10.072427424895276
+Psoriasis (real and generated): 19.680443907367422
+Psoriasis (real): 26.49892976608147
+Psoriasis (generated): 14.81009686542882
+Healthy (real and generated): 0.0
+Healthy (real): 0.0
+Healthy (generated): 0.0
+Total (real and generated): 12.57729430739516
+Total (real): 13.215488802339493
+Total (generated): 11.65545781469779
+
+Average extra detected but correctly recognized area in % of predicted bounding boxes:
+Atopic (real and generated): 24.216895979748323
+Atopic (real): 24.674923620631425
+Atopic (generated): 23.5843816185288
+Verruca (real and generated): 6.516120732773821
+Verruca (real): 9.80722797992928
+Verruca (generated): 5.228296157799947
+Dysh (real and generated): 14.656804992710295
+Dysh (real): 19.34879661392582
+Dysh (generated): 9.964813371494767
+Psoriasis (real and generated): 12.908234344801565
+Psoriasis (real): 10.24562681592341
+Psoriasis (generated): 14.81009686542882
+Healthy (real and generated): 0.0
+Healthy (real): 0.0
+Healthy (generated): 0.0
+Total (real and generated): 10.256879437653694
+Total (real): 9.55338954937996
+Total (generated): 11.273031498493532
+
+Average detection score of correctly detected area in %:
+Atopic (real and generated): 91.70112935533245
+Atopic (real): 87.91115978067653
+Atopic (generated): 96.93489686319062
+Verruca (real and generated): 98.98992741139614
+Verruca (real): 96.41084191085139
+Verruca (generated): 99.99913478117453
+Dysh (real and generated): 87.96809065608093
+Dysh (real): 79.72568075816898
+Dysh (generated): 96.21050055399289
+Psoriasis (real and generated): 83.340798273786
+Psoriasis (real): 64.06554738521945
+Psoriasis (generated): 97.10883462276213
+Healthy (real and generated): 0.0
+Healthy (real): 0.0
+Healthy (generated): 0.0
+Total (real and generated): 53.093242128563865
+Total (real): 40.01072130020212
+Total (generated): 71.99021665841973
+
+Average detection score of correctly detected and recognized area in %:
+Atopic (real and generated): 92.32402833608306
+Atopic (real): 88.27271421062245
+Atopic (generated): 97.91870022362393
+Verruca (real and generated): 95.93683993477343
+Verruca (real): 85.5554197717484
+Verruca (generated): 99.99913478117453
+Dysh (real and generated): 88.08933402082396
+Dysh (real): 80.10733377731562
+Dysh (generated): 96.0713342643323
+Psoriasis (real and generated): 80.6835162706812
+Psoriasis (real): 57.6880705777679
+Psoriasis (generated): 97.10883462276213
+Healthy (real and generated): 0.0
+Healthy (real): 0.0
+Healthy (generated): 0.0
+Total (real and generated): 52.67049158648853
+Total (real): 39.120924385807726
+Total (generated): 72.2420886541386
+
+Most frequent normalized IoU value:
+Atopic (real and generated): {0.7: 107}
+Atopic (real): {0.8: 61}
+Atopic (generated): {0.7: 50}
+Verruca (real and generated): {0.9: 27}
+Verruca (real): {0.8: 5}
+Verruca (generated): {0.9: 22}
+Dysh (real and generated): {0.7: 52}
+Dysh (real): {0.8: 15}
+Dysh (generated): {0.5: 41}
+Psoriasis (real and generated): {0.7: 33}
+Psoriasis (real): {0.7: 12}
+Psoriasis (generated): {0.6: 25}
+Healthy (real and generated): {0.0: 29}
+Healthy (real): {0.0: 26}
+Healthy (generated): {0.0: 3}
+Total (real and generated): {0.7: 195}
+Total (real): {0.8: 89}
+Total (generated): {0.7: 109}
+{'atopic_real': {0.0: 33, 0.1: 16, 0.2: 6, 0.3: 15, 0.4: 13, 0.5: 28, 0.6: 44, 0.7: 57, 0.8: 61, 0.9: 20, 1.0: 1}, 'atopic_generated': {0.0: 23, 0.1: 3, 0.2: 0, 0.3: 0, 0.4: 1, 0.5: 3, 0.6: 23, 0.7: 50, 0.8: 46, 0.9: 16, 1.0: 3}, 'verruca_real': {0.0: 1, 0.1: 1, 0.2: 0, 0.3: 0, 0.4: 0, 0.5: 0, 0.6: 0, 0.7: 3, 0.8: 5, 0.9: 5, 1.0: 0}, 'verruca_generated': {0.0: 0, 0.1: 0, 0.2: 0, 0.3: 0, 0.4: 0, 0.5: 0, 0.6: 0, 0.7: 0, 0.8: 6, 0.9: 22, 1.0: 7}, 'dysh_real': {0.0: 14, 0.1: 4, 0.2: 2, 0.3: 4, 0.4: 3, 0.5: 0, 0.6: 5, 0.7: 14, 0.8: 15, 0.9: 8, 1.0: 0}, 'dysh_generated': {0.0: 3, 0.1: 19, 0.2: 11, 0.3: 15, 0.4: 16, 0.5: 41, 0.6: 33, 0.7: 38, 0.8: 20, 0.9: 5, 1.0: 0}, 'psor_real': {0.0: 6, 0.1: 1, 0.2: 0, 0.3: 1, 0.4: 2, 0.5: 2, 0.6: 3, 0.7: 12, 0.8: 8, 0.9: 5, 1.0: 0}, 'psor_generated': {0.0: 9, 0.1: 2, 0.2: 8, 0.3: 12, 0.4: 18, 0.5: 17, 0.6: 25, 0.7: 21, 0.8: 22, 0.9: 8, 1.0: 0}, 'healthy_real': {0.0: 26, 0.1: 0, 0.2: 0, 0.3: 0, 0.4: 0, 0.5: 0, 0.6: 0, 0.7: 0, 0.8: 0, 0.9: 0, 1.0: 0}, 'healthy_generated': {0.0: 3, 0.1: 0, 0.2: 0, 0.3: 0, 0.4: 0, 0.5: 0, 0.6: 0, 0.7: 0, 0.8: 0, 0.9: 0, 1.0: 0}}
+{0.0: 118, 0.1: 46, 0.2: 27, 0.3: 47, 0.4: 53, 0.5: 91, 0.6: 133, 0.7: 195, 0.8: 183, 0.9: 89, 1.0: 11}

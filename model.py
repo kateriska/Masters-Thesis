@@ -8,6 +8,7 @@ import cv2
 import numpy as np
 from matplotlib import pyplot as plt
 import xml.etree.cElementTree as ET
+import csv
 import collections
 import functools
 import operator
@@ -221,6 +222,11 @@ class UsedModel:
         category_index = label_map_util.create_category_index_from_labelmap(os.path.join('annotations', 'label_map.pbtxt'))
 
         f = open("./results/predictions.txt", "w+") # file for predictions of tested images
+        csv_path = "./experiments/" + full_model_name + ".csv"
+        with open(csv_path, 'w+') as csv_file:
+            writer = csv.writer(csv_file)
+            writer.writerow([full_model_name, "Atopic (real and generated)", "Atopic (real)", "Atopic (generated)", "Verruca (real and generated)", "Verruca (real)", "Verruca (generated)", "Dysh (real and generated)", "Dysh (real)", "Dysh (generated)", "Psoriasis (real and generated)", "Psoriasis (real)", "Psoriasis (generated)", "Healthy (real and generated)", "Healthy (real)", "Healthy (generated)", "Total (real and generated)", "Total (real)", "Total (generated)"])
+            csv_file.close()
 
         # declare names of parts of dataset
         dataset_parts = ['atopic_real', 'atopic_generated', 'verruca_real', 'verruca_generated', 'dysh_real', 'dysh_generated', 'psor_real', 'psor_generated', 'healthy_real', 'healthy_generated']
@@ -277,6 +283,7 @@ class UsedModel:
 
         set_min_score_thresh = 0.3 # minimum detection score of predicted bounding boxes - means how model is sure that bounding box belongs to particular class - bounding boxes of lower score are not used for evaluation
         # detect and clasify each image from test dataset
+        #processed_counter = 0
         for file in glob.glob('./dataset/test_preprocessed/*'):
             file_substr = file.split('/')[-1]
             test_image_name = file_substr.rsplit('.', 1)[0]
@@ -441,42 +448,49 @@ class UsedModel:
             plt.savefig("./results/" + file_substr, bbox_inches='tight', pad_inches = 0)
             plt.close('all')
 
+            '''
+            processed_counter += 1
+            if processed_counter > 50:
+                break
+            '''
+
         f.close()
 
 
         # print detailed average statistics for each metric, classes, real samples, generated samples
         print("========================")
         print("Average correctly detected area:")
-        self.print_evaluate_metrics(evaluate_dict, 'correctly_detected_area_sum')
+        self.print_evaluate_metrics(evaluate_dict, 'correctly_detected_area_sum', "Average correctly detected area in %", csv_path)
         print()
         print("Average not detected annotated area:")
-        self.print_evaluate_metrics(evaluate_dict, 'not_detected_annotated_area_sum')
+        self.print_evaluate_metrics(evaluate_dict, 'not_detected_annotated_area_sum', "Average not detected annotated area in %", csv_path)
         print()
         print("Average correctly detected and recognized area:")
-        self.print_evaluate_metrics(evaluate_dict, 'correctly_detected_recognized_area_sum')
+        self.print_evaluate_metrics(evaluate_dict, 'correctly_detected_recognized_area_sum', "Average correctly detected and recognized area in %", csv_path)
         print()
         print("Average extra detected area in % of predicted bounding boxes:")
-        self.print_evaluate_metrics(evaluate_dict, 'extra_detected_area_sum')
+        self.print_evaluate_metrics(evaluate_dict, 'extra_detected_area_sum', "Average extra detected area in % of predicted bounding boxes", csv_path)
         print()
         print("Average extra detected but correctly recognized area in % of predicted bounding boxes:")
-        self.print_evaluate_metrics(evaluate_dict, 'extra_detected_recognized_area_sum')
+        self.print_evaluate_metrics(evaluate_dict, 'extra_detected_recognized_area_sum', "Average extra detected but correctly recognized area in % of predicted bounding boxes", csv_path)
         print()
         print("Average detection score of correctly detected area in %:")
-        self.print_evaluate_metrics(evaluate_dict, 'average_detection_score_correctly_detected_area_sum')
+        self.print_evaluate_metrics(evaluate_dict, 'average_detection_score_correctly_detected_area_sum', "Average detection score of correctly detected area in %", csv_path)
         print()
         print("Average detection score of correctly detected and recognized area in %:")
-        self.print_evaluate_metrics(evaluate_dict, 'average_detection_score_correctly_detected_recognized_area_sum')
+        self.print_evaluate_metrics(evaluate_dict, 'average_detection_score_correctly_detected_recognized_area_sum', "Average detection score of correctly detected and recognized area in %", csv_path)
         print()
         print("Most frequent normalized IoU value:")
-        self.print_evaluate_metrics(iou_dict, 'most_frequent_iou_value')
-        print(iou_dict)
+        self.print_evaluate_metrics(iou_dict, 'most_frequent_iou_value', "Most frequent normalized IoU value", csv_path)
+
+        #print(iou_dict)
 
         iou_edited_dict = []
         for i in iou_dict:
             iou_edited_dict.append(iou_dict[i])
         # sum all iou values for each dataset part to get final graph of whole test dataset
         iou_all_classes = dict(functools.reduce(operator.add, map(collections.Counter, iou_edited_dict)))
-        print(iou_all_classes)
+        #print(iou_all_classes)
 
         fig = plt.figure()
         ax = fig.add_axes([0,0,1,1])
@@ -864,10 +878,11 @@ class UsedModel:
                 dataset_parts_count += evaluate_dict[item]['count']
 
             if dataset_parts_count != 0:
-                result = metrics_value_count / dataset_parts_count
+                result = round((metrics_value_count / dataset_parts_count),3)
             else:
                 # theyre no images in test folder of input part
                 result = None
+            return result
 
         else:
             metrics_value_count = 0
@@ -884,27 +899,51 @@ class UsedModel:
             # return most frequent value of normalized IoU and count of bounding boxes for this normalized value for dataset part(s)
             result[max_key] = max_value
 
-        return result
+            return max_key
 
     # print average detailed statistics of evaluation
-    def print_evaluate_metrics(self, evaluate_dict, metrics_name):
+    def print_evaluate_metrics(self, evaluate_dict, metrics_name, metrics_print_string, csv_path):
         # dataset_parts = ['atopic_real', 'atopic_generated', 'verruca_real', 'verruca_generated', 'dysh_real', 'dysh_generated', 'psor_real', 'psor_generated', 'healthy_real', 'healthy_generated']
+        atopic_real_gen = self.compute_average_evaluate_metrics(evaluate_dict, ['atopic_real', 'atopic_generated'], metrics_name)
+        atopic_real = self.compute_average_evaluate_metrics(evaluate_dict, ['atopic_real'], metrics_name)
+        atopic_gen = self.compute_average_evaluate_metrics(evaluate_dict, ['atopic_generated'], metrics_name)
+        verruca_real_gen = self.compute_average_evaluate_metrics(evaluate_dict, ['verruca_real', 'verruca_generated'], metrics_name)
+        verruca_real = self.compute_average_evaluate_metrics(evaluate_dict, ['verruca_real'], metrics_name)
+        verruca_gen = self.compute_average_evaluate_metrics(evaluate_dict, ['verruca_generated'], metrics_name)
+        dysh_real_gen = self.compute_average_evaluate_metrics(evaluate_dict, ['dysh_real', 'dysh_generated'], metrics_name)
+        dysh_real = self.compute_average_evaluate_metrics(evaluate_dict, ['dysh_real'], metrics_name)
+        dysh_gen = self.compute_average_evaluate_metrics(evaluate_dict, ['dysh_generated'], metrics_name)
+        psor_real_gen = self.compute_average_evaluate_metrics(evaluate_dict, ['psor_real', 'psor_generated'], metrics_name)
+        psor_real = self.compute_average_evaluate_metrics(evaluate_dict, ['psor_real'], metrics_name)
+        psor_gen = self.compute_average_evaluate_metrics(evaluate_dict, ['psor_generated'], metrics_name)
+        healthy_real_gen = self.compute_average_evaluate_metrics(evaluate_dict, ['healthy_real', 'healthy_generated'], metrics_name)
+        healthy_real = self.compute_average_evaluate_metrics(evaluate_dict, ['healthy_real'], metrics_name)
+        healthy_gen = self.compute_average_evaluate_metrics(evaluate_dict, ['healthy_generated'], metrics_name)
+        total_real_gen = self.compute_average_evaluate_metrics(evaluate_dict, ['atopic_real', 'atopic_generated', 'verruca_real', 'verruca_generated', 'dysh_real', 'dysh_generated', 'psor_real', 'psor_generated', 'healthy_real', 'healthy_generated'], metrics_name)
+        total_real = self.compute_average_evaluate_metrics(evaluate_dict, ['atopic_real', 'verruca_real', 'dysh_real', 'psor_real', 'healthy_real'], metrics_name)
+        total_gen = self.compute_average_evaluate_metrics(evaluate_dict, ['atopic_generated', 'verruca_generated', 'dysh_generated', 'psor_generated', 'healthy_generated'], metrics_name)
 
-        print("Atopic (real and generated): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['atopic_real', 'atopic_generated'], metrics_name)))
-        print("Atopic (real): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['atopic_real'], metrics_name)))
-        print("Atopic (generated): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['atopic_generated'], metrics_name)))
-        print("Verruca (real and generated): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['verruca_real', 'verruca_generated'], metrics_name)))
-        print("Verruca (real): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['verruca_real'], metrics_name)))
-        print("Verruca (generated): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['verruca_generated'], metrics_name)))
-        print("Dysh (real and generated): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['dysh_real', 'dysh_generated'], metrics_name)))
-        print("Dysh (real): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['dysh_real'], metrics_name)))
-        print("Dysh (generated): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['dysh_generated'], metrics_name)))
-        print("Psoriasis (real and generated): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['psor_real', 'psor_generated'], metrics_name)))
-        print("Psoriasis (real): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['psor_real'], metrics_name)))
-        print("Psoriasis (generated): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['psor_generated'], metrics_name)))
-        print("Healthy (real and generated): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['healthy_real', 'healthy_generated'], metrics_name)))
-        print("Healthy (real): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['healthy_real'], metrics_name)))
-        print("Healthy (generated): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['healthy_generated'], metrics_name)))
-        print("Total (real and generated): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['atopic_real', 'atopic_generated', 'verruca_real', 'verruca_generated', 'dysh_real', 'dysh_generated', 'psor_real', 'psor_generated', 'healthy_real', 'healthy_generated'], metrics_name)))
-        print("Total (real): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['atopic_real', 'verruca_real', 'dysh_real', 'psor_real', 'healthy_real'], metrics_name)))
-        print("Total (generated): " + str(self.compute_average_evaluate_metrics(evaluate_dict, ['atopic_generated', 'verruca_generated', 'dysh_generated', 'psor_generated', 'healthy_generated'], metrics_name)))
+        print("Atopic (real and generated): " + str(atopic_real_gen))
+        print("Atopic (real): " + str(atopic_real))
+        print("Atopic (generated): " + str(atopic_gen))
+        print("Verruca (real and generated): " + str(verruca_real_gen))
+        print("Verruca (real): " + str(verruca_real))
+        print("Verruca (generated): " + str(verruca_gen))
+        print("Dysh (real and generated): " + str(dysh_real_gen))
+        print("Dysh (real): " + str(dysh_real))
+        print("Dysh (generated): " + str(dysh_gen))
+        print("Psoriasis (real and generated): " + str(psor_real_gen))
+        print("Psoriasis (real): " + str(psor_real))
+        print("Psoriasis (generated): " + str(psor_gen))
+        print("Healthy (real and generated): " + str(healthy_real_gen))
+        print("Healthy (real): " + str(healthy_real))
+        print("Healthy (generated): " + str(healthy_gen))
+        print("Total (real and generated): " + str(total_real_gen))
+        print("Total (real): " + str(total_real))
+        print("Total (generated): " + str(total_gen))
+
+        with open(csv_path, 'a', newline='') as csv_file:
+            writer = csv.writer(csv_file)
+            writer.writerow([metrics_print_string, atopic_real_gen, atopic_real, atopic_gen, verruca_real_gen, verruca_real, verruca_gen, dysh_real_gen, dysh_real, dysh_gen, psor_real_gen, psor_real, psor_gen, healthy_real_gen, healthy_real, healthy_gen, total_real_gen, total_real, total_gen])
+
+        csv_file.close()

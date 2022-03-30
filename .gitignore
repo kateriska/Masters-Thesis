@@ -28,3 +28,4 @@ scripts/atopic_real_new_annotations/*
 scripts/sfinge_partial_original/*
 scripts/sfinge_partial_resized/*
 experiments/.~lock.training_unchanged_pipeline.ods#
+experiments/ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8.csv
