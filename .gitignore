@@ -1,5 +1,6 @@
 MT-env/*
 annotations/*
+!annotations/label_map.pbtxt
 dataset/*
 GenerateTFRecord/*
 models/*

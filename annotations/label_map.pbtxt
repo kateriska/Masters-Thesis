@@ -1,0 +1,16 @@
+item {
+	name:'atopic'
+	id:1
+}
+item {
+	name:'verruca'
+	id:2
+}
+item {
+	name:'dysh'
+	id:3
+}
+item {
+	name:'psor'
+	id:4
+}
