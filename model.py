@@ -1,3 +1,16 @@
+'''
+Author: Katerina Fortova
+Master's Thesis: Analysis of Convolutional Neural Networks for Detection and Classification of Damages in Fingerprint Images
+Academic Year: 2021/22
+
+Downloading pretrained model, model configuration, generating TF records from train and validation dataset, generating training command and evaluation on ./dataset/test_preprocessed images
+Checkpoint with configured pipeline is stored in ./trained_models in subfolder based on used model
+
+Model can be trained from downloaded checkpoint from beginning or from checkpoint trained on same task (store already trained checkpoint on same task in ./trained_models/model_name/trained_checkpoint (e.g. trained_models/efficientdet_d0_coco17_tpu-32/trained_checkpoint))
+pipeline.config file with configured model parameters for training is stored in ./trained_models/model_name (e.g. trained_models/efficientdet_d0_coco17_tpu-32), changing of some parametres was used for experiments
+
+'''
+
 import os
 import wget
 import subprocess
@@ -26,7 +39,6 @@ from object_detection.builders import model_builder
 from dataset import Dataset
 
 
-
 class UsedModel:
     def __init__(self, model, epochs, test):
         super().__init__()
@@ -50,7 +62,7 @@ class UsedModel:
             subprocess.call(['tar', '-zxvf', archive_name])
             os.chdir("..")
 
-    # configuration of model pipeline
+    # basic configuration of model pipeline - some advanced changing of training parameters was used for experiments (see Thesis text)
     def config_pipeline(self, model, full_model_name):
         if not os.path.exists(os.path.join('trained_models',full_model_name, 'pipeline.config')):
             if os.path.isdir('./trained_models/' + full_model_name) == False:
@@ -69,6 +81,7 @@ class UsedModel:
           pipeline_config.model.center_net.num_classes = 4
         pipeline_config.train_config.batch_size = 4
 
+        # if our model of detection and classification of fingerprint damages has some checkpoint, load them and continue training, otherwise load initial checkpoint of downloaded model
         if os.path.isdir(os.path.join('trained_models', full_model_name, 'trained_checkpoint')) and tf.train.latest_checkpoint(os.path.join('trained_models', full_model_name, 'trained_checkpoint')) is not None:
             trained_model_latest_checkpoint = tf.train.latest_checkpoint(os.path.join('trained_models', full_model_name, 'trained_checkpoint'))
             pipeline_config.train_config.fine_tune_checkpoint = trained_model_latest_checkpoint
@@ -77,14 +90,6 @@ class UsedModel:
             pipeline_config.train_config.fine_tune_checkpoint = os.path.join('pretrained_models', full_model_name, 'checkpoint', 'ckpt-0')
             pipeline_config.train_config.fine_tune_checkpoint_type = "detection"
 
-        # if our model of detection and classification of fingerprint damages has some checkpoint, load them and continue training, otherwise load initial checkpoint of downloaded model
-        '''
-        if (trained_model_latest_checkpoint is None):
-            pipeline_config.train_config.fine_tune_checkpoint = os.path.join('pretrained_models', full_model_name, 'checkpoint', 'ckpt-0')
-        else:
-            pipeline_config.train_config.fine_tune_checkpoint = trained_model_latest_checkpoint
-        '''
-        #pipeline_config.train_config.fine_tune_checkpoint_type = "detection"
         pipeline_config.train_input_reader.label_map_path= os.path.join('annotations', 'label_map.pbtxt')
         pipeline_config.train_input_reader.tf_record_input_reader.input_path[:] = [os.path.join('annotations', 'train.record')]
         pipeline_config.eval_input_reader[0].label_map_path = os.path.join('annotations', 'label_map.pbtxt')
@@ -97,7 +102,8 @@ class UsedModel:
 
 
     def config_model(self):
-
+        print("TRAINING MODE")
+        print("Started downloading pretrained model")
         if self.model == "ssd_mobilenet_v2":
             self.download_pretrained_model(self.model, 'ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8', 'http://download.tensorflow.org/models/object_detection/tf2/20200711/ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8.tar.gz')
         elif self.model == "faster_rcnn_resnet50":
@@ -115,10 +121,13 @@ class UsedModel:
         elif self.model == 'centernet_resnet101':
             self.download_pretrained_model(self.model, 'centernet_resnet101_v1_fpn_512x512_coco17_tpu-8', 'http://download.tensorflow.org/models/object_detection/tf2/20200711/centernet_resnet101_v1_fpn_512x512_coco17_tpu-8.tar.gz')
 
-
+        print("Started preprocessing and splitting dataset")
         self.load_dataset()
+        print("Creating label map")
         self.create_label_map()
+        print("Creating TF records")
         self.create_tf_record()
+        print("Processing basic pipeline configuration and generating training command")
         if self.model == "ssd_mobilenet_v2":
             self.config_pipeline(self.model, 'ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8')
             self.train_model('ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8')
@@ -148,24 +157,11 @@ class UsedModel:
 
     # generate train command of model
     def train_model(self, full_model_name):
-        print(os.getcwd())
-        train_command = "python {} --model_dir={} --pipeline_config_path={} --num_train_steps={}".format(os.path.join('.','models', 'research', 'object_detection', 'model_main_tf2.py'), os.path.join('trained_models', full_model_name),os.path.join('trained_models', full_model_name, 'pipeline.config'), self.epochs)
+        train_command = "python {} --model_dir={} --pipeline_config_path={} --num_train_steps={}".format(os.path.join('.','model', 'research', 'object_detection', 'model_main_tf2.py'), os.path.join('trained_models', full_model_name),os.path.join('trained_models', full_model_name, 'pipeline.config'), self.epochs)
         print("Command for training model:")
         print(train_command)
-        #subprocess.Popen(['python', os.path.join('models', 'research', 'object_detection', 'model_main_tf2.py'), '--model_dir=' + os.path.join('trained_models', 'ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8'), '--pipeline_config_path=' + os.path.join('trained_models', 'ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8', 'pipeline.config'), '--num_train_steps=' + str(self.epochs)])
-    '''
-    label map in format:
-    item {
-	name:'eczema'
-	id:1
-    }
-    item {
-	   name:'verruca'
-	   id:2
-    }
-    '''
 
-
+    # create label map with classes of diseases, name of classes are annotated in dataset
     def create_label_map(self):
         labels = [{'name':'atopic', 'id':1}, {'name':'verruca', 'id':2}, {'name':'dysh', 'id':3}, {'name':'psor', 'id':4}]
 
@@ -181,14 +177,15 @@ class UsedModel:
                 f.write("}" + "\n")
         f.close()
 
+    # generate TF records of test and validation dataset for training from XML annotations
     def create_tf_record(self):
         subprocess.call(['python', './GenerateTFRecord/generate_tfrecord.py', '-x', os.path.join('dataset', 'train_preprocessed'), '-l', os.path.join('annotations', 'label_map.pbtxt'), '-o', os.path.join('annotations', 'train.record')])
         subprocess.call(['python', './GenerateTFRecord/generate_tfrecord.py', '-x', os.path.join('dataset', 'val_preprocessed'), '-l', os.path.join('annotations', 'label_map.pbtxt'), '-o', os.path.join('annotations', 'val.record')])
 
 
-    # test trained model on test dataset, save results into ./results folder - images with bounding box and txt file with predictions (at least for now)
+    # test trained model on test dataset, save results into ./results folder - images with bounding box and txt file with predictions and csv file into trained_models/model_name
     def test_model(self):
-        print("Only test trained model on test dataset")
+        print("EVALUATION MODE - Only test trained model on test dataset")
 
         # Empty results folder
         for file in glob.glob('./results/*'):
@@ -232,7 +229,6 @@ class UsedModel:
         dataset_parts = ['atopic_real', 'atopic_generated', 'verruca_real', 'verruca_generated', 'dysh_real', 'dysh_generated', 'psor_real', 'psor_generated', 'healthy_real', 'healthy_generated']
 
         # declare dictionary for plotting normalized IoU distributions
-        #iou_stats = {0.0 : 0, 0.1 : 0, 0.2 : 0, 0.3 : 0, 0.4 : 0, 0.5 : 0, 0.6 : 0, 0.7 : 0, 0.8 : 0, 0.9 : 0, 1.0 : 0}
         iou_dict = {}
         for item in dataset_parts:
             iou_dict[item] = {}
@@ -247,26 +243,6 @@ class UsedModel:
             iou_dict[item][0.8] = 0
             iou_dict[item][0.9] = 0
             iou_dict[item][1.0] = 0
-        #print(iou_dict)
-
-        '''
-        item {
-	       name:'atopic'
-	          id:1
-        }
-        item {
-	       name:'verruca'
-	          id:2
-        }
-        item {
-	       name:'dysh'
-	          id:3
-        }
-        item {
-	       name:'psor'
-	          id:4
-        }
-        '''
 
         # create dictionary for storing sums of all evaluate metrics for separate classes to compute average of these metrics in the end
         evaluate_dict = {}
@@ -351,27 +327,6 @@ class UsedModel:
                 # get class of bounding boxes if image has any, if image doesnt have any annotated bounding boxes - it is healthy image without any disease
                 name = class_img.find('name').text
 
-            #iou_dict = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_dict, root)
-            #print(iou_stats)
-
-            # plot graph of normalized IoU distributions for whole test dataset - updated after each processed image
-            '''
-            fig = plt.figure()
-            ax = fig.add_axes([0,0,1,1])
-            normalized_iou_scores = iou_stats.keys()
-            normalized_iou_scores = [str(i) for i in normalized_iou_scores]
-            #print(normalized_iou_scores)
-            counts = iou_stats.values()
-            ax.bar(normalized_iou_scores, counts)
-            plt.title('Normalized IoU Distributions')
-            plt.xlabel('Normalized IoU (Intersection over Union Score)')
-            plt.ylabel('Count of Predicted Bounding Boxes')
-            plt.show()
-            plt.savefig('./results/normalized_iou_distributions.jpg', bbox_inches='tight')
-            plt.clf()
-            ax.cla()
-            '''
-
             # compute evaluation metrics
             correctly_detected_area, extra_detected_area = self.compute_area_test(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, root, False)
             not_detected_annotated_area = 100 - correctly_detected_area # percentage of area which is annotated but not detected
@@ -428,7 +383,6 @@ class UsedModel:
                 iou_dict = self.compute_iou(test_image_name, detection_classes_tolist_filtered, detection_scores_tolist_filtered, detection_boxes_tolist_filtered, iou_dict, root, 'verruca_generated')
 
             image_np_array_result = image_np_array.copy()
-            #print(iou_dict)
 
             # visualize result with predicted bounding boxes
             viz_utils.visualize_boxes_and_labels_on_image_array(
@@ -483,20 +437,18 @@ class UsedModel:
         print("Most frequent normalized IoU value:")
         self.print_evaluate_metrics(iou_dict, 'most_frequent_iou_value', "Most frequent normalized IoU value", csv_path)
 
-        #print(iou_dict)
-
+        # plot graph of normalized IoU distributions for whole test dataset
         iou_edited_dict = []
         for i in iou_dict:
             iou_edited_dict.append(iou_dict[i])
         # sum all iou values for each dataset part to get final graph of whole test dataset
         iou_all_classes = dict(functools.reduce(operator.add, map(collections.Counter, iou_edited_dict)))
-        #print(iou_all_classes)
 
         fig = plt.figure()
         ax = fig.add_axes([0,0,1,1])
         normalized_iou_scores = iou_all_classes.keys()
         normalized_iou_scores = [str(i) for i in normalized_iou_scores]
-        #print(normalized_iou_scores)
+
         counts = iou_all_classes.values()
         ax.bar(normalized_iou_scores, counts)
         plt.title('Normalized IoU Distributions')
@@ -594,7 +546,7 @@ class UsedModel:
             i += 1
 
         all_bndboxes_pixels = np.unique(all_bndboxes_pixels, axis=0)
-        #print(all_bndboxes_pixels)
+
         j = 0
 
         if predicted_boxes != []:
@@ -631,7 +583,7 @@ class UsedModel:
         if correct_class_recognition == True and j == 0:
           all_predicted_bndboxes_pixels = []
         all_predicted_bndboxes_pixels = np.unique(all_predicted_bndboxes_pixels, axis=0)
-        #print(all_predicted_bndboxes_pixels)
+
         if all_predicted_bndboxes_pixels != [] and all_bndboxes_pixels != []:
             correctly_predicted_bndboxes_pixels = self.compute_same_pixels(all_bndboxes_pixels, all_predicted_bndboxes_pixels)
             # compute extra detected pixels which are not annotated
@@ -685,7 +637,7 @@ class UsedModel:
             i += 1
 
         all_bndboxes_pixels = np.unique(all_bndboxes_pixels, axis=0)
-        #print(all_bndboxes_pixels)
+
         j = 0
         all_predicted_bndboxes_detection_scores = np.array([])
 
@@ -734,15 +686,6 @@ class UsedModel:
 
             # stack pixels coordinates and their detection_score, each row contains pixel coordinate and detection score of pixel coordinate
             stacked_values = np.column_stack((all_predicted_bndboxes_pixels,all_predicted_bndboxes_detection_scores))
-
-            #A = np.array([[ 1,  2],[ 3,  4],[ 5,  6],[ 7,  8],[ 9, 10],[1,2]])
-            #B = np.array([[1, 4],[1, 2],[5, 6],[6, 3]])
-
-            #A = stacked_values[:,[0,1]].astype(np.int64) # stack pixels coordinates and their detection_score, each row contains pixel coordinate and detection score of pixel coordinate
-            #B = correctly_predicted_bndboxes_pixels
-
-            #stacked_values = np.array([[1,2,60.5],[2,5,100.7],[1,3,8.5],[1,2,70.7],[2,5,80.5]])
-            #correctly_predicted_bndboxes_pixels = np.array([[1,2],[2,5],[6,3]])
 
             stacked_values_pixels = stacked_values[:,[0,1]].astype(np.int64)
             filtered_indexes = self.get_indexes_of_intersecting_rows(stacked_values_pixels, correctly_predicted_bndboxes_pixels)

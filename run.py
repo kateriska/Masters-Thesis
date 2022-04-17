@@ -1,3 +1,12 @@
+'''
+Author: Katerina Fortova
+Master's Thesis: Analysis of Convolutional Neural Networks for Detection and Classification of Damages in Fingerprint Images
+Academic Year: 2021/22
+
+Parsing arguments for training or evaluation mode
+
+'''
+
 import argparse
 from model import UsedModel
 
@@ -15,7 +24,6 @@ if __name__ == "__main__":
         if getattr(args, arg) is not None:
             init_args[arg] = getattr(args, arg)
 
-    #print(init_args)
     model = UsedModel(**init_args)
 
     if args.test == False: # train model
