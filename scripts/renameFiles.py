@@ -1,9 +1,13 @@
 import glob
 import os
 
-path = "/media/katerina/DATA/Stazene/NISTSpecialDatabase4GrayScaleImagesofFIGS/sd04/png_txt/figs_5_filtered"
+path = "/media/katerina/DATA/dataset_splits/val_preprocessed_split/content/Masters-Thesis/dataset/val_preprocessed"
 for file in glob.glob(path + '/*'):
-    print(file)
     file_substr = file.split('/')[-1]
-    print(file_substr)
-    os.rename(file, path + "/nist_" + file_substr)
+
+    extension = os.path.splitext(file)[1][1:]
+
+    if extension == 'xml':
+        continue
+    test_image_name = file_substr.rsplit('.', 1)[0]
+    print(test_image_name)

@@ -14,12 +14,13 @@ import shutil
 import random
 
 class Dataset:
-    def __init__(self):
+    def __init__(self, use_used_dataset_split):
         super().__init__()
         self.dataset_path = os.path.join('dataset', 'train', '*')
         self.preprocessed_dataset_path = os.path.join('dataset', 'train_preprocessed', '*')
         self.preprocessed_dataset_val_path = os.path.join('dataset', 'val_preprocessed', '*')
         self.preprocessed_dataset_test_path = os.path.join('dataset', 'test_preprocessed', '*')
+        self.use_used_dataset_split = use_used_dataset_split
 
     def preprocess_dataset(self):
         for file in glob.glob(os.path.abspath(self.preprocessed_dataset_path)):
@@ -48,7 +49,13 @@ class Dataset:
 
             cv2.imwrite(os.path.join('dataset', 'train_preprocessed', file_substr),result_orig)
 
-        self.split_dataset()
+        if self.use_used_dataset_split == False:
+            print("Randomly splitting dataset into train, validation and test")
+            self.split_dataset()
+        else:
+            print("Using split of dataset which was used by author for training and experiments")
+            self.use_used_dataset_split_for_experiments()
+
 
     # split dataset into test and train folder and store in train or test folder also their xml annotations
     def split_dataset(self):
@@ -152,3 +159,39 @@ class Dataset:
 
         train, val, test = np.split(samples, [int(len(samples)* split_val_value), int(len(samples)*split_test_value)])
         return train, val, test
+
+    # dont split dataset randomly but use same splitting into train, test and val dataset which was used by author of Thesis for training and experiments
+    def use_used_dataset_split_for_experiments(self):
+        val_images_names_txt = open('./dataset/val_preprocessed_split.txt', 'r')
+        val_images_names = [line.strip() for line in val_images_names_txt.readlines()]
+
+        test_images_names_txt = open('./dataset/test_preprocessed_split.txt', 'r')
+        test_images_names = [line.strip() for line in test_images_names_txt.readlines()]
+
+        for file in glob.glob(os.path.abspath(self.preprocessed_dataset_val_path)):
+            os.remove(file)
+
+        for file in glob.glob(os.path.abspath(self.preprocessed_dataset_test_path)):
+            os.remove(file)
+
+        for file in glob.glob(self.preprocessed_dataset_path):
+            file_substr = file.split('/')[-1]
+            extension = os.path.splitext(file)[1][1:]
+
+            if extension == 'xml':
+                continue
+
+            test_image_name = file_substr.rsplit('.', 1)[0]
+
+            if test_image_name in val_images_names:
+                shutil.move(file, os.path.join('dataset', 'val_preprocessed', file_substr))
+                shutil.move(os.path.join('dataset', 'train_preprocessed', test_image_name + ".xml"), os.path.join('dataset', 'val_preprocessed', test_image_name + ".xml"))
+
+            elif test_image_name in test_images_names:
+                shutil.move(file, os.path.join('dataset', 'test_preprocessed', file_substr))
+                shutil.move(os.path.join('dataset', 'train_preprocessed', test_image_name + ".xml"), os.path.join('dataset', 'test_preprocessed', test_image_name + ".xml"))
+
+        print("Validation dataset images:")
+        print(val_images_names)
+        print("Test dataset images:")
+        print(test_images_names)

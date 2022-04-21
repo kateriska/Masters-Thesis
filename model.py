@@ -40,16 +40,17 @@ from dataset import Dataset
 
 
 class UsedModel:
-    def __init__(self, model, epochs, test):
+    def __init__(self, model, epochs, test, use_used_dataset_split):
         super().__init__()
 
         self.model = model
         self.epochs = epochs
         self.test = test
+        self.use_used_dataset_split = use_used_dataset_split
 
 
     def load_dataset(self):
-        self.dataset = Dataset()
+        self.dataset = Dataset(self.use_used_dataset_split)
         self.dataset.preprocess_dataset()
 
     # download pretrained model from TensorFlow Detection Model Zoo

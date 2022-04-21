@@ -59,7 +59,8 @@ Processed STRaDe dataset images are converted into folder `Masters-Thesis/datase
 
 **For configuration and training selected model:** <br />
 Firstly configure all neccessary for training:  <br />
-`python run.py --model {choices=['ssd_mobilenet_v2', 'faster_rcnn_resnet50', 'faster_rcnn_resnet101', 'ssd_resnet50', 'efficient_det_d0', 'efficient_det_d1', 'centernet_hourglass', 'centernet_resnet101']} --epochs {}` <br />
+`python run.py --model {choices=['ssd_mobilenet_v2', 'faster_rcnn_resnet50', 'faster_rcnn_resnet101', 'ssd_resnet50', 'efficient_det_d0', 'efficient_det_d1', 'centernet_hourglass', 'centernet_resnet101']} --epochs {} --use_used_dataset_split` <br />
+When `--use_used_dataset_split` is set, train, validation and test dataset contain the same images as were used for training the model and experiments. Otherwise, when `--use_used_dataset_split` isn't set, the dataset is splitted randomly.<br />
 Then training can be runned for chosen model:  <br />
 `python model/research/object_detection/model_main_tf2.py --model_dir=trained_models/ssd_resnet50_v1_fpn_640x640_coco17_tpu-8 --pipeline_config_path=trained_models/ssd_resnet50_v1_fpn_640x640_coco17_tpu-8/pipeline.config`
 

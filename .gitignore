@@ -2,7 +2,6 @@ MT-env/*
 annotations/*
 !annotations/label_map.pbtxt
 dataset/*
-GenerateTFRecord/*
 models/*
 pretrained_models/*
 __pycache__/*
@@ -30,3 +29,6 @@ scripts/sfinge_partial_original/*
 scripts/sfinge_partial_resized/*
 experiments/.~lock.training_unchanged_pipeline.ods#
 experiments/ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8.csv
+!dataset/train_preprocessed_split.txt
+!dataset/val_preprocessed_split.txt
+!dataset/test_preprocessed_split.txt
