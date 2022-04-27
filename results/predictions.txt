@@ -1,120 +1,52 @@
+FILE NAME: PsoriasisDamagedImg-SG39_5.png
+DETECTIONS: 
+	CLASS: dishydrosis
+	DETECTION SCORE: 70.95 %
+	CLASS: psoriasis
+	DETECTION SCORE: 44.32 %
+	CLASS: dishydrosis
+	DETECTION SCORE: 38.56 %
+	CLASS: verruca vulgaris
+	DETECTION SCORE: 37.89 %
+FILE NAME: PsoriasisDamagedImg-SG10_2.xml
+DETECTIONS: 
+FILE NAME: PsoriasisDamagedImg-SG53_3.png
+DETECTIONS: 
+	CLASS: atopic eczema
+	DETECTION SCORE: 40.82 %
+	CLASS: atopic eczema
+	DETECTION SCORE: 30.19 %
+FILE NAME: nist_s1322_09.xml
+DETECTIONS: 
 FILE NAME: dys_FP_00301.png
 DETECTIONS: 
 	CLASS: dishydrosis
 	DETECTION SCORE: 99.15 %
 	CLASS: dishydrosis
 	DETECTION SCORE: 92.59 %
-FILE NAME: dys_SG104_1.xml
-DETECTIONS: 
-FILE NAME: PsoriasisDamagedImg-SG18_4.xml
-DETECTIONS: 
-FILE NAME: atopic_eczema_FP_00838.png
-DETECTIONS: 
-	CLASS: atopic eczema
-	DETECTION SCORE: 99.0 %
-	CLASS: atopic eczema
-	DETECTION SCORE: 83.5 %
-	CLASS: atopic eczema
-	DETECTION SCORE: 81.88 %
-	CLASS: atopic eczema
-	DETECTION SCORE: 74.64 %
-	CLASS: atopic eczema
-	DETECTION SCORE: 65.68 %
-	CLASS: atopic eczema
-	DETECTION SCORE: 52.33 %
-FILE NAME: dys_SG104_1.png
+FILE NAME: atopic_eczema_SG84_3.png
 DETECTIONS: 
 	CLASS: dishydrosis
-	DETECTION SCORE: 99.37 %
+	DETECTION SCORE: 37.2 %
 	CLASS: dishydrosis
-	DETECTION SCORE: 98.0 %
-	CLASS: dishydrosis
-	DETECTION SCORE: 97.78 %
-	CLASS: dishydrosis
-	DETECTION SCORE: 97.27 %
-	CLASS: dishydrosis
-	DETECTION SCORE: 53.61 %
-	CLASS: dishydrosis
-	DETECTION SCORE: 42.98 %
-FILE NAME: healthy_SG50_5.png
+	DETECTION SCORE: 35.11 %
+FILE NAME: atopic_eczema_SG60_4.xml
 DETECTIONS: 
-FILE NAME: healthy_SG72_3.png
-DETECTIONS: 
-FILE NAME: psor_FP_00436.xml
-DETECTIONS: 
-FILE NAME: dys_SG11_5.xml
-DETECTIONS: 
-FILE NAME: healthy_SG13_2.xml
-DETECTIONS: 
-FILE NAME: atopic_eczema_FP_00966.png
+FILE NAME: atopic_eczema_FP_00336.png
 DETECTIONS: 
 	CLASS: atopic eczema
-	DETECTION SCORE: 76.16 %
+	DETECTION SCORE: 99.17 %
 	CLASS: atopic eczema
-	DETECTION SCORE: 72.12 %
+	DETECTION SCORE: 95.01 %
 	CLASS: atopic eczema
-	DETECTION SCORE: 66.95 %
+	DETECTION SCORE: 94.58 %
 	CLASS: atopic eczema
-	DETECTION SCORE: 60.54 %
-FILE NAME: nist_f1315_02.png
-DETECTIONS: 
-FILE NAME: psor_FP_00438.png
-DETECTIONS: 
-FILE NAME: psor_FP_00102.png
-DETECTIONS: 
-FILE NAME: dys_SG111_1.png
-DETECTIONS: 
-	CLASS: dishydrosis
-	DETECTION SCORE: 99.1 %
-	CLASS: dishydrosis
-	DETECTION SCORE: 98.89 %
-	CLASS: dishydrosis
-	DETECTION SCORE: 97.85 %
-	CLASS: dishydrosis
-	DETECTION SCORE: 96.78 %
-	CLASS: dishydrosis
-	DETECTION SCORE: 44.52 %
-	CLASS: dishydrosis
-	DETECTION SCORE: 34.73 %
-	CLASS: dishydrosis
-	DETECTION SCORE: 34.64 %
-FILE NAME: atopic_eczema_SG47_4.png
-DETECTIONS: 
-	CLASS: dishydrosis
-	DETECTION SCORE: 31.18 %
-FILE NAME: atopic_eczema_FP_00187.xml
-DETECTIONS: 
-FILE NAME: healthy_SG76_4.xml
-DETECTIONS: 
-FILE NAME: atopic_eczema_FP_00827.xml
-DETECTIONS: 
-FILE NAME: atopic_eczema_FP_00190.png
-DETECTIONS: 
+	DETECTION SCORE: 91.72 %
 	CLASS: atopic eczema
-	DETECTION SCORE: 71.12 %
+	DETECTION SCORE: 90.71 %
 	CLASS: atopic eczema
-	DETECTION SCORE: 37.98 %
+	DETECTION SCORE: 85.75 %
 	CLASS: atopic eczema
-	DETECTION SCORE: 33.23 %
-FILE NAME: atopic_eczema_SG63_2.xml
-DETECTIONS: 
-FILE NAME: nist_f0334_02.xml
-DETECTIONS: 
-FILE NAME: dys_FP_00290.png
-DETECTIONS: 
-	CLASS: dishydrosis
-	DETECTION SCORE: 99.45 %
-FILE NAME: atopic_eczema_FP_00329.png
-DETECTIONS: 
+	DETECTION SCORE: 49.76 %
 	CLASS: atopic eczema
-	DETECTION SCORE: 99.1 %
-	CLASS: atopic eczema
-	DETECTION SCORE: 98.65 %
-	CLASS: atopic eczema
-	DETECTION SCORE: 98.27 %
-	CLASS: atopic eczema
-	DETECTION SCORE: 98.1 %
-	CLASS: atopic eczema
-	DETECTION SCORE: 79.98 %
-	CLASS: atopic eczema
-	DETECTION SCORE: 68.86 %
+	DETECTION SCORE: 37.35 %

@@ -25,6 +25,7 @@ import csv
 import collections
 import functools
 import operator
+from pathlib import Path
 
 import tensorflow as tf
 import object_detection
@@ -40,14 +41,19 @@ from dataset import Dataset
 
 
 class UsedModel:
-    def __init__(self, model, epochs, test, use_used_dataset_split):
+    def __init__(self, model, epochs, test, use_used_dataset_split, ckpt_path, use_ckpt):
         super().__init__()
 
         self.model = model
         self.epochs = epochs
         self.test = test
         self.use_used_dataset_split = use_used_dataset_split
-
+        if ckpt_path != "":
+            self.ckpt_path = Path(ckpt_path)
+        else:
+            self.ckpt_path = ckpt_path
+            
+        self.use_ckpt = use_ckpt
 
     def load_dataset(self):
         self.dataset = Dataset(self.use_used_dataset_split)
@@ -83,10 +89,28 @@ class UsedModel:
         pipeline_config.train_config.batch_size = 4
 
         # if our model of detection and classification of fingerprint damages has some checkpoint, load them and continue training, otherwise load initial checkpoint of downloaded model
-        if os.path.isdir(os.path.join('trained_models', full_model_name, 'trained_checkpoint')) and tf.train.latest_checkpoint(os.path.join('trained_models', full_model_name, 'trained_checkpoint')) is not None:
+        # if --use_ckpt is set and --ckpt_path is not set use path to checkpoint as Masters-Thesis/trained_models/model_name/trained_checkpoint (e.g. Masters-Thesis/trained_models/efficientdet_d0_coco17_tpu-32/trained_checkpoint)
+        if os.path.isdir(os.path.join('trained_models', full_model_name, 'trained_checkpoint')) and tf.train.latest_checkpoint(os.path.join('trained_models', full_model_name, 'trained_checkpoint')) is not None and self.use_ckpt == True and self.ckpt_path == "":
             trained_model_latest_checkpoint = tf.train.latest_checkpoint(os.path.join('trained_models', full_model_name, 'trained_checkpoint'))
             pipeline_config.train_config.fine_tune_checkpoint = trained_model_latest_checkpoint
+            '''
+            train_config.fine_tune_checkpoint_type = "full":
+            Restores the entire detection model, including the
+            feature extractor, its classification backbone, and the prediction
+            heads. This option should only be used when the pre-training and
+            fine-tuning tasks are the same. Otherwise, the model's parameters
+            may have incompatible shapes, which will cause errors when
+            attempting to restore the checkpoint
+
+            tldr restore chcekpoint of model which was trained on same task
+            '''
             pipeline_config.train_config.fine_tune_checkpoint_type = "full"
+        # if --use_ckpt is set and --ckpt_path is set, use path to checkpoint specified by user
+        elif self.use_ckpt == True and self.ckpt_path != "":
+            trained_model_latest_checkpoint = tf.train.latest_checkpoint(self.ckpt_path)
+            pipeline_config.train_config.fine_tune_checkpoint = trained_model_latest_checkpoint
+            pipeline_config.train_config.fine_tune_checkpoint_type = "full"
+        # when --use_ckpt is not set, ckpt is loaded from downloaded pretrained model
         else:
             pipeline_config.train_config.fine_tune_checkpoint = os.path.join('pretrained_models', full_model_name, 'checkpoint', 'ckpt-0')
             pipeline_config.train_config.fine_tune_checkpoint_type = "detection"
@@ -213,9 +237,18 @@ class UsedModel:
         configs = config_util.get_configs_from_pipeline_file(os.path.join('trained_models', full_model_name, 'pipeline.config'))
         detection_model = model_builder.build(model_config=configs['model'], is_training=False)
 
-        ckpt = tf.compat.v2.train.Checkpoint(model=detection_model)
-        trained_model_latest_checkpoint = tf.train.latest_checkpoint(os.path.join('trained_models', full_model_name))
-        ckpt.restore(trained_model_latest_checkpoint).expect_partial()
+        '''
+        EVALUATION MODE - when --ckpt_path is not specified, path is Masters-Thesis/trained_models/model_name (e.g. Masters-Thesis/trained_models/efficientdet_d0_coco17_tpu-32)
+                        - when --ckpt_path is specified, path is set to specified path
+        '''
+        if self.use_ckpt == True and self.ckpt_path != "":
+            ckpt = tf.compat.v2.train.Checkpoint(model=detection_model)
+            trained_model_latest_checkpoint = tf.train.latest_checkpoint(self.ckpt_path)
+            ckpt.restore(trained_model_latest_checkpoint).expect_partial()
+        else:
+            ckpt = tf.compat.v2.train.Checkpoint(model=detection_model)
+            trained_model_latest_checkpoint = tf.train.latest_checkpoint(os.path.join('trained_models', full_model_name))
+            ckpt.restore(trained_model_latest_checkpoint).expect_partial()
 
         category_index = label_map_util.create_category_index_from_labelmap(os.path.join('annotations', 'label_map.pbtxt'))
 
