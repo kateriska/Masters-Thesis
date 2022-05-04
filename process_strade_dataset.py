@@ -18,12 +18,12 @@ from PIL import Image
 import glob
 import os
 
-STRADE_DATASET_PATH = "/media/katerina/DATA/strade_dataset"
-STRADE_ATOPIC_PATH = "/media/katerina/DATA/strade_dataset/atopic"
-STRADE_VERRUCA_PATH = "/media/katerina/DATA/strade_dataset/verruca"
-STRADE_DYSH_PATH = "/media/katerina/DATA/strade_dataset/dysh"
-STRADE_PSOR_PATH = "/media/katerina/DATA/strade_dataset/psor"
-TRAIN_PATH = "/media/katerina/DATA/strade_dataset/train" # folder of whole dataset used for Thesis
+STRADE_DATASET_PATH = "./strade_dataset"
+STRADE_ATOPIC_PATH = "./strade_dataset/atopic"
+STRADE_VERRUCA_PATH = "./strade_dataset/verruca"
+STRADE_DYSH_PATH = "./strade_dataset/dysh"
+STRADE_PSOR_PATH = "./strade_dataset/psor"
+TRAIN_PATH = "./dataset/train" # folder of whole dataset used for Thesis
 
 # process of atopic eczema images from STRaDe dataset
 atopic_txt = open(STRADE_ATOPIC_PATH + "/atopic_strade.txt", 'r')

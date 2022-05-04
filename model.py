@@ -52,7 +52,7 @@ class UsedModel:
             self.ckpt_path = Path(ckpt_path)
         else:
             self.ckpt_path = ckpt_path
-            
+
         self.use_ckpt = use_ckpt
 
     def load_dataset(self):
@@ -234,7 +234,13 @@ class UsedModel:
             full_model_name = 'centernet_resnet101_v1_fpn_512x512_coco17_tpu-8'
 
         # configure trained model
-        configs = config_util.get_configs_from_pipeline_file(os.path.join('trained_models', full_model_name, 'pipeline.config'))
+
+        # need to load pipeline.config file - it has to be in the same folder as is checkpoint
+        if self.use_ckpt == True and self.ckpt_path != "":
+            configs = config_util.get_configs_from_pipeline_file(os.path.join(self.ckpt_path, 'pipeline.config'))
+        else:
+            configs = config_util.get_configs_from_pipeline_file(os.path.join('trained_models', full_model_name, 'pipeline.config'))
+
         detection_model = model_builder.build(model_config=configs['model'], is_training=False)
 
         '''
@@ -253,7 +259,7 @@ class UsedModel:
         category_index = label_map_util.create_category_index_from_labelmap(os.path.join('annotations', 'label_map.pbtxt'))
 
         f = open("./results/predictions.txt", "w+") # file for predictions of tested images
-        csv_path = "./experiments/" + full_model_name + ".csv"
+        csv_path = "./results/" + full_model_name + ".csv"
         with open(csv_path, 'w+') as csv_file:
             writer = csv.writer(csv_file)
             writer.writerow([full_model_name, "Atopic (real and generated)", "Atopic (real)", "Atopic (generated)", "Verruca (real and generated)", "Verruca (real)", "Verruca (generated)", "Dysh (real and generated)", "Dysh (real)", "Dysh (generated)", "Psoriasis (real and generated)", "Psoriasis (real)", "Psoriasis (generated)", "Healthy (real and generated)", "Healthy (real)", "Healthy (generated)", "Total (real and generated)", "Total (real)", "Total (generated)"])
@@ -433,6 +439,7 @@ class UsedModel:
 
             plt.imshow(cv2.cvtColor(image_np_array_result, cv2.COLOR_BGR2RGB))
             # image with detected bounding box is saved in results folder
+            plt.axis('off')
             plt.savefig("./results/" + file_substr, bbox_inches='tight', pad_inches = 0)
             plt.close('all')
 
