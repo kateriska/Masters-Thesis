@@ -1,0 +1,19 @@
+ID,Type,Correctly detected and clasify (all),Correctly detected and clasify (real)
+1,SSD MobileNet,70.991,68.226
+2,SSD MobileNet,66.412,60.861
+3,SSD ResNet-50,70.934,67.123
+4,SSD ResNet-50,63.8,55.604
+5,Faster R-CNN ResNet-50,80.263,76.875
+6,Faster R-CNN ResNet-50,77.851,73.971
+7,Faster R-CNN ResNet-50,78.268,73.808
+8,Faster R-CNN ResNet-101,78.043,73.241
+9,Faster R-CNN ResNet-101,76.898,72.616
+10,Faster R-CNN ResNet-101,76.348,70.175
+11,EfficientDet D0,71.893,67.633
+12,EfficientDet D0,72.788,70.448
+13,EfficientDet D1,71.23,68.106
+14,EfficientDet D1,76.027,75.329
+15,CenterNet Hourglass,72.682,66.736
+16,CenterNet Hourglass,76.551,72.019
+17,CenterNet ResNet-101,76.608,73.682
+18,CenterNet ResNet-101,77.193,74.624
