@@ -6,7 +6,8 @@ Classification and detection of diseased fingerprints with use of modern availab
 
 **Author:** Katerina Fortova <br />
 **Master's Thesis:** Analysis of Convolutional Neural Networks for Detection and Classification of Damages in Fingerprint Images <br />
-**Academic Year:** 2021/22
+**Academic Year:** 2021/22 <br />
+**Google Colab Project Demo (the easiest way how to run implementation):** https://colab.research.google.com/drive/1YgnBWWaUrqjOrwPRzjGdAFcfYkiwkypY?usp=sharing
 
 ### Setup:
 
@@ -59,7 +60,7 @@ Processed STRaDe dataset images are converted into folder `Masters-Thesis/datase
 
 **TRAINING MODE - For configuration and training selected model:** <br />
 Firstly configure all neccessary for training:  <br />
-`python run.py --model {choices=['ssd_mobilenet_v2', 'faster_rcnn_resnet50', 'faster_rcnn_resnet101', 'ssd_resnet50', 'efficient_det_d0', 'efficient_det_d1', 'centernet_hourglass', 'centernet_resnet101']} --epochs {} --use_used_dataset_split --use_ckpt --ckpt_path <PATH>` <br />
+`python run.py --model {choices=['ssd_mobilenet_v2', 'faster_rcnn_resnet50', 'faster_rcnn_resnet101', 'ssd_resnet50', 'efficient_det_d0', 'efficient_det_d1', 'centernet_hourglass', 'centernet_resnet101']} --num_train_steps {} --use_used_dataset_split --use_ckpt --ckpt_path <PATH>` <br />
 When `--use_used_dataset_split` is set, train, validation and test dataset contain the same images as were used for training the model and experiments. Otherwise, when `--use_used_dataset_split` isn't set, the dataset is splitted randomly.<br />
 Default ckpt path when `--use_ckpt` is set is `Masters-Thesis/trained_models/model_name/trained_checkpoint` (e.g. `Masters-Thesis/trained_models/efficientdet_d0_coco17_tpu-32/trained_checkpoint`)<br />
 When `--use_ckpt` is not set, ckpt is loaded from downloaded pretrained model<br />

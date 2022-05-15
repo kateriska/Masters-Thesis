@@ -41,11 +41,11 @@ from dataset import Dataset
 
 
 class UsedModel:
-    def __init__(self, model, epochs, test, use_used_dataset_split, ckpt_path, use_ckpt):
+    def __init__(self, model, num_train_steps, test, use_used_dataset_split, ckpt_path, use_ckpt):
         super().__init__()
 
         self.model = model
-        self.epochs = epochs
+        self.num_train_steps = num_train_steps
         self.test = test
         self.use_used_dataset_split = use_used_dataset_split
         if ckpt_path != "":
@@ -182,7 +182,7 @@ class UsedModel:
 
     # generate train command of model
     def train_model(self, full_model_name):
-        train_command = "python {} --model_dir={} --pipeline_config_path={} --num_train_steps={}".format(os.path.join('.','model', 'research', 'object_detection', 'model_main_tf2.py'), os.path.join('trained_models', full_model_name),os.path.join('trained_models', full_model_name, 'pipeline.config'), self.epochs)
+        train_command = "python {} --model_dir={} --pipeline_config_path={} --num_train_steps={}".format(os.path.join('.','model', 'research', 'object_detection', 'model_main_tf2.py'), os.path.join('trained_models', full_model_name),os.path.join('trained_models', full_model_name, 'pipeline.config'), self.num_train_steps)
         print("Command for training model:")
         print(train_command)
 
