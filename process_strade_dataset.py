@@ -34,8 +34,8 @@ for file in glob.glob(STRADE_ATOPIC_PATH + '/*'):
     file_substr = file.split('/')[-1]
     extension = os.path.splitext(file)[1][1:]
 
-    # skip txt file with used dataset imgs
-    if extension == 'txt':
+    # skip txt file with used dataset imgs and zip archive with images 
+    if extension == 'txt' or extension == 'zip':
         continue
 
     if file_substr in atopic_used_imgs:
@@ -54,8 +54,8 @@ for file in glob.glob(STRADE_VERRUCA_PATH + '/*'):
     file_substr = file.split('/')[-1]
     extension = os.path.splitext(file)[1][1:]
 
-    # skip txt file with used dataset imgs
-    if extension == 'txt':
+    # skip txt file with used dataset imgs and zip archive with images 
+    if extension == 'txt' or extension == 'zip':
         continue
 
     if file_substr in verruca_used_imgs:
@@ -74,8 +74,8 @@ for file in glob.glob(STRADE_DYSH_PATH + '/*'):
     file_substr = file.split('/')[-1]
     extension = os.path.splitext(file)[1][1:]
 
-    # skip txt file with used dataset imgs
-    if extension == 'txt':
+    # skip txt file with used dataset imgs and zip archive with images 
+    if extension == 'txt' or extension == 'zip':
         continue
 
     if file_substr in dysh_used_imgs:
@@ -94,8 +94,8 @@ for file in glob.glob(STRADE_PSOR_PATH + '/*'):
     file_substr = file.split('/')[-1]
     extension = os.path.splitext(file)[1][1:]
 
-    # skip txt file with used dataset imgs
-    if extension == 'txt':
+    # skip txt file with used dataset imgs and zip archive with images 
+    if extension == 'txt' or extension == 'zip':
         continue
 
     if file_substr in psor_used_imgs:
