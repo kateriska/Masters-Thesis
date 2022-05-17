@@ -7,7 +7,8 @@ Classification and detection of diseased fingerprints with use of modern availab
 **Author:** Katerina Fortova <br />
 **Master's Thesis:** Analysis of Convolutional Neural Networks for Detection and Classification of Damages in Fingerprint Images <br />
 **Academic Year:** 2021/22 <br />
-**Google Colab Project Demo (the easiest way how to run implementation):** https://colab.research.google.com/drive/1YgnBWWaUrqjOrwPRzjGdAFcfYkiwkypY?usp=sharing
+**Google Colab Project Demo (the easiest way how to run submitted WIS archive):** https://colab.research.google.com/drive/1YgnBWWaUrqjOrwPRzjGdAFcfYkiwkypY?usp=sharing <br />
+**Github repository link:** https://github.com/kateriska/Masters-Thesis
 
 ### Setup:
 
@@ -23,9 +24,9 @@ Classification and detection of diseased fingerprints with use of modern availab
 `mkdir Masters-Thesis/trained_models` <br />
 `mkdir Masters-Thesis/model` <br />
 `mkdir Masters-Thesis/GenerateTFRecord` <br />
-`mkdir dataset/train_preprocessed` <br />
-`mkdir dataset/val_preprocessed` <br />
-`mkdir dataset/test_preprocessed` <br />
+`mkdir Masters-Thesis/dataset/train_preprocessed` <br />
+`mkdir Masters-Thesis/dataset/val_preprocessed` <br />
+`mkdir Masters-Thesis/dataset/test_preprocessed` <br />
 
 **Important:** Private STRaDe dataset with real diseased fingerprints can't be part of submitted Thesis. Please contact STRaDe research group for providing the dataset.
 
@@ -59,11 +60,11 @@ Processed STRaDe dataset images are converted into folder `Masters-Thesis/datase
 ### Run program:
 
 **TRAINING MODE - For configuration and training selected model:** <br />
-Firstly configure all neccessary for training:  <br />
+Firstly configure all necessary for training:  <br />
 `python run.py --model {choices=['ssd_mobilenet_v2', 'faster_rcnn_resnet50', 'faster_rcnn_resnet101', 'ssd_resnet50', 'efficient_det_d0', 'efficient_det_d1', 'centernet_hourglass', 'centernet_resnet101']} --num_train_steps {} --use_used_dataset_split --use_ckpt --ckpt_path <PATH>` <br />
 When `--use_used_dataset_split` is set, train, validation and test dataset contain the same images as were used for training the model and experiments. Otherwise, when `--use_used_dataset_split` isn't set, the dataset is splitted randomly.<br />
 Default ckpt path when `--use_ckpt` is set is `Masters-Thesis/trained_models/model_name/trained_checkpoint` (e.g. `Masters-Thesis/trained_models/efficientdet_d0_coco17_tpu-32/trained_checkpoint`)<br />
-When `--use_ckpt` is not set, ckpt is loaded from downloaded pretrained model<br />
+When `--use_ckpt` is not set, ckpt is loaded from downloaded pretrained model.<br />
 You can specify your own path with `--ckpt_path <PATH>` (if its different from `Masters-Thesis/trained_models/model_name/trained_checkpoint`)<br />
 Then training can be runned for chosen model:  <br />
 `python model/research/object_detection/model_main_tf2.py --model_dir=trained_models/ssd_resnet50_v1_fpn_640x640_coco17_tpu-8 --pipeline_config_path=trained_models/ssd_resnet50_v1_fpn_640x640_coco17_tpu-8/pipeline.config`
@@ -73,4 +74,4 @@ Then training can be runned for chosen model:  <br />
 
 When `--ckpt_path` is not specified, path is `Masters-Thesis/trained_models/model_name` (e.g. `Masters-Thesis/trained_models/efficientdet_d0_coco17_tpu-32`)<br />
 When `--ckpt_path` is specified, path is set to specified `<PATH>`.<br />
-Results of evaluation are written into csv file into appropriate chosen model subfolder of `Masters-Thesis/trained_models` next to model checkpoint. Test dataset images with predicted bounding boxes are stored in `Masters-Thesis/results`.
+CSV file with results of evaluation, test dataset images with predicted bounding boxes, normalized IoU graph are stored in `Masters-Thesis/results`.
